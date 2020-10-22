@@ -6,8 +6,8 @@ public class Tile {
     boolean down;
     boolean left;
     boolean right;
-
-    Tile(){}
+    
+    Tile(){} 
 
     Tile(Tile tile)
     {
