@@ -9,13 +9,16 @@ public class Player {
 	int x;
 	int y;
 	
-	Player(){}
+	Player()
+	{
+		this.board = new Board();
+	}
 	
 	Player(int playerId, String name, Board board, int score, int x, int y)
 	{
 		this.playerId = playerId; 
 		this.name = name;
-		this.board = board; //not sure
+		this.board = new Board(board); 
 		this.score = score;
 		this.x = x;
 		this.y = y;
@@ -25,7 +28,7 @@ public class Player {
 	{
 		this.playerId = player.getPlayerId(); 
 		this.name = player.getName() ;
-		this.board = player.board; //not sure
+		this.board = new Board(player.board); 
 		this.score = player.getScore() ;
 		this.x = player.getX() ;
 		this.y = player.getY() ;
