@@ -8,29 +8,35 @@ public class Supply {
     Supply(){
         //void constructor
     }
+    
+	Supply(int supplyId, int x, int y, int supplyTileId){
+		this.supplyId=supplyId;
+		this.x=x;
+		this.y=y;
+		this.supplyTileId=supplyTileId;
+	}
 
     Supply(Supply ob){
-        supplyId=ob.supplyId;
-        x=ob.x;
-        y=ob.y;
-        supplyTileId=ob.supplyTileId;
-
+        supplyId=ob.getSupplyId();
+        x=ob.getX();
+        y=ob.getY();
+        supplyTileId=ob.getSupplyTileId();
     }
 
     void setSupplyId(int supId) { supplyId = supId; }
 
     int getSupplyId() { return supplyId; }
 
-    void setx(int x) { this.x = x; }
+    void setX(int x) { this.x = x; }
 
-    int getx() { return x; }
+    int getX() { return x; }
 
-    void sety(int y) { this.y = y; }
+    void setY(int y) { this.y = y; }
 
-    int gety() { return y; }
+    int getY() { return y; }
 
-    void setsupplyTileId(int supTileId) { supplyTileId = supTileId; }
+    void setSupplyTileId(int supTileId) { supplyTileId = supTileId; }
 
-    int getsupplyTileId() { return supplyTileId; }
+    int getSupplyTileId() { return supplyTileId; }
 
 }

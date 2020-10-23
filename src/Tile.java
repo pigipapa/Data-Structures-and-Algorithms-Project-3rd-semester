@@ -11,13 +11,13 @@ public class Tile {
 
     Tile(Tile tile)
     {
-        tileId = tile.tileId;
-        x = tile.x;
-        y = tile.y;
-        up = tile.up;
-        down = tile.down;
-        left = tile.left;
-        right = tile.right;
+        this.tileId = tile.getTileId();
+        this.x = tile.getX();
+        this.y = tile.getY();
+        this.up = tile.getUp();
+        this.down = tile.getDown();
+        this.left = tile.getLeft();
+        this.right = tile.getRight();
     }
 
     Tile(int tileId, int x, int y, boolean up, boolean down, boolean left, boolean right)
@@ -59,4 +59,13 @@ public class Tile {
 
     void setLeft(boolean left) { this.left = left; }
 
+    int countTileWalls() {
+    	int count=0;
+    	if(down==true) {count++;}
+    	if(up==true) {count++;}
+    	if(left==true) {count++;}
+    	if(right==true) {count++;}
+    	
+    	return count;
+    }
 }

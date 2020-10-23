@@ -26,12 +26,12 @@ public class Player {
 	
 	Player(Player player)
 	{
-		this.playerId = player.getPlayerId(); 
-		this.name = player.getName() ;
-		this.board = new Board(player.board); 
-		this.score = player.getScore() ;
-		this.x = player.getX() ;
-		this.y = player.getY() ;
+		playerId = player.getPlayerId(); 
+		name = player.getName() ;
+		board = new Board(player.board); 
+		score = player.getScore();
+		x = player.getX();
+		y = player.getY();
 	}	
 	
 	int getPlayerId() { return playerId; }
