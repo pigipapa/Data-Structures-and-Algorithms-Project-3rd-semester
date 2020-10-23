@@ -2,7 +2,7 @@ import java.util.Random;
 
 public class Player {
 
-	int playerId;
+	int playerId; // 1 for Minotaur, 2 for Theseus
 	String name;
 	Board board;
 	int score;
@@ -63,44 +63,59 @@ public class Player {
 		Random rand  = new Random();
 		int n = rand.nextInt(4);
 		int move = 2*n + 1;
+		
 		int currentTile = this.y + this.x * board.getN();
-		int supplies = 0; //?
-		int[] array = {currentTile, this.x, this.y, supplies};
+		
+		int supplies = -1; //when no supply is got, supplies value is -1
+		
+		int[] array = {id, this.x, this.y, supplies};
 		
 		switch(move)
 		{
 			case 1:
+				
 				if(board.tiles[currentTile].getUp())
-					break;
-				else
 				{
-					this.y = this.y + 1;
-					currentTile = this.y + this.x * board.getN();
+					System.out.println("Player didn't move. Wall ahead!");
+					break;					
 				}
+				else
+				{ this.y = this.y + 1; }
+				
 			case 3:
+				
 				if(board.tiles[currentTile].getRight())
-					break;
-				else
 				{
-					this.x = this.x + 1;
-					currentTile = this.y + this.x * board.getN();
+					System.out.println("Player didn't move. Wall ahead!");
+					break;					
 				}
+				else
+				{ this.x = this.x + 1; }
+				
 			case 5:
+				
 				if(board.tiles[currentTile].getDown())
-					break;
-				else
 				{
-					this.y = this.y - 1;
-					currentTile = this.y + this.x * board.getN();
+					System.out.println("Player didn't move. Wall ahead!");
+					break;					
 				}
+				else
+				{ this.y = this.y - 1; }
+				
 			case 7:
+				
 				if(board.tiles[currentTile].getLeft())
-					break;
-				else
 				{
-					this.x = this.x - 1;
-					currentTile = this.y + this.x * board.getN();
+					System.out.println("Player didn't move. Wall ahead!");
+					break;					
 				}
+				else { this.x = this.x - 1; }
+		}
+		
+		
+		if(id == 2)
+		{
+			
 		}
 		
 		return array;
