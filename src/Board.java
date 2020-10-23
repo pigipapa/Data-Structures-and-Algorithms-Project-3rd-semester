@@ -10,6 +10,8 @@ public class Board {
 	
 	Board(){
 		//void constructor
+		tiles = new Tile[this.N*this.N];
+		supplies = new Supply[S];
 	}
 	
 	Board(int N, int S, int W){		
@@ -41,8 +43,7 @@ public class Board {
 	void createTile() {
 		
 		Random rand = new Random();
-		
-		
+				
 		for(int j=0;j<N;j++)
 		{
 			for(int k=0;k<N;k++) {
@@ -51,6 +52,7 @@ public class Board {
 				tiles[k+N*j].up=false;
 				tiles[k+N*j].left=false;
 				tiles[k+N*j].right=false;
+				tiles[k+N*j].supply = false;
 			}
 		}
 		
@@ -178,7 +180,7 @@ public class Board {
 			
 				
 						
-				if(c==0){		// if it dosn't exist
+				if(c==0){		// if it doesn't exist
 					supplies[i].supplyId = check; //the number in check variable is the next random id
 					arr[i]=supplies[i].supplyId;  //add it in the assisting array
 					 supp--;				
@@ -192,6 +194,7 @@ public class Board {
 		supplies[k].x=rand.nextInt(N*N);
 		supplies[k].y=rand.nextInt(N*N);
 		supplies[k].supplyTileId=supplies[k].y+N*supplies[k].x;
+		tiles[supplies[k].getSupplyTileId()].setSupply(true);
 		arr[k]=supplies[k].supplyTileId;
 		k++;
 		int checkx, checky, check3, c1=0;
@@ -212,6 +215,7 @@ public class Board {
 				supplies[k].x=checkx;
 				supplies[k].y=checky;
 				supplies[k].supplyTileId=check3;
+				tiles[supplies[k].getSupplyTileId()].setSupply(true);
 				 k++;
 			 }
 			 

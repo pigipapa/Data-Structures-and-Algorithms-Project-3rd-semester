@@ -6,6 +6,7 @@ public class Tile {
     boolean down;
     boolean left;
     boolean right;
+    boolean supply;
     
     Tile(){} 
 
@@ -18,9 +19,10 @@ public class Tile {
         this.down = tile.getDown();
         this.left = tile.getLeft();
         this.right = tile.getRight();
+        this.supply = tile.getSupply();
     }
 
-    Tile(int tileId, int x, int y, boolean up, boolean down, boolean left, boolean right)
+    Tile(int tileId, int x, int y, boolean up, boolean down, boolean left, boolean right, boolean supply)
     {
         this.tileId = tileId;
         this.x = x;
@@ -29,6 +31,7 @@ public class Tile {
         this.down = down;
         this.right = right;
         this.left = left;
+        this.supply = supply;
     }
 
     int getTileId() { return tileId; }
@@ -58,6 +61,10 @@ public class Tile {
     boolean getLeft() { return left; }
 
     void setLeft(boolean left) { this.left = left; }
+    
+    boolean getSupply() { return supply; }
+    
+    void setSupply(boolean supply) { this.supply = supply; }
 
     int countTileWalls() {
     	int count=0;

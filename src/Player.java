@@ -80,7 +80,10 @@ public class Player {
 					break;					
 				}
 				else
-				{ this.y = this.y + 1; }
+				{ 
+					this.y = this.y + 1; 
+					currentTile = this.y + this.x * board.getN();
+				}
 				
 			case 3:
 				
@@ -90,7 +93,10 @@ public class Player {
 					break;					
 				}
 				else
-				{ this.x = this.x + 1; }
+				{ 
+					this.x = this.x + 1; 
+					currentTile = this.y + this.x * board.getN();
+				}
 				
 			case 5:
 				
@@ -100,7 +106,10 @@ public class Player {
 					break;					
 				}
 				else
-				{ this.y = this.y - 1; }
+				{ 
+					this.y = this.y - 1; 
+					currentTile = this.y + this.x * board.getN();
+				}
 				
 			case 7:
 				
@@ -109,7 +118,11 @@ public class Player {
 					System.out.println("Player didn't move. Wall ahead!");
 					break;					
 				}
-				else { this.x = this.x - 1; }
+				else 
+				{ 
+					this.x = this.x - 1; 
+					currentTile = this.y + this.x * board.getN();
+				}
 		}
 		
 		
