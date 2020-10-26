@@ -6,14 +6,17 @@ public class Supply {
     int supplyTileId; //id of the board tile on which the supply is located
 
     Supply(){
-        //void constructor
+    	x = -1;
+    	y = -1;
+    	supplyId = -1;
+    	supplyTileId = 0-1;
     }
     
 	Supply(int supplyId, int x, int y, int supplyTileId){
-		this.supplyId=supplyId;
-		this.x=x;
-		this.y=y;
-		this.supplyTileId=supplyTileId;
+		this.supplyId = supplyId;
+		this.x = x;
+		this.y = y;
+		this.supplyTileId = supplyTileId;
 	}
 
     Supply(Supply ob){

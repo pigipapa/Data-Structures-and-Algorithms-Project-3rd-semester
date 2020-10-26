@@ -40,6 +40,8 @@ public class Board {
 
     int getW() { return W; }
 	
+    Tile getTile(int index) { return tiles[index]; }
+    
 	void createTile() {
 		
 		Random rand = new Random();
@@ -48,11 +50,11 @@ public class Board {
 		{
 			for(int k=0;k<N;k++) {
 				
-				tiles[k+N*j].down=false;	//initializing boolean variables as false
-				tiles[k+N*j].up=false;
-				tiles[k+N*j].left=false;
-				tiles[k+N*j].right=false;
-				tiles[k+N*j].supply = false;
+				tiles[k+N*j].setDown(false);	//initializing boolean variables as false
+				tiles[k+N*j].setUp(false);
+				tiles[k+N*j].setLeft(false);
+				tiles[k+N*j].setRight(false);
+				tiles[k+N*j].setSupply(false);
 			}
 		}
 		
@@ -60,142 +62,136 @@ public class Board {
 		{
 			for(int k=0;k<N;k++) {
 				
-				tiles[k+N*j].x=j;
-				tiles[k+N*j].y=k;
-				tiles[k+N*j].tileId = k+N*j;
+				tiles[k+N*j].setX(j);
+				tiles[k+N*j].setY(k);
+				tiles[k+N*j].setTileId(k+N*j);
 				
-				if(tiles[k+N*j].x==0) {tiles[k+N*j].down=true;}		//checking if the tile is located on the
-				if(tiles[k+N*j].x==N-1) {tiles[k+N*j].up=true;}	//boundaries of the board. If yes, considering
-				if(tiles[k+N*j].y==0) {tiles[k+N*j].left=true;}	//its position 1 or 2 booleans become true. 
-				if(tiles[k+N*j].y==N-1) {tiles[k+N*j].right=true;} //The rest remain false.
-				
-				
+				if(tiles[k+N*j].x==0) { tiles[k+N*j].setDown(true); }		//checking if the tile is located on the
+				if(tiles[k+N*j].x==N-1) { tiles[k+N*j].setUp(true); }		//boundaries of the board. If yes, considering
+				if(tiles[k+N*j].y==0) { tiles[k+N*j].setLeft(true); }		//its position 1 or 2 booleans become true. 
+				if(tiles[k+N*j].y==N-1) { tiles[k+N*j].setRight(true); }    //The rest remain false.
+								
 			}
 		}
 				
-		tiles[0].down=false;  //?
+		tiles[0].down=false;  // The tile with 0 is considered to be the entrance
 		int walls=W-(4*N-1);  //the number of walls left to be used after setting the perimetric walls
 		
-			do{
-				int xi = rand.nextInt(N); //initialize a random x
-				int yi = rand.nextInt(N); //initialize a random y
-				int n = rand.nextInt(4);  //a random number between 0 and 3
-				int side=2*n+1; 	      //side is a variable in the set {1,3,5,7} 
-				
-					if(tiles[yi+N*xi].countTileWalls()<2) {  //checks if the given tile has more than 2 walls
-						
-						switch(side) //1->up, 5->down, 7->left, 3->right
-						{
-							case 1: 
-								if(yi+N*xi+N<N*N) {	//checks if the upper neighboring tile of the given one exists
-									if(tiles[yi+N*xi+N].countTileWalls()<2)	//checks if the upper neighboring tile has more than 2 walls
-									{
-										if(tiles[yi+N*xi].up!=true)	//checks if the given tile already has a wall upwards
-										{
-											tiles[yi+N*xi].up=rand.nextBoolean(); //if not then randomly decide if placing one on the upper side
-											if(tiles[yi+N*xi].up==true) { //if a wall is placed
-												tiles[yi+N*xi+N].down=true;	//the upper neighboring tile acquires an southern wall 
-												walls--; //thus subtracts the wall counter by 1
-											}
-										}	
+		do{
+			int xi = rand.nextInt(N); //initialize a random tile's x coordinate
+			int yi = rand.nextInt(N); //initialize a random tile's y coordinate
+			int n = rand.nextInt(4);  //a random number between 0 and 3
+			int side = 2*n+1; 	      //side is a variable in the set {1,3,5,7} 
+					
+			if(tiles[yi+N*xi].countTileWalls()<2) {  //checks if the given tile has more than 2 walls
+							
+				switch(side) //1->up, 5->down, 7->left, 3->right
+				{
+					case 1: 
+						if(yi+N*xi+N<N*N) //checks if the upper neighboring tile of the given one exists
+						{	
+							if(tiles[yi+N*xi+N].countTileWalls()<2)	//checks if the upper neighboring tile has more than 2 walls
+							{
+								if(tiles[yi+N*xi].up!=true)	//checks if the given tile already has a wall upwards
+								{
+									tiles[yi+N*xi].up=rand.nextBoolean(); //if not then randomly decide if placing one on the upper side
+									if(tiles[yi+N*xi].up==true) { //if a wall is placed
+										tiles[yi+N*xi+N].down=true;	//the upper neighboring tile acquires an southern wall 
+										walls--; //thus subtracts the wall counter by 1
 									}
-							} break;
+								}	
+							}
+					} break;
+									
+					//other cases follow the same logic
+					case 3:
+						if(yi<N-1) {
+							if(tiles[yi+N*xi+1].countTileWalls()<2)
+							{
+								if(tiles[yi+N*xi].right!=true)
+								{
+									tiles[yi+N*xi].right=rand.nextBoolean();
+									if(tiles[yi+N*xi].right==true) {
+										tiles[yi+N*xi+1].left=true;
+										walls--;
+									}
+								}	
+							}
+						} break;
 								
-							//other cases follow the same logic
-							case 3:
-								if(yi<N-1) {
-									if(tiles[yi+N*xi+1].countTileWalls()<2)
-									{
-										if(tiles[yi+N*xi].right!=true)
-										{
-											tiles[yi+N*xi].right=rand.nextBoolean();
-											if(tiles[yi+N*xi].right==true) {
-												tiles[yi+N*xi+1].left=true;
-												walls--;
-											}
-										}	
+					case 7:
+						if(yi>0) {
+							if(tiles[yi+N*xi-1].countTileWalls()<2)
+							{
+								if(tiles[yi+N*xi].left!=true)
+								{
+									tiles[yi+N*xi].left=rand.nextBoolean();
+									if(tiles[yi+N*xi].left==true) {
+										tiles[yi+N*xi-1].right=true;
+										walls--;
 									}
-							} break;
-							
-							case 7:
-								if(yi>0) {
-									if(tiles[yi+N*xi-1].countTileWalls()<2)
-									{
-										if(tiles[yi+N*xi].left!=true)
-										{
-											tiles[yi+N*xi].left=rand.nextBoolean();
-											if(tiles[yi+N*xi].left==true) {
-												tiles[yi+N*xi-1].right=true;
-												walls--;
-											}
-										}	
-									}
-							} break;
-							
-							case 5:
-								if(yi+N*xi-N>0) {
-									if(tiles[yi+N*xi-N].countTileWalls()<2)
-									{
-										if(tiles[yi+N*xi].down!=true)
-										{
-											tiles[yi+N*xi].down=rand.nextBoolean();
-											if(tiles[yi+N*xi].down==true) {
-												tiles[yi+N*xi-N].up=true;
-												walls--;
-											}
-										}	
-									}
-							} break;
-						
-						}												
-					}		
-															
-			}while(walls>0);						
+								}	
+							}
+					} break;
+								
+					case 5:
+						if(yi+N*xi-N>0) {
+						if(tiles[yi+N*xi-N].countTileWalls()<2)
+						{
+							if(tiles[yi+N*xi].down!=true)
+							{
+								tiles[yi+N*xi].down=rand.nextBoolean();
+								if(tiles[yi+N*xi].down==true) {
+									tiles[yi+N*xi-N].up=true;
+									walls--;
+								}
+							}	
+						}
+					} break;							
+				}												
+			}																		
+	}while(walls>0);						
 	}
 	
 	void createSupply() {
 		
 		Random rand = new Random();
-		int i=0;
-		int supp=S;
-		int[] arr=new int[S];
-		int c=0;
+		int i = 0;
+		int supp = S;
+		int[] arr = new int[S];
+		int c = 0;
 		
-		supplies[i].supplyId = rand.nextInt(S)+1; //supply Id is between 1-S, randomly choose one number of the set
-		arr[i]=supplies[i].supplyId; //store the previous result in a assisting array
+		supplies[i].setSupplyId(rand.nextInt(S)+1); //supply Id is between 1-S, randomly choose one number of the set
+		arr[i] = supplies[i].supplyId; //store the previous result in a assisting array
 		supp--; //reverse supply counter
-		i++; //supply array index
+		i++; //supply array index 
 		int check;
 		
 		while(supp>0) {
 			
-				check = rand.nextInt(S)+1; //find a random number and store it in the check variable
-				for(int j=0;j<i;j++)
-				{
-					if(check==arr[j])
-					{
-						c++;				//check if this random number which is the supply id already exists in the assisting array
-					}
-				}
-			
-				
+			check = rand.nextInt(S)+1; //find a random number and store it in the check variable
+			for(int j=0;j<i;j++)
+			{
+				if(check==arr[j]) //check if this random number which is the supply id already exists in the assisting array	
+					c++;										
 						
 				if(c==0){		// if it doesn't exist
 					supplies[i].supplyId = check; //the number in check variable is the next random id
 					arr[i]=supplies[i].supplyId;  //add it in the assisting array
-					 supp--;				
-					 i++;					 
-					}					
-			c=0;
-		} 
+					supp--;				
+					i++;					 
+					}		
+				
+				c=0;
+			} 
 		
-			//same logic as the above
+		//same logic as above
 		int k=0;
-		supplies[k].x=rand.nextInt(N*N);
-		supplies[k].y=rand.nextInt(N*N);
-		supplies[k].supplyTileId=supplies[k].y+N*supplies[k].x;
+		supplies[k].setX(rand.nextInt(N*N));
+		supplies[k].setY(rand.nextInt(N*N));
+		supplies[k].setSupplyTileId(supplies[k].getY()+N*supplies[k].getX());
 		tiles[supplies[k].getSupplyTileId()].setSupply(true);
-		arr[k]=supplies[k].supplyTileId;
+		arr[k]=supplies[k].getSupplyTileId();
 		k++;
 		int checkx, checky, check3, c1=0;
 		
@@ -207,14 +203,13 @@ public class Board {
 			for(int j=0;j<k;j++)
 			{
 				if(check3==arr[j])
-				{
 					c1++;
-				}
+
 			}
-			 if(c1==0) {
-				supplies[k].x=checkx;
-				supplies[k].y=checky;
-				supplies[k].supplyTileId=check3;
+			if(c1==0) {
+				supplies[k].setX(checkx);
+				supplies[k].setY(checky);
+				supplies[k].setSupplyTileId(check3);
 				tiles[supplies[k].getSupplyTileId()].setSupply(true);
 				 k++;
 			 }
@@ -222,5 +217,8 @@ public class Board {
 			c1=0;
 		}
 			
+		}
 	}
-}    
+	
+
+}

@@ -1,5 +1,3 @@
-import java.util.Random;
-
 public class Player {
 
 	int playerId; // 1 for Minotaur, 2 for Theseus
@@ -8,10 +6,12 @@ public class Player {
 	int score;
 	int x;
 	int y;
+	int currentTile;
 	
 	Player()
 	{
 		this.board = new Board();
+		this.score = 0;
 	}
 	
 	Player(int playerId, String name, Board board, int score, int x, int y)
@@ -22,6 +22,7 @@ public class Player {
 		this.score = score;
 		this.x = x;
 		this.y = y;
+		this.currentTile = y + x * board.getN();
 	}
 	
 	Player(Player player)
@@ -32,6 +33,7 @@ public class Player {
 		score = player.getScore();
 		x = player.getX();
 		y = player.getY();
+		currentTile = player.getY() + player.getX() * player.getBoard().getN();
 	}	
 	
 	int getPlayerId() { return playerId; }
@@ -54,23 +56,15 @@ public class Player {
 	
 	void setY(int y) { this.y = y;}
 	
-	int[] move(int id)
-	{
-		// TODO: 1) check whether player is Minotaur or Theseus
-		//       2) id?
-		//       3) supplies
+	Board getBoard() { return board; }
+	
+	int[] move(int direction)
+	{				
+		int supply = -1; //when no supply is got, supplies value is -1
 		
-		Random rand  = new Random();
-		int n = rand.nextInt(4);
-		int move = 2*n + 1;
+		int[] array = {currentTile, x, y, supply};
 		
-		int currentTile = this.y + this.x * board.getN();
-		
-		int supplies = -1; //when no supply is got, supplies value is -1
-		
-		int[] array = {id, this.x, this.y, supplies};
-		
-		switch(move)
+		switch(direction)
 		{
 			case 1:
 				
@@ -82,7 +76,7 @@ public class Player {
 				else
 				{ 
 					this.y = this.y + 1; 
-					currentTile = this.y + this.x * board.getN();
+					this.currentTile = this.y + this.x * board.getN();
 				}
 				
 			case 3:
@@ -95,7 +89,7 @@ public class Player {
 				else
 				{ 
 					this.x = this.x + 1; 
-					currentTile = this.y + this.x * board.getN();
+					this.currentTile = this.y + this.x * board.getN();
 				}
 				
 			case 5:
@@ -108,7 +102,7 @@ public class Player {
 				else
 				{ 
 					this.y = this.y - 1; 
-					currentTile = this.y + this.x * board.getN();
+					this.currentTile = this.y + this.x * board.getN();
 				}
 				
 			case 7:
@@ -121,15 +115,26 @@ public class Player {
 				else 
 				{ 
 					this.x = this.x - 1; 
-					currentTile = this.y + this.x * board.getN();
+					this.currentTile = this.y + this.x * board.getN();
 				}
 		}
-		
-		
-		if(id == 2)
+				
+		if(playerId == 2) //Checks if Theseus is the player
 		{
-			
-		}
+//			if(board.getTile(currentTile).getSupply()) //Checks if there is a supply in the current tile
+//			{
+//				array[3] = supplies[currentTile].getSupplyId();
+//				supplies[currentTile].setX(-1);
+//				supplies[currentTile].setY(-1)'
+//				supplies[currentTile].setSupplyId(-1);
+//				supplies[currentTile].setSupplyTileId(-1);
+//				board.tiles[currentTile].setSupply(false);
+//				setScore(getScore() + 1); 
+//			}
+		} 
+		array[0]  = this.currentTile;
+		array[1] = this.x;
+		array[2] = this.y;
 		
 		return array;
 	}

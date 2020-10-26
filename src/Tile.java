@@ -6,7 +6,7 @@ public class Tile {
     boolean down;
     boolean left;
     boolean right;
-    boolean supply;
+    boolean supply; // if true, there is a supply in the tile
     
     Tile(){} 
 
@@ -54,7 +54,7 @@ public class Tile {
 
     void setDown(boolean down) { this.down = down; }
 
-    boolean getRight() { return right;    }
+    boolean getRight() { return right; }
 
     void setRight(boolean right) { this.right = right; }
 
