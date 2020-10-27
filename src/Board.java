@@ -9,15 +9,17 @@ public class Board {
 	Supply[] supplies;
 	
 	Board(){
-		//void constructor
-		tiles = new Tile[this.N*this.N];
-		supplies = new Supply[S];
+		N=0;
+		S=0;
+		W=0;
 	}
 	
 	Board(int N, int S, int W){		
 		this.N = N;
 		this.S = S;
-		this.W = W;		
+		this.W = W;
+		tiles = new Tile[this.N*this.N];
+		supplies = new Supply[S];
 	}
 	
 	Board(Board ob){
@@ -41,6 +43,8 @@ public class Board {
     int getW() { return W; }
 	
     Tile getTile(int index) { return tiles[index]; }
+   
+    Supply getSupply(int index) { return supplies[index]; }
     
 	void createTile() {
 		
@@ -156,69 +160,46 @@ public class Board {
 	void createSupply() {
 		
 		Random rand = new Random();
-		int i = 0;
-		int supp = S;
-		int[] arr = new int[S];
-		int c = 0;
 		
-		supplies[i].setSupplyId(rand.nextInt(S)+1); //supply Id is between 1-S, randomly choose one number of the set
-		arr[i] = supplies[i].supplyId; //store the previous result in a assisting array
-		supp--; //reverse supply counter
-		i++; //supply array index 
-		int check;
+		int k = 0;
+		int checkx, checky, checkId;
 		
-		while(supp>0) {
-			
-			check = rand.nextInt(S)+1; //find a random number and store it in the check variable
-			for(int j=0;j<i;j++)
-			{
-				if(check==arr[j]) //check if this random number which is the supply id already exists in the assisting array	
-					c++;										
-						
-				if(c==0){		// if it doesn't exist
-					supplies[i].supplyId = check; //the number in check variable is the next random id
-					arr[i]=supplies[i].supplyId;  //add it in the assisting array
-					supp--;				
-					i++;					 
-					}		
-				
-				c=0;
-			} 
-		
-		//same logic as above
-		int k=0;
-		supplies[k].setX(rand.nextInt(N*N));
-		supplies[k].setY(rand.nextInt(N*N));
-		supplies[k].setSupplyTileId(supplies[k].getY()+N*supplies[k].getX());
-		tiles[supplies[k].getSupplyTileId()].setSupply(true);
-		arr[k]=supplies[k].getSupplyTileId();
-		k++;
-		int checkx, checky, check3, c1=0;
-		
-		while(k!=S)
+		while(k != S)
 		{
-			checkx = rand.nextInt(N*N); //x
-			checky = rand.nextInt(N*N); //y
-			check3 = checky+N*checkx; //Id
-			for(int j=0;j<k;j++)
-			{
-				if(check3==arr[j])
-					c1++;
+			checkx = rand.nextInt(N); //x
+			checky = rand.nextInt(N); //y
+			checkId = checky + N*checkx; //Id
+			
+			if((checkId != 0) && checkId != ((N*1)*(N-1))/2 ) { // Supply must not be placed on the middle or on the first tile
+									
+				 if(!tiles[checkId].getSupply()) {		// if it doesn't exist
+					supplies[k].x = checkx;	//the number in checkx variable is the next random x
+					supplies[k].y = checky;	//the number in checky variable is the next random y
+					supplies[k].supplyTileId = checkId;	//the number in check3 variable is the next random tile id
+					supplies[k].setSupplyId(k+1); 
+					tiles[supplies[k].getSupplyTileId()].setSupply(true);	///the tile with this specific Id now contains a supply
+					k++;
+				 }
 
 			}
-			if(c1==0) {
-				supplies[k].setX(checkx);
-				supplies[k].setY(checky);
-				supplies[k].setSupplyTileId(check3);
-				tiles[supplies[k].getSupplyTileId()].setSupply(true);
-				 k++;
-			 }
-			 
-			c1=0;
 		}
-			
-		}
+				
 	}
 	
 
+	/* 
+	* TileIdToSupplyId function returns the supply's Id given 
+	* the Id of the tile it is located on. If it is not found 
+	* return -1.
+	*/
+	    
+	int  TileIdToSupplyId(int tileId)
+	{
+	    for(int i = 0; i < S; i++)
+	    	if(tileId == supplies[i].getSupplyTileId())
+	    		return supplies[i].getSupplyId();
+	    
+	    return -1;
+	    
+	}	
 }

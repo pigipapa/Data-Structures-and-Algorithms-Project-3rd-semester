@@ -9,7 +9,7 @@ public class Supply {
     	x = -1;
     	y = -1;
     	supplyId = -1;
-    	supplyTileId = 0-1;
+    	supplyTileId = -1;
     }
     
 	Supply(int supplyId, int x, int y, int supplyTileId){
@@ -26,7 +26,7 @@ public class Supply {
         supplyTileId=ob.getSupplyTileId();
     }
 
-    void setSupplyId(int supId) { supplyId = supId; }
+    void setSupplyId(int supplyId) { this.supplyId = supplyId; }
 
     int getSupplyId() { return supplyId; }
 
@@ -38,8 +38,9 @@ public class Supply {
 
     int getY() { return y; }
 
-    void setSupplyTileId(int supTileId) { supplyTileId = supTileId; }
+    void setSupplyTileId(int supplyTileId) { this.supplyTileId = supplyTileId; }
 
     int getSupplyTileId() { return supplyTileId; }
+
 
 }

@@ -60,9 +60,9 @@ public class Player {
 	
 	int[] move(int direction)
 	{				
-		int supply = -1; //when no supply is got, supplies value is -1
+		int supplyId = -1; //when no supply is got, supplyId's value is -1
 		
-		int[] array = {currentTile, x, y, supply};
+		int[] array = {currentTile, x, y, supplyId};
 		
 		switch(direction)
 		{
@@ -121,18 +121,20 @@ public class Player {
 				
 		if(playerId == 2) //Checks if Theseus is the player
 		{
-//			if(board.getTile(currentTile).getSupply()) //Checks if there is a supply in the current tile
-//			{
-//				array[3] = supplies[currentTile].getSupplyId();
-//				supplies[currentTile].setX(-1);
-//				supplies[currentTile].setY(-1)'
-//				supplies[currentTile].setSupplyId(-1);
-//				supplies[currentTile].setSupplyTileId(-1);
-//				board.tiles[currentTile].setSupply(false);
-//				setScore(getScore() + 1); 
-//			}
+			if(board.getTile(currentTile).getSupply()) //Checks if there is a supply in the current tile
+			{
+				supplyId = board.TileIdToSupplyId(currentTile);
+				array[3] = supplyId;
+				board.getSupply(supplyId).setX(-1);
+				board.getSupply(supplyId).setY(-1);
+				board.getSupply(supplyId).setSupplyId(-1);
+				board.getSupply(supplyId).setSupplyTileId(-1);
+				board.getTile(supplyId).setSupply(false);
+				score++; 
+			}
 		} 
-		array[0]  = this.currentTile;
+		
+		array[0] = this.currentTile;
 		array[1] = this.x;
 		array[2] = this.y;
 		
