@@ -170,7 +170,7 @@ public class Board {
 			checky = rand.nextInt(N); //y
 			checkId = checky + N*checkx; //Id
 			
-			if((checkId != 0) && checkId != ((N*1)*(N-1))/2 ) { // Supply must not be placed on the middle or on the first tile
+			if((checkId != 0) && checkId != (N*N-1)/2 ) { // Supply must not be placed on the middle or on the first tile
 									
 				 if(!tiles[checkId].getSupply()) {		// if it doesn't exist
 					supplies[k].x = checkx;	//the number in checkx variable is the next random x
