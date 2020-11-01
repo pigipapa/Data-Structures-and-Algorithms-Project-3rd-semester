@@ -1,12 +1,15 @@
+/**
+ * Class that implements board's tiles.
+ */
 public class Tile {
-    int tileId;
-    int x;
-    int y;
-    boolean up;
-    boolean down;
-    boolean left;
-    boolean right;
-    boolean supply;
+    int tileId; //tile's id
+    int x; //tile's x coordinate
+    int y; //tile's y coordinate
+    boolean up; // true if there is a wall northerly, false if not
+    boolean down; // true if there is a wall southerly, false if not
+    boolean left; // true if there is a wall westerly, false if not
+    boolean right; // true if there is a wall easterly, false if not
+    boolean supply; // true if there is a supply on the tile, false if not
 
     Tile(){
     	tileId = 0;
@@ -19,6 +22,24 @@ public class Tile {
     	supply = false;
     }
     
+	/**
+     * Initializes Tile with the given values.
+     */
+    Tile(int tileId, int x, int y, boolean up, boolean down, boolean left, boolean right, boolean supply)
+    {
+        this.tileId = tileId;
+        this.x = x;
+        this.y = y;
+        this.up = up;
+        this.down = down;
+        this.right = right;
+        this.left = left;
+        this.supply = supply;
+    }
+    
+	/**
+     * Initializes Tile with the values of another board.
+     */    
     Tile(Tile tile)
     {
         tileId = tile.tileId;
@@ -32,17 +53,6 @@ public class Tile {
         
     }
 
-    Tile(int tileId, int x, int y, boolean up, boolean down, boolean left, boolean right, boolean supply)
-    {
-        this.tileId = tileId;
-        this.x = x;
-        this.y = y;
-        this.up = up;
-        this.down = down;
-        this.right = right;
-        this.left = left;
-        this.supply = supply;
-    }
 
     int getTileId() { return tileId; }
 
@@ -76,7 +86,9 @@ public class Tile {
     
     void setSupply(boolean supply) { this.supply = supply; }
     
-    
+	/**
+	 * Counts tile's total walls
+	 */
     int countTileWalls() {
     	int count=0;
     	if(down==true) {count++;}

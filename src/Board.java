@@ -12,18 +12,18 @@ public class Board {
 	Supply[] supplies;	// An array with Supply objects.
 	
 	/**
-     * Initializes the board with zero values.
+     * Initializes Board with zero values.
      */
 	public Board(){
-		N=0;
-		S=0;
-		W=0;
-		tiles=new Tile[0];
+		N = 0;
+		S = 0;
+		W = 0;
+		tiles = new Tile[0];
 		supplies = new Supply[0];
 	}
 	
 	/**
-     * Initializes the board with the given values.
+     * Initializes Board with the given values.
      */
 	public Board(int N, int S, int W){
 		
@@ -32,29 +32,26 @@ public class Board {
 		this.W = W;
 		tiles = new Tile[this.N*this.N];
 		
-		for(int i=0; i<N*N; i++) {
-        tiles[i] = new Tile();
-		}
+		for(int i=0; i<N*N; i++) 
+			tiles[i] = new Tile();
 		
 		supplies = new Supply[S];
 		
-		for(int i=0; i<S; i++) {
+		for(int i=0; i<S; i++) 
 			supplies[i] = new Supply();
-		}
 		
 		createBoard();
 	}
 	
 	/**
-     * Initializes the board with the values of another board.
+     * Initializes Board with the values of another board.
      */
 	public Board(Board ob){
 		N = ob.N;
 		S = ob.S;
 		W = ob.W;
 		tiles = ob.tiles.clone();
-		supplies = ob.supplies.clone();
-		
+		supplies = ob.supplies.clone();		
 	}
 
 	/**
@@ -62,54 +59,42 @@ public class Board {
      *
      * @param N the size of the square matrix.
      */
-	public void setN(int N) {
-		this.N = N;
-	}
+	public void setN(int N) { this.N = N; }
 	
 	/**
      * Returns the size of the board.
      *
      * @return the size of the board.
      */
-	public int getN() {
-		return N;
-	}
+	public int getN() { return N; }
 	
 	/**
      * Sets the number of the supplies on the board.
      *
      * @param S the host of the supplies.
      */
-	public void setS(int S) {
-		this.S = S;
-	}
+	public void setS(int S) { this.S = S; }
 	
 	/**
      * Returns the number of the supplies.
      *
      * @return the number of the supplies.
      */
-	public int getS() {
-		return S;
-	}
+	public int getS() { return S; }
 	
 	/**
      * Sets the number of the walls of the maze.
      *
      * @param W the host of the supplies.
      */
-	public void setW(int W) {
-		this.W = W;
-	}
+	public void setW(int W) { this.W = W; }
 	
 	/**
      * Returns the number of the maze walls.
      *
      * @return the number of the walls.
      */
-	public int getW() {
-		return W;
-	}
+	public int getW() { return W; }
 	
 	/**
      * Returns a tile of the board given its index.
@@ -148,9 +133,7 @@ public class Board {
 				if(tiles[k+N*j].x==0) { tiles[k+N*j].setDown(true); }		// Checking if the tile is located on the
 				if(tiles[k+N*j].x==N-1) { tiles[k+N*j].setUp(true); }		// boundaries of the board. If yes, considering
 				if(tiles[k+N*j].y==0) { tiles[k+N*j].setLeft(true); }		// its position 1 or 2 booleans become true. 
-				if(tiles[k+N*j].y==N-1) { tiles[k+N*j].setRight(true); }    // The rest remain false.
-				
-				
+				if(tiles[k+N*j].y==N-1) { tiles[k+N*j].setRight(true); }    // The rest remain false.				
 			}
 		}
 				
@@ -165,9 +148,9 @@ public class Board {
 				
 					if(tiles[yi+N*xi].countTileWalls()<2) {  // Checks if the given tile has more than 2 walls.
 						
-						switch(side) // 1->up, 5->down, 7->left, 3->right
+						switch(side) // 1 -> Up, 5 -> Down, 7 -> Left, 3 -> Right
 						{
-							case 1:	//up
+							case 1:	//Up
 								if(yi+N*xi+N<N*N) {										// Checks if the upper neighboring tile of the given one exists.
 									if(tiles[yi+N*xi+N].countTileWalls()<2)				// Checks if the upper neighboring tile has more than 2 walls.
 									{
@@ -183,7 +166,7 @@ public class Board {
 							} break;
 								
 							// The rest cases follow the same logic.
-							case 3:	//right
+							case 3:	// Right
 								if(yi<N-1) {
 									if(tiles[yi+N*xi+1].countTileWalls()<2)
 									{
@@ -198,7 +181,7 @@ public class Board {
 									}
 							} break;
 							
-							case 7:	//left
+							case 7:	// Left
 								if(yi>0) {
 									if(tiles[yi+N*xi-1].countTileWalls()<2)
 									{
@@ -213,7 +196,7 @@ public class Board {
 									}
 							} break;
 							
-							case 5:	//down
+							case 5:	// Down
 								if(yi+N*xi-N>0) {
 									if(tiles[yi+N*xi-N].countTileWalls()<2)
 									{
@@ -226,18 +209,10 @@ public class Board {
 											}
 										}	
 									}
-							} break;
-						
+							} break;						
 						}
-						
-						
-					}		
-					
-					
-					
+					}							
 			}while(walls>0);
-				
-		
 	}
 	
 	/**
@@ -268,20 +243,16 @@ public class Board {
 					tiles[supplies[k].getSupplyTileId()].setSupply(true);	// The tile with this specific Id now contains a supply.
 					k++;
 				 }
-
 			}
-		}
-				
+		}				
 	}
 	
 	/**
 	 * Creates the board using createTile() and createSupply() functions which are initializing the board in a random way. 
 	 */
-	public void createBoard() {
-		
+	public void createBoard() {	
 		createTile();
-		createSupply();
-				
+		createSupply();				
 	}
 	
 	/**
@@ -366,8 +337,7 @@ public class Board {
 			}
 		}
 		
-		return b;
-		
+		return b;		
 	}
 	
 	
@@ -377,8 +347,7 @@ public class Board {
 	    	if(tileId == supplies[i].getSupplyTileId())
 	    		return supplies[i].getSupplyId();
 	    
-	    return -1;
-	    
+	    return -1;	    
 	}
 
 }

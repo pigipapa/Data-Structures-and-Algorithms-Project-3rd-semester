@@ -1,11 +1,25 @@
 import java.util.Random;
 
+/**
+ * Class that contains the main and implements the game. 
+ */
 public class Game {
-	int round;
+	int round; // game's number of total rounds
 	
 	Game(){ this.round = 1; }
-	
+
+	/**
+     * Returns game's current round.
+     *
+     * @return game's current round.
+     */	
 	int getRound() { return round; }
+	
+	/**
+     * Sets game's current round.
+     *
+     * @param round, game's current round.
+     */
 	void setRound(int round) { this.round = round; }
 	
 	
@@ -14,7 +28,7 @@ public class Game {
 		Random rand = new Random(System.currentTimeMillis());
 		
 		// Board variables
-		int Dimensions = 5;  //egrafe 15
+		int Dimensions = 15;  
 		int Supplies = 4;
 		int Walls = (Dimensions*Dimensions*3+1)/2;
 		
@@ -26,6 +40,7 @@ public class Game {
 		int direction = 0; // The direction the player will move to
 		int n = 0;
 		int times;
+		
 		for(times = 0; times < 200; times++)
 		{
 			System.out.println("======================================");
@@ -39,13 +54,13 @@ public class Game {
 
 					System.out.print(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile())[i][j]);
 				}
-				System.out.print(newLine);
+				System.out.println();
 			}
 			
-			System.out.print(newLine);
+			System.out.println();
 				
 			// Time for Theseus to move
-			if(Theseus.getCurrentTile() == 0) 
+			if(Theseus.getCurrentTile() == 0) // If Theseus is on the tile with Id 0 (entrance tile), he must not move southerly
 			{
 				n = rand.nextInt(2);
 				direction = 2*n + 1;
@@ -68,7 +83,7 @@ public class Game {
 			System.out.print(newLine);
 			
 			// Time for Minotaur to move
-			if(Minotaur.getCurrentTile() == 0)
+			if(Minotaur.getCurrentTile() == 0) // If Minotaur is on the tile with Id 0 (entrance tile), he must not move southerly
 			{
 				n = rand.nextInt(2);
 				direction = 2*n + 1;
