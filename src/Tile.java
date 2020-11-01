@@ -6,20 +6,30 @@ public class Tile {
     boolean down;
     boolean left;
     boolean right;
-    boolean supply; // if true, there is a supply in the tile
-    
-    Tile(){} 
+    boolean supply;
 
+    Tile(){
+    	tileId = 0;
+    	x = 0;
+    	y = 0;
+    	down = false;
+    	up = false;
+    	left = false;
+    	right = false;
+    	supply = false;
+    }
+    
     Tile(Tile tile)
     {
-        this.tileId = tile.getTileId();
-        this.x = tile.getX();
-        this.y = tile.getY();
-        this.up = tile.getUp();
-        this.down = tile.getDown();
-        this.left = tile.getLeft();
-        this.right = tile.getRight();
-        this.supply = tile.getSupply();
+        tileId = tile.tileId;
+        x = tile.x;
+        y = tile.y;
+        up = tile.up;
+        down = tile.down;
+        left = tile.left;
+        right = tile.right;
+        supply = tile.supply; 
+        
     }
 
     Tile(int tileId, int x, int y, boolean up, boolean down, boolean left, boolean right, boolean supply)
@@ -54,7 +64,7 @@ public class Tile {
 
     void setDown(boolean down) { this.down = down; }
 
-    boolean getRight() { return right; }
+    boolean getRight() { return right;    }
 
     void setRight(boolean right) { this.right = right; }
 
@@ -65,7 +75,8 @@ public class Tile {
     boolean getSupply() { return supply; }
     
     void setSupply(boolean supply) { this.supply = supply; }
-
+    
+    
     int countTileWalls() {
     	int count=0;
     	if(down==true) {count++;}
@@ -76,3 +87,5 @@ public class Tile {
     	return count;
     }
 }
+
+
