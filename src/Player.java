@@ -238,22 +238,20 @@ public class Player {
 			if(board.getTile(currentTile).getSupply() == true) //Checks if there is a supply in the current tile
 			{   
 				supplyId = board.TileIdToSupplyId(currentTile);
-				if(supplyId > 0) {	
 					
-					array[3] = supplyId;
+				array[3] = supplyId;
 					
-					// Theseus got the supply, so it should be deleted. Deletion is made by setting supply's
-					// coordinates equal to -1 (outside board), and its id equal to -1 as well. 
-					// Also, tile's variable supply is set false.
+				// Theseus got the supply, so it should be deleted. Deletion is made by setting supply's
+				// coordinates equal to -1 (outside board), and its id equal to -1 as well. 
+				// Also, tile's variable supply is set false.
 					
-					board.getSupply(supplyId-1).setX(-1);
-					board.getSupply(supplyId-1).setY(-1);
-					board.getSupply(supplyId-1).setSupplyId(-1);
-					board.getSupply(supplyId-1).setSupplyTileId(-1);
-					board.getTile(supplyId-1).setSupply(false);
+				board.getSupply(supplyId-1).setX(-1);
+				board.getSupply(supplyId-1).setY(-1);
+				board.getSupply(supplyId-1).setSupplyId(-1);
+				board.getSupply(supplyId-1).setSupplyTileId(-1);
+				board.getTile(currentTile).setSupply(false);
 					
-					score++; 					
-				}
+				score++; 					
 			}
 		} 
 		

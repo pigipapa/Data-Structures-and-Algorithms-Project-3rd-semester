@@ -330,7 +330,7 @@ public class Board {
 		
 		for(int i=0; i<S; i++) {											// The supplies are placed.
 			if(supplies[i].getSupplyId() > 0) {
-				if(tiles[supplies[i].getSupplyTileId()].getLeft() == true)
+				if(tiles[supplies[i].getSupplyTileId()].getLeft())
 					b[2*supplies[i].getX()+1][supplies[i].getY()] = b[2*supplies[i].getX()+1][supplies[i].getY()].replace("   ", "S"+ (i+1) + " ");
 				else
 					b[2*supplies[i].getX()+1][supplies[i].getY()] = b[2*supplies[i].getX()+1][supplies[i].getY()].replace("   ", " S"+ (i+1)); 

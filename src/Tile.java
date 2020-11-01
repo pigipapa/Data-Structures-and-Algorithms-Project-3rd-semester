@@ -2,14 +2,14 @@
  * Class that implements board's tiles.
  */
 public class Tile {
-    int tileId; //tile's id
-    int x; //tile's x coordinate
-    int y; //tile's y coordinate
-    boolean up; // true if there is a wall northerly, false if not
-    boolean down; // true if there is a wall southerly, false if not
-    boolean left; // true if there is a wall westerly, false if not
-    boolean right; // true if there is a wall easterly, false if not
-    boolean supply; // true if there is a supply on the tile, false if not
+    int tileId; // Tile's id
+    int x; // Tile's x coordinate
+    int y; // Tile's y coordinate
+    boolean up; // True if there is a wall northerly, false if not
+    boolean down; // True if there is a wall southerly, false if not
+    boolean left; // True if there is a wall westerly, false if not
+    boolean right; // True if there is a wall easterly, false if not
+    boolean supply; // True if there is a supply on the tile, false if not
 
     Tile(){
     	tileId = 0;
