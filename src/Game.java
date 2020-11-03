@@ -28,7 +28,7 @@ public class Game {
 		Random rand = new Random(System.currentTimeMillis());
 		
 		// Board variables
-		int Dimensions = 15;  
+		int Dimensions = 5;  
 		int Supplies = 4;
 		int Walls = (Dimensions*Dimensions*3+1)/2;
 		
@@ -42,18 +42,15 @@ public class Game {
 		int times;
 		
 		for(times = 0; times < 200; times++)
-		{
-			System.out.println("======================================");
-			System.out.println();			
+		{		
 			System.out.println("Current round: " + game.getRound());
 			
 			
 			String newLine = System.getProperty("line.separator");
 			for (int i = 2*Dimensions; i >= 0; i--) {
-				for (int j = 0; j < Dimensions; j++) {
-
+				for (int j = 0; j < Dimensions; j++) 
 					System.out.print(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile())[i][j]);
-				}
+
 				System.out.println();
 			}
 			
@@ -114,12 +111,13 @@ public class Game {
 				break;
 			}
 			
-			if((Theseus.getX() == Minotaur.getX()) && (Theseus.getY() == Minotaur.getY())) // Theseus went in the tile where Minotaur was
+			if(Theseus.getCurrentTile() == Minotaur.getCurrentTile()) // Theseus went in the tile where Minotaur was
 			{
 				System.out.println("Minotaur got Theseus. Minotaur is the winner.");
 				break;
 			}		
-			
+
+			System.out.println("======================================");
 			game.setRound(game.getRound()+1);
 		}
 		

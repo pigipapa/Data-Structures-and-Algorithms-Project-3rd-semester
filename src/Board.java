@@ -137,16 +137,16 @@ public class Board {
 			}
 		}
 				
-		tiles[0].setDown(false); 	// The tile with 0 is considered to be the entrance. No wall is added.
-		int walls=14; 		 	    // The number of walls left to be used after setting the perimetric walls.
+		tiles[0].setDown(false); 	  // The tile with Id 0 is considered to be the entrance. No wall is added.
+		int walls = W - (4 * N - 1);  // The number of walls left to be used after setting the perimetric walls.
 		
 			do{
 				int xi = rand.nextInt(N); // Initialize a random x.
 				int yi = rand.nextInt(N); // Initialize a random y.
 				int n = rand.nextInt(4);  // A random number between 0 and 3.
-				int side=2*n+1; 	      // Side is a variable in the set {1,3,5,7}. 
+				int side = 2*n + 1; 	  // Side is a variable in the set {1,3,5,7}. 
 				
-					if(tiles[yi+N*xi].countTileWalls()<2) {  // Checks if the given tile has more than 2 walls.
+					if(tiles[yi + N*xi].countTileWalls()<2) {  // Checks if the given tile has more than 2 walls.
 						
 						switch(side) // 1 -> Up, 5 -> Down, 7 -> Left, 3 -> Right
 						{
@@ -159,7 +159,7 @@ public class Board {
 											tiles[yi+N*xi].setUp(rand.nextBoolean());	// If not then randomly decide if placing one on the upper side.
 											if(tiles[yi+N*xi].getUp()==true) { 			// If a wall is placed
 												tiles[yi+N*xi+N].setDown(true);			// the upper neighboring tile acquires an southern wall. 
-												walls--; 								// Thus subtracts the wall counter by 1.
+												walls -= 2; 								// Thus subtracts the wall counter by 1.
 											}
 										}	
 									}
@@ -175,7 +175,7 @@ public class Board {
 											tiles[yi+N*xi].setRight(rand.nextBoolean());
 											if(tiles[yi+N*xi].getRight()==true) {
 												tiles[yi+N*xi+1].setLeft(true);
-												walls--;
+												walls -= 2;
 											}
 										}	
 									}
@@ -190,7 +190,7 @@ public class Board {
 											tiles[yi+N*xi].setLeft(rand.nextBoolean());
 											if(tiles[yi+N*xi].getLeft()==true) {
 												tiles[yi+N*xi-1].setRight(true);
-												walls--;
+												walls -= 2;
 											}
 										}	
 									}
@@ -205,7 +205,7 @@ public class Board {
 											tiles[yi+N*xi].setDown(rand.nextBoolean());
 											if(tiles[yi+N*xi].getDown()==true) {
 												tiles[yi+N*xi-N].setUp(true);
-												walls--;
+												walls -= 2;
 											}
 										}	
 									}
@@ -252,7 +252,13 @@ public class Board {
 	 */
 	public void createBoard() {	
 		createTile();
-		createSupply();				
+		createSupply();	
+		
+		int totalWalls = 0;
+		for(int i = 0; i < N*N; i++)
+			totalWalls += tiles[i].countTileWalls();
+
+		System.out.println("Total Walls: " + totalWalls);
 	}
 	
 	/**
@@ -305,12 +311,10 @@ public class Board {
 				}
 			
 			if(tiles[i].getLeft()==true) {
-				//if(tiles[i].getY() != 0) {
 				if(tiles[i].getY() == N-1)
 					b[2*tiles[i].getX()+1][tiles[i].getY()]="|   |";
 				else
 					b[2*tiles[i].getX()+1][tiles[i].getY()]="|   ";
-				//}
 			}
 			
 		}
