@@ -32,7 +32,7 @@ public class Player {
 		this.board = new Board(board); 
 		this.score = score;
 		this.x = x;
-		this.y = y;
+		this.y = y; 
 		this.currentTile = y + x * board.getN();
 	}
 	
