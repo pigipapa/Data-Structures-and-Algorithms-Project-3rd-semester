@@ -8,7 +8,7 @@ public class Supply {
 	int y; //y coordinate of the board tile on which the supply is located
 	int supplyTileId; //id of the board tile on which the supply is located
 	
-	Supply(){
+	Supply(){ 
 		supplyId = -1;
 		x = -1;
 		y = -1;
