@@ -11,7 +11,7 @@ public class Tile {
     boolean right; // True if there is a wall easterly, false if not
     boolean supply; // True if there is a supply on the tile, false if not
 
-    Tile(){
+    Tile(){ 
     	tileId = 0;
     	x = 0;
     	y = 0;
