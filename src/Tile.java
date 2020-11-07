@@ -1,18 +1,21 @@
 /**
- * Class that implements board's tiles.
+ * Class that implements the tiles of the board. 
  */
 public class Tile {
-    int tileId; // Tile's id
-    int x; // Tile's x coordinate
-    int y; // Tile's y coordinate
-    boolean up; // True if there is a wall northerly, false if not
-    boolean down; // True if there is a wall southerly, false if not
-    boolean left; // True if there is a wall westerly, false if not
-    boolean right; // True if there is a wall easterly, false if not
-    boolean supply; // True if there is a supply on the tile, false if not
+    int tileId;		// Id number of the tile.
+    int x;			// x coordinate of the tile.
+    int y;			// y coordinate of the tile.	
+    boolean up;		// If true the tile has an upper wall.
+    boolean down;	// If true the tile has a bottom wall.
+    boolean left;	// If true the tile has a left wall.
+    boolean right;	// If true the tile has a right wall.	 
+    boolean supply;	// Id true the tile has a supply.
 
-    Tile(){ 
-    	tileId = 0;
+    /**
+     * Initializes tile integer variables as zero (0) and boolean variables as false.
+     */
+    public Tile(){
+    	tileId = 0;	
     	x = 0;
     	y = 0;
     	down = false;
@@ -22,25 +25,11 @@ public class Tile {
     	supply = false;
     }
     
-	/**
-     * Initializes Tile with the given values.
+    /**
+     * Initializes tiles with the given values.
+     * @param tile, a tile object.
      */
-    Tile(int tileId, int x, int y, boolean up, boolean down, boolean left, boolean right, boolean supply)
-    {
-        this.tileId = tileId;
-        this.x = x;
-        this.y = y;
-        this.up = up;
-        this.down = down;
-        this.right = right;
-        this.left = left;
-        this.supply = supply;
-    }
-    
-	/**
-     * Initializes Tile with the values of another board.
-     */    
-    Tile(Tile tile)
+    public Tile(Tile tile)
     {
         tileId = tile.tileId;
         x = tile.x;
@@ -53,43 +42,129 @@ public class Tile {
         
     }
 
+    /**
+     * Initializes tiles with the values of another tile.
+     * @param tileId
+     * @param x
+     * @param y
+     * @param up
+     * @param down
+     * @param left
+     * @param right
+     * @param supply
+     */
+    public Tile(int tileId, int x, int y, boolean up, boolean down, boolean left, boolean right, boolean supply)
+    {
+        this.tileId = tileId;
+        this.x = x;
+        this.y = y;
+        this.up = up;
+        this.down = down;
+        this.right = right;
+        this.left = left;
+        this.supply = supply;
+    }
 
-    int getTileId() { return tileId; }
+    /**
+     * Returns Id of the tile.
+     * @return tileId
+     */
+     public int getTileId() { return tileId; }
 
-    void setTileId(int tileId){ this.tileId = tileId; }
-
-    int getX() { return x; }
-
-    void setX(int x) { this.x = x; }
-
-    int getY() { return y; }
-
-    void setY(int y) { this.y = y; }
-
-    boolean getUp() { return up; }
-
-    void setUp(boolean up) { this.up = up; }
-
-    boolean getDown() { return down; }
-
-    void setDown(boolean down) { this.down = down; }
-
-    boolean getRight() { return right;    }
-
-    void setRight(boolean right) { this.right = right; }
-
-    boolean getLeft() { return left; }
-
-    void setLeft(boolean left) { this.left = left; }
+    /**
+     * Sets the Id of the tile.
+     * @param tileId
+     */
+    public void setTileId(int tileId){ this.tileId = tileId; }
     
-    boolean getSupply() { return supply; }
+    /**
+     * Returns x coordinate of the tile.
+     * @return x
+     */
+    public int getX() { return x; }
+   
+    /**
+     * Sets x coordinate of the tile.
+     * @param x
+     */
+    public void setX(int x) { this.x = x; }
     
-    void setSupply(boolean supply) { this.supply = supply; }
+    /**
+     * Returns y coordinate of the tile.
+     * @return y
+     */
+    public int getY() { return y; }
     
-	/**
-	 * Counts tile's total walls
-	 */
-    int countTileWalls() {
+    /**
+     * Sets y coordinate of the tile.
+     * @param y
+     */
+    public void setY(int y) { this.y = y; }
+
+    /**
+     * Shows the absence or not of an upper wall.
+     * @return up, true if it has, false if it doesn't.
+     */
+    public boolean getUp() { return up; }
+
+    /**
+     * Sets up variable true or false.
+     * @param up
+     */
+    public void setUp(boolean up) { this.up = up; }
+
+    /**
+     * Shows the absence or not of a bottom wall.
+     * @return down, true if it has, false if it doesn't.
+     */
+    public boolean getDown() { return down; }
+
+    /**
+     * Sets down variable true or false.
+     * @param down
+     */
+    public void setDown(boolean down) { this.down = down; }
+
+    /**
+     * Shows the absence or not of a right wall.
+     * @return right, true if it has, false if it doesn't.
+     */
+    public boolean getRight() { return right;    }
+
+    /**
+     * Sets right variable true or false.
+     * @param right
+     */
+    public void setRight(boolean right) { this.right = right; }
+
+    /**
+     *  Shows the absence or not of a left wall.
+     * @return left, true if it has, false if it doesn't.
+     */
+    public boolean getLeft() { return left; }
+
+    /**
+     * Sets left variable true or false.
+     * @param left
+     */
+    public void setLeft(boolean left) { this.left = left; }
+    
+    /**
+     * Shows the absence or not of a supply. 
+     * @return supply, true if it has, false if it doesn't.
+     */
+    public boolean getSupply() { return supply; }
+    /**
+     * Sets supply variable true or false.
+     * @param supply
+     */
+    public void setSupply(boolean supply) { this.supply = supply; }
+    
+    /**
+     * It counts how many walls the tile has.
+     * @return the number of the walls.
+     */
+    public int countTileWalls() {
     	int count=0;
     	if(down==true) {count++;}
     	if(up==true) {count++;}
@@ -99,5 +174,6 @@ public class Tile {
     	return count;
     }
 }
+
 
 

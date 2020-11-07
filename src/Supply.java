@@ -1,14 +1,17 @@
 /**
- * Class that implements board's supplies.
+ *	Class that implements the supplies Theseus is seeking.
  */
 public class Supply {
 	
-	int supplyId; //id of the supply
-	int x; //x coordinate of the board tile on which the supply is located
-	int y; //y coordinate of the board tile on which the supply is located
-	int supplyTileId; //id of the board tile on which the supply is located
+	int supplyId; 		// Id of the supply.
+	int x; 				// x coordinate of the board tile on which the supply is located.
+	int y; 				// y coordinate of the board tile on which the supply is located.
+	int supplyTileId;	// Id of the board tile on which the supply is located.
 	
-	Supply(){ 
+	/**
+	 * Initializes supplies with -1 values.
+	 */
+	public Supply(){
 		supplyId = -1;
 		x = -1;
 		y = -1;
@@ -16,9 +19,13 @@ public class Supply {
 	}
 	
 	/**
-     * Initializes Supply with the given values.
-     */
-	Supply(int supplyId, int x, int y, int supplyTileId){
+	 * Initializes supplies with the given values.
+	 * @param supplyId
+	 * @param x
+	 * @param y
+	 * @param supplyTileId
+	 */
+	public Supply(int supplyId, int x, int y, int supplyTileId){
 		this.supplyId=supplyId;
 		this.x=x;
 		this.y=y;
@@ -26,31 +33,80 @@ public class Supply {
 	}
 	
 	/**
-     * Initializes Supply with the values of another board.
-     */
-	Supply(Supply ob){
+	 * Initializes supplies with the values of another supply.
+	 * @param a Supply object.
+	 */
+	public Supply(Supply ob){
 		supplyId=ob.supplyId;
 		x=ob.x;
 		y=ob.y;
-		supplyTileId=ob.supplyTileId;		
+		supplyTileId=ob.supplyTileId;
+		
 	}
 	
-	void setSupplyId(int supId) { supplyId = supId; }
+	/**
+	 * Sets the Id of the supply.
+	 * @param supId, Id of the supply.
+	 */
+	public void setSupplyId(int supId) {
+		supplyId = supId;
+	}
 	
-	int getSupplyId() { return supplyId; }
+	/**
+	 * Returns the Id of the supply.
+	 * @return supplyId
+	 */
+	public int getSupplyId() {
+		return supplyId;
+	}
 	
-	void setX(int x) { this.x = x; }
+	/**
+	 * Sets x coordinate of the supply.
+	 * @param x coordinate.
+	 */
+	public void setX(int x) {
+		this.x = x;
+	}
 	
-	int getX() { return x; }
+	/**
+	 * 
+	 * Returns the x coordinate of the supply.
+	 * @return x coordinate.
+	 */
+	public int getX() {
+		return x;
+	}
 	
-	void setY(int y) { this.y = y; }
+	/**
+	 * Sets y coordinate of the supply.
+	 * @param y coordinate.
+	 */
+	public void setY(int y) {
+		this.y = y;
+	}
 	
-	int getY() { return y; }
+	/**
+	 * Returns the y coordinate of the supply.
+	 * @return y coordinate.
+	 */
+	public int getY() {
+		return y;
+	}
 	
-	void setSupplyTileId(int supTileId) { supplyTileId = supTileId; }
+	/**
+	 * Sets the tile Id on which the supply is on.
+	 * @param supTileId, the Id of the tile that will contain the supply.
+	 */
+	public void setSupplyTileId(int supTileId) {
+		supplyTileId = supTileId;
+	}
 	
-	int getSupplyTileId() { return supplyTileId; }
+	/**
+	 * Returns the tile Id on which the supply is located on.  
+	 * @return supplyTileId, the Id of the tile that contains the supply.
+	 */
+	public int getSupplyTileId() {
+		return supplyTileId;
+	}
 
 }
-
-
