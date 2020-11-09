@@ -1,15 +1,20 @@
 import java.util.Random; 
 
 /**
- * Class that implements the board of the game.
+ * @authors Pigi Papanikolaou (10062), +0306978806503, pigipapa@ece.auth.gr
+ * 			Vasiliki Pappa (09981), +0306984119813, vasilikip@ece.auth.gr
+ */
+
+/**
+ *	Class that implements the board of the game.
  */
 public class Board {
 	
-	int N;				// The dimensions of NxN board. N is odd.
-	int S;				// The number of the supplies on the board.
-	int W;				// The number of the walls that can be added in the maze. Walls are determined by N as (N*N*3+1)/2.
-	Tile[] tiles;		// An array with Tile objects.
-	Supply[] supplies;	// An array with Supply objects.
+	private int N;				// The dimensions of NxN board. N is odd.
+	private int S;				// The number of the supplies on the board.
+	private int W;				// The number of the walls that can be added in the maze. Walls are determined by N as (N*N*3+1)/2.
+	private Tile[] tiles;		// An array with Tile objects.
+	private Supply[] supplies;	// An array with Supply objects.
 	
 	/**
      * Initializes board with zero values.
@@ -117,17 +122,33 @@ public class Board {
 	}
 	
 	/**
+	 * Sets the values of a tile of given index equal to the values of another tile. 
+	 * 
+	 * @param index, the index of tile that is given to be set.
+	 * @param tile, the tile that is going to be copied.
+	 */
+	public void setTile(int index, Tile tile) { tiles[index] = tile; }
+	
+	/**
      * Returns a tile of the board given its index.
      *
-     * @param index the index of the tile to be returned.
+     * @param index, the index of the tile to be returned.
      * @return a tile of the board given its index.
      */
 	public Tile getTile(int index) { return tiles[index]; }
 	
 	/**
+	 * Sets the values of a supply of given index equal to the values of another supply.
+	 * 
+	 * @param index, the index of supply that is given to be set.
+	 * @param supply, he supply that is going to be copied.
+	 */
+	public void setSupply(int index, Supply supply) { supplies[index] = supply; }
+	
+	/**
      * Returns a supply given its index.
      *
-     * @param index the index of the supply to be returned.
+     * @param index, the index of the supply to be returned.
      * @return a supply given its index.
      */   
 	public Supply getSupply(int index) { return supplies[index]; }
