@@ -1,12 +1,17 @@
 /**
+ * @authors Pigi Papanikolaou (10062), +0306978806503, pigipapa@ece.auth.gr
+ * 			Vasiliki Pappa (09981), +0306984119813, vasilikip@ece.auth.gr
+ */
+
+/**
  *	Class that implements the supplies Theseus is seeking.
  */
 public class Supply {
 	
-	int supplyId; 		// Id of the supply.
-	int x; 				// x coordinate of the board tile on which the supply is located.
-	int y; 				// y coordinate of the board tile on which the supply is located.
-	int supplyTileId;	// Id of the board tile on which the supply is located.
+	private int supplyId; 		// Id of the supply.
+	private int x; 				// x coordinate of the board tile on which the supply is located.
+	private int y; 				// y coordinate of the board tile on which the supply is located.
+	private int supplyTileId;	// Id of the board tile on which the supply is located.
 	
 	/**
 	 * Initializes supplies with -1 values.

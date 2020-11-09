@@ -1,15 +1,20 @@
 /**
+ * @authors Pigi Papanikolaou (10062), +0306978806503, pigipapa@ece.auth.gr
+ * 			Vasiliki Pappa (09981), +0306984119813, vasilikip@ece.auth.gr
+ */
+
+/**
  * Class that implements game's players.
  */
 public class Player {
 
-	int playerId;		// 1 for Minotaur, 2 for Theseus
-	String name;		// Player's name
-	Board board;		// The board on which the game is played
-	int score;			// Player's score, depending on the number of supplies that the player has got. Always equal to 0 for Minotaur.
-	int x;				// Player's x coordinate on the board
-	int y;				// Player's y coordinate on the board
-	int currentTile;	// Id of the tile, player is located on. 
+	private int playerId;		// 1 for Minotaur, 2 for Theseus
+	private String name;		// Player's name
+	private Board board;		// The board on which the game is played
+	private int score;			// Player's score, depending on the number of supplies that the player has got. Always equal to 0 for Minotaur.
+	private int x;				// Player's x coordinate on the board
+	private int y;				// Player's y coordinate on the board
+	private int currentTile;	// Id of the tile, player is located on. 
 	
 	/**
 	 * Initializes the objects and variables of the player as zero (0), minus 1 (-1) and null.
@@ -139,8 +144,15 @@ public class Player {
 		this.board.setN(board.getN());
 		this.board.setS(board.getS());
 		this.board.setW(board.getW());
-		this.board.tiles = board.tiles.clone();
-		this.board.supplies = board.supplies.clone();
+		
+		for(int i=0; i<board.getN()*board.getN(); i++) {
+			this.board.setTile(i, board.getTile(i));
+		}
+		
+		for(int i=0; i<board.getW(); i++) {
+			this.board.setSupply(i, board.getSupply(i));
+		}
+		
 	}
 	
 	/**
@@ -177,7 +189,7 @@ public class Player {
 		{
 			case 1:	//up
 				
-				if(board.tiles[currentTile].getUp() == true)
+				if(board.getTile(currentTile).getUp() == true)
 				{
 					System.out.println(printplayer + " didn't move. Wall ahead!");
 					break;					
@@ -192,7 +204,7 @@ public class Player {
 				
 			case 3:	//right
 				
-				if(board.tiles[currentTile].getRight() == true)
+				if(board.getTile(currentTile).getRight() == true)
 				{
 					System.out.println(printplayer + " didn't move. Wall at the right side!");
 					break;					
@@ -207,7 +219,7 @@ public class Player {
 				
 			case 5:	//down
 				
-				if(board.tiles[currentTile].getDown() == true)
+				if(board.getTile(currentTile).getDown() == true)
 				{
 					System.out.println(printplayer + " didn't move. Wall down!");
 					break;					
@@ -222,7 +234,7 @@ public class Player {
 				
 			case 7:	//left
 				
-				if(board.tiles[currentTile].getLeft() == true)
+				if(board.getTile(currentTile).getLeft() == true)
 				{
 					System.out.println(printplayer + " didn't move. Wall at the left side!");
 					break;					

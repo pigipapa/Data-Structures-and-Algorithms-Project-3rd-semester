@@ -1,15 +1,20 @@
 /**
+ * @authors Pigi Papanikolaou (10062), +0306978806503, pigipapa@ece.auth.gr
+ * 			Vasiliki Pappa (09981), +0306984119813, vasilikip@ece.auth.gr
+ */
+
+/**
  * Class that implements the tiles of the board. 
  */
 public class Tile {
-    int tileId;		// Id number of the tile.
-    int x;			// x coordinate of the tile.
-    int y;			// y coordinate of the tile.	
-    boolean up;		// If true the tile has an upper wall.
-    boolean down;	// If true the tile has a bottom wall.
-    boolean left;	// If true the tile has a left wall.
-    boolean right;	// If true the tile has a right wall.	 
-    boolean supply;	// Id true the tile has a supply.
+	private int tileId;		// Id number of the tile.
+	private int x;			// x coordinate of the tile.
+	private int y;			// y coordinate of the tile.	
+	private boolean up;		// If true the tile has an upper wall.
+	private boolean down;	// If true the tile has a bottom wall.
+	private boolean left;	// If true the tile has a left wall.
+	private boolean right;	// If true the tile has a right wall.	 
+	private boolean supply;	// Id true the tile has a supply.
 
     /**
      * Initializes tile integer variables as zero (0) and boolean variables as false.

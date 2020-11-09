@@ -1,10 +1,14 @@
 import java.util.Random;
+/**
+ * @authors Pigi Papanikolaou (10062), +0306978806503, pigipapa@ece.auth.gr
+ * 			Vasiliki Pappa (09981), +0306984119813, vasilikip@ece.auth.gr
+ */
 
 /**
  * Class that contains the main and implements the game. 
  */
 public class Game {
-	int round;	// Game's number of total rounds.
+	private int round;	// Game's number of total rounds.
 	
 	public Game(){ this.round = 1; }
 	
