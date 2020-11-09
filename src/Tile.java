@@ -20,9 +20,9 @@ public class Tile {
      * Initializes tile integer variables as zero (0) and boolean variables as false.
      */
     public Tile(){
-    	tileId = 0;	
-    	x = 0;
-    	y = 0;
+    	tileId = -1;	
+    	x = -1;
+    	y = -1;
     	down = false;
     	up = false;
     	left = false;

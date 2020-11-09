@@ -10,7 +10,7 @@ import java.util.Random;
 public class Game {
 	private int round;	// Game's number of total rounds.
 	
-	public Game(){ this.round = 1; }
+	public Game(){ this.round = 0; }
 	
 	/**
      * Returns game's current round.
@@ -46,6 +46,8 @@ public class Game {
 		int times;
 		for(times = 0; times < 200; times++)
 		{
+			game.setRound(game.getRound()+1);
+			
 			System.out.println("Current round: " + game.getRound());
 			
 			String newLine = System.getProperty("line.separator");
@@ -61,7 +63,7 @@ public class Game {
 			System.out.print(newLine);
 				
 			// Time for Theseus to move
-			if(Theseus.getX() == 0 && Theseus.getY() == 0) {
+			if(Theseus.getCurrentTile() == 0 ) {	// If Theseus is on the first tile he can't escape from the maze.
 				n = rand.nextInt(2);
 				direction = 2*n + 1;
 				Theseus.move(direction);
@@ -83,14 +85,14 @@ public class Game {
 			
 			System.out.print(newLine);
 			
-			if((Theseus.getX() == Minotaur.getX()) && (Theseus.getY() == Minotaur.getY()))	// Theseus went in the tile where Minotaur was.
+			if(Theseus.getCurrentTile() == Minotaur.getCurrentTile())	// Theseus went in the tile where Minotaur was.
 			{
 				System.out.println("Minotaur got Theseus. Minotaur is the winner.");	// There is a possibility because the moves are random, Theseus walks onto Minotaur,
 				break;																	// so we check it here.
 			}
 			
 			// Time for Minotaur to move
-			if(Minotaur.getX() == 0 && Minotaur.getY() == 0) {
+			if(Minotaur.getCurrentTile() == 0) {	// If Minotaur is on the first tile he can't escape from the maze.
 				n = rand.nextInt(2);
 				direction = 2*n + 1;
 				Minotaur.move(direction);
@@ -121,7 +123,7 @@ public class Game {
 				break;
 			}
 			
-			if((Theseus.getX() == Minotaur.getX()) && (Theseus.getY() == Minotaur.getY()))	// Theseus went in the tile where Minotaur was.
+			if(Theseus.getCurrentTile() == Minotaur.getCurrentTile())	// Theseus went in the tile where Minotaur was.
 			{
 				System.out.println("Minotaur got Theseus. Minotaur is the winner.");
 				break;
@@ -130,7 +132,6 @@ public class Game {
 			if(times<199) {
 			System.out.println("==========================================");
 			}
-			game.setRound(game.getRound()+1);
 		}
 		
 		if(times == 200) System.out.println("Tie...");	// Nobody won...
