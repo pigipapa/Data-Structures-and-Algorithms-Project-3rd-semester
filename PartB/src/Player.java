@@ -4,13 +4,13 @@
  */
 public class Player {
 
-	private int playerId;		// 1 for Minotaur, 2 for Theseus
-	private String name;		// Player's name
-	private Board board;		// The board on which the game is played
-	private int score;			// Player's score, depending on the number of supplies that the player has got. Always equal to 0 for Minotaur.
-	private int x;				// Player's x coordinate on the board
-	private int y;				// Player's y coordinate on the board
-	private int currentTile;	// Id of the tile, player is located on. 
+	protected int playerId;		// 1 for Minotaur, 2 for Theseus
+	protected String name;		// Player's name
+	protected Board board;		// The board on which the game is played
+	protected int score;			// Player's score, depending on the number of supplies that the player has got. Always equal to 0 for Minotaur.
+	protected int x;				// Player's x coordinate on the board
+	protected int y;				// Player's y coordinate on the board
+	protected int currentTile;	// Id of the tile, player is located on. 
 	
 	/**
 	 * Initializes the objects and variables of the player as zero (0), minus 1 (-1) and null.
@@ -272,6 +272,9 @@ public class Player {
 		array[0] = this.currentTile;
 		array[1] = this.x;
 		array[2] = this.y;
+		
+		if(playerId == 1) {board.setMinotaurTile(this.currentTile);}
+		else if(playerId == 2) {board.setTheseusTile(this.currentTile);}
 		
 		return array;
 	}
