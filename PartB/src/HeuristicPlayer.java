@@ -41,50 +41,92 @@ public class HeuristicPlayer extends Player{
 		{
 			case 1: // Up
 				
-				for(int i = 1; i < 4; i++)
+				for(int i = 1; i < 4; i++) {
+					
 					if((!board.getTile(currentTile + i*dimension).getDown()) && (currentTile + i*dimension) < dimension * dimension)
 						if(board.getTile(currentTile + i*dimension).getSupply())
 						{
 							NearSupplies = i;
 							break;
-						}					
+						}	
+					
+					if((!board.getTile(currentTile + i*dimension).getDown()) && (currentTile + i*dimension) < dimension * dimension) {
+						if(board.getMinotaurTile() == currentTile + i*dimension) {
+							
+							OpponentDist = i;
+							break;
+						}
+					}
+					
+				}
 				
 				break;
 				
 			case 3: // Right
 				
-				for(int i = 1; i < 4; i++)
+				for(int i = 1; i < 4; i++) {
+					
 					if((!board.getTile(currentTile + i*1).getLeft()) && (currentTile + i*1) < (getX()+1)*dimension-1)
 						if(board.getTile(currentTile + i*1).getSupply())
 						{
 							NearSupplies = i;
 							break;
 						}
+					
+					if((!board.getTile(currentTile + i*1).getLeft()) && (currentTile + i*1) < (getX()+1)*dimension-1) {
+						if(board.getMinotaurTile() == currentTile + i*1) {
+							
+							OpponentDist = i;
+							break;
+						}
+					}
+					
+				}
 				
 				break;
 		
 			case 5: // Down
 				
-				for(int i = 1; i < 4; i++)
+				for(int i = 1; i < 4; i++) {
+					
 					if((!board.getTile(currentTile - i*dimension).getUp()) && (currentTile - i*dimension) > 0)
 						if(board.getTile(currentTile - i*dimension).getSupply())
 						{
 							NearSupplies = i;
 							break;
 						}
+					
+					if((!board.getTile(currentTile - i*dimension).getUp()) && (currentTile - i*dimension) > 0) {
+						if(board.getMinotaurTile() == currentTile - i*dimension) {
+							
+							OpponentDist = i;
+							break;
+						}
+					}
+					
+				}
 				
 				break;
 		
 			case 7: // Left
 				
-				for(int i = 1; i < 4; i++)
+				for(int i = 1; i < 4; i++) {
 					if((!board.getTile(currentTile - i*1).getRight()) && (currentTile - i*1) > getX()*dimension)
 						if(board.getTile(currentTile - i*1).getSupply())
 						{
 							NearSupplies = i;
 							break;
 						}
-						
+					
+					if((!board.getTile(currentTile - i*1).getRight()) && (currentTile - i*1) > getX()*dimension) {
+						if(board.getMinotaurTile() == currentTile - i*1) {
+							
+							OpponentDist = i;
+							break;
+						}
+					}
+					
+				}
 				break;
 		}		
 //		f(NearSupplies, NearOpponent) = NearSupplies * 0,46 + OpponentDist * 0,54
