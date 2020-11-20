@@ -49,15 +49,20 @@ public class HeuristicPlayer extends Player{
 							NearSupplies = i;
 							break;
 						}	
-						if(board.getMinotaurTile() == currentTile + i*dimension) {						
+					}
+				}
+				
+				for(int i = 1; i < 4; i++) {
+					
+					if((!board.getTile(currentTile + i*dimension).getDown()) && (currentTile + i*dimension) < dimension * dimension)
+					{
+						if(board.getMinotaurTile() == currentTile + i*dimension) 
+						{						
 							OpponentDist = i;
 							break;
 						}
 					}
-				}
-
-				
-				break;
+				} break;
 				
 			case 3: // Right
 				
@@ -70,17 +75,20 @@ public class HeuristicPlayer extends Player{
 							NearSupplies = i;
 							break;
 						}
+					}
+				}
 						
-						if(board.getMinotaurTile() == currentTile + i*1) {
+				for(int i = 1; i < 4; i++) {
 							
+					if((!board.getTile(currentTile + i*1).getLeft()) && (currentTile + i*1) < (getX()+1)*dimension-1)
+					{
+						if(board.getMinotaurTile() == currentTile + i*1) 
+						{
 							OpponentDist = i;
 							break;
 						}
-					}
-					
-				}
-				
-				break;
+					}	
+				} break;
 		
 			case 5: // Down
 				
@@ -93,17 +101,21 @@ public class HeuristicPlayer extends Player{
 							NearSupplies = i;
 							break;
 						}
-
-						if(board.getMinotaurTile() == currentTile - i*dimension) {
-							
+					}
+				}
+				
+				for(int i = 1; i < 4; i++) {
+					
+					if((!board.getTile(currentTile - i*dimension).getUp()) && (currentTile - i*dimension) > 0)
+					{
+						if(board.getMinotaurTile() == currentTile - i*dimension) 
+						{
 							OpponentDist = i;
 							break;
 						}
 					}
 					
-				}
-				
-				break;
+				} break;
 		
 			case 7: // Left
 				
@@ -115,17 +127,22 @@ public class HeuristicPlayer extends Player{
 							NearSupplies = i;
 							break;
 						}
-					
-						if(board.getMinotaurTile() == currentTile - i*1) {
-							
+					}
+				}
+				
+				for(int i = 1; i < 4; i++) {
+					if((!board.getTile(currentTile - i*1).getRight()) && (currentTile - i*1) > getX()*dimension)
+					{	
+						if(board.getMinotaurTile() == currentTile - i*1) 
+						{	
 							OpponentDist = i;
 							break;
 						}
 					}
 					
-				}
-				break;
+				} break;
 		}		
+		
 		return (NearSupplies * 0.46 + OpponentDist * 0.54);		
 	}	
 	
@@ -152,5 +169,10 @@ public class HeuristicPlayer extends Player{
 		// path
 		
 		return (int) bestDice;
+	}
+	
+	
+	void statistics() {
+		
 	}
 }
