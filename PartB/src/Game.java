@@ -118,7 +118,7 @@ public class Game {
 				System.out.println("Theseus gathered all supplies. Theseus is the winner.");
 				break;
 			}
-			
+		
 			if(Theseus.getCurrentTile() == Minotaur.getCurrentTile())	// Theseus went in the tile where Minotaur was.
 			{
 				System.out.println("Minotaur got Theseus. Minotaur is the winner.");
