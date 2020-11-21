@@ -176,23 +176,18 @@ public class Player {
 		
 		int[] array = {currentTile, x, y, supplyId};
 		
-		String printplayer = null;
-		
-		if(getPlayerId() == 1)			printplayer = "Minotaur";
-		else if (getPlayerId() == 2)	printplayer = "Theseus";
-		
 		switch(direction) 
 		{
 			case 1:	//up
 				
 				if(board.getTile(currentTile).getUp() == true)
 				{
-					System.out.println(printplayer + " didn't move. Wall ahead!");
+					System.out.println(getName() + " didn't move. Wall ahead!");
 					break;					
 				}
 				else
 				{ 
-					System.out.println(printplayer + " moved up.");
+					System.out.println(getName() + " moved up.");
 					this.x = this.x + 1; 
 					this.currentTile = this.y + this.x * board.getN();
 					break;
@@ -202,12 +197,12 @@ public class Player {
 				
 				if(board.getTile(currentTile).getRight() == true)
 				{
-					System.out.println(printplayer + " didn't move. Wall at the right side!");
+					System.out.println(getName() + " didn't move. Wall at the right side!");
 					break;					
 				}
 				else
 				{ 
-					System.out.println(printplayer + " moved right.");
+					System.out.println(getName() + " moved right.");
 					this.y = this.y + 1; 
 					this.currentTile = this.y + this.x * board.getN();
 					break;
@@ -217,12 +212,12 @@ public class Player {
 				
 				if(board.getTile(currentTile).getDown() == true)
 				{
-					System.out.println(printplayer + " didn't move. Wall down!");
+					System.out.println(getName() + " didn't move. Wall down!");
 					break;					
 				}
 				else
 				{ 
-					System.out.println(printplayer + " moved down.");
+					System.out.println(getName() + " moved down.");
 					this.x = this.x - 1; 
 					this.currentTile = this.y + this.x * board.getN();
 					break;
@@ -232,12 +227,12 @@ public class Player {
 				
 				if(board.getTile(currentTile).getLeft() == true)
 				{
-					System.out.println(printplayer + " didn't move. Wall at the left side!");
+					System.out.println(getName() + " didn't move. Wall at the left side!");
 					break;					
 				}
 				else 
 				{ 
-					System.out.println(printplayer + " moved left.");
+					System.out.println(getName() + " moved left.");
 					this.y = this.y - 1; 
 					this.currentTile = this.y + this.x * board.getN();
 					break;

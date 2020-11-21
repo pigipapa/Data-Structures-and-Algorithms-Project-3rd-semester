@@ -1,4 +1,4 @@
-import java.util.Random;
+import java.util.*;
 
 /**
  * Class that contains the main and implements the game. 
@@ -35,7 +35,8 @@ public class Game {
 		Game game = new Game();
 		Board board = new Board(Dimensions, Supplies, Walls);
 		Player Minotaur = new Player(1, "Minotaur", board, 0, (Dimensions-1)/2, (Dimensions-1)/2); 
-		Player Theseus = new Player(2, "Theseus", board, 0, 0, 0); 
+		HeuristicPlayer Theseus = new HeuristicPlayer(2, "Theseus", board, 0, 0, 0); 
+		
 		
 		int direction = 0;	// The direction the player will move towards.
 		int n = 0;
@@ -59,16 +60,7 @@ public class Game {
 			System.out.print(newLine);
 			
 			// Time for Theseus to move
-			if(Theseus.getCurrentTile() == 0 ) {	// If Theseus is on the first tile he can't escape from the maze.
-				n = rand.nextInt(2);
-				direction = 2*n + 1;
-				Theseus.move(direction);
-			}
-			else {
-				n = rand.nextInt(4);
-				direction = 2*n + 1;
-				Theseus.move(direction);
-			}
+			Theseus.move(Theseus.getNextMove());
 					    
 		    // Prints the board after Theseus moves.
 			for (int i = 2*Dimensions; i >= 0; i--) {
@@ -78,6 +70,7 @@ public class Game {
 				}
 				System.out.print(newLine);
 			}
+			Theseus.statistics();
 			
 			System.out.print(newLine);
 			
