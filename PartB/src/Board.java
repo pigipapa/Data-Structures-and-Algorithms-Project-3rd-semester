@@ -377,9 +377,15 @@ public class Board {
 		b[0][0] = "+   ";
 		
 		// Minotaur and Theseus are placed on the board.
-		b[2*(minotaurTile / N)+1][minotaurTile % N] = b[2*(minotaurTile / N)+1][minotaurTile % N].replace("   "," M ");
-		b[2*(theseusTile / N)+1][theseusTile % N] = b[2*(theseusTile / N)+1][theseusTile % N].replace("   "," T ");		
-		
+		if(getTile(minotaurTile).getLeft())
+			b[2*(minotaurTile / N)+1][minotaurTile % N] = b[2*(minotaurTile / N)+1][minotaurTile % N].replace("   "," M ");
+		else
+			b[2*(minotaurTile / N)+1][minotaurTile % N] = b[2*(minotaurTile / N)+1][minotaurTile % N].replace("    ","  M ");
+		if(getTile(theseusTile).getLeft())
+			b[2*(theseusTile / N)+1][theseusTile % N] = b[2*(theseusTile / N)+1][theseusTile % N].replace("   "," T ");		
+		else 
+			b[2*(theseusTile / N)+1][theseusTile % N] = b[2*(theseusTile / N)+1][theseusTile % N].replace("    ","  T ");
+			
 		// The supplies are placed.
 		for(int i=0; i<S; i++) {											
 			if(supplies[i].getSupplyId() > 0) {

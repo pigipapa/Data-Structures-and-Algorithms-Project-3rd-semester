@@ -28,20 +28,20 @@ public class Game {
 		Random rand = new Random(System.currentTimeMillis());
 		
 		// Board variables
-		int Dimensions = 15;  
+		int Dimensions = 7;  
 		int Supplies = 4;
 		int Walls = (Dimensions*Dimensions*3+1)/2;
 		
 		Game game = new Game();
 		Board board = new Board(Dimensions, Supplies, Walls);
 		Player Minotaur = new Player(1, "Minotaur", board, 0, (Dimensions-1)/2, (Dimensions-1)/2); 
-		HeuristicPlayer Theseus = new HeuristicPlayer(2, "Theseus", board, 0, 0, 0); 
+		HeuristicPlayer Theseus = new HeuristicPlayer(2, "Theseus", board, 0, 0, 0, -1, -1, -1); 
 		
 		
 		int direction = 0;	// The direction the player will move towards.
 		int n = 0;
 		int times;
-		for(times = 0; times < 200; times++)
+		for(times = 0; times < 35; times++)
 		{	
 			game.setRound(game.getRound()+1);
 			

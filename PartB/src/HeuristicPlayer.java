@@ -4,24 +4,40 @@ public class HeuristicPlayer extends Player{
 	ArrayList <ArrayList<Integer>> path;
 	int tileDistMinotaur;
 	int tileDistSupply; 
+	int LastMove;
 		
 	public HeuristicPlayer() 
 	{
 		super();
 		
-		path = new ArrayList<ArrayList<Integer>>(0);
+
+		//path = new ArrayList<ArrayList<Integer>>(0);
+
+		path = new ArrayList<ArrayList<Integer>>();
+
 		tileDistMinotaur = -1;
 		tileDistSupply = -1;
 	}
 	
-	public HeuristicPlayer(int playerId, String name, Board board, int score, int x, int y) 
+
+	/*public HeuristicPlayer(int playerId, String name, Board board, int score, int x, int y) 
 	{
 		super(playerId, name, board, score, x, y);
 		
 		tileDistMinotaur = -1; // These two variables should be initialized in Game as -1.
 		tileDistSupply = -1;
+	}*/
+
+	public HeuristicPlayer(int playerId, String name, Board board, int score, int x, int y, int tileDistMinotaur, int tileDistSupply, int LastMove) 
+	{
+		super(playerId, name, board, score, x, y);
+		
+		this.tileDistMinotaur = tileDistMinotaur; // These two variables should initialized in Game as -1.
+		this.tileDistSupply = tileDistSupply;
+		this.LastMove = LastMove; //Initialized <1. Better as -1.
 		
 		path = new ArrayList<ArrayList<Integer>>();
+		
 		for(int i = 0; i < 8; i++)
 			path.add(new ArrayList<Integer>()); 
 	}
@@ -30,8 +46,13 @@ public class HeuristicPlayer extends Player{
 	{
 		super(player);
 		
-		for(int i = 0; i < path.size(); i++)
+		for(int i = 0; i < path.size(); i++) {
+
 			this.path.set(i, new ArrayList<Integer>(path.get(i)));
+
+			this.path.add(i, path.get(i));
+		}
+
 	}
 
 	int getTileDistMinotaur(){ return tileDistMinotaur; }
@@ -41,6 +62,10 @@ public class HeuristicPlayer extends Player{
 	int getTileDistSupply() { return tileDistSupply; } 
 	
 	void setTileDistSupply(int tileDistSupply) {this.tileDistSupply = tileDistSupply;} 
+	
+	int getLastMove() { return LastMove; }
+	
+	void setLastMove(int LastMove) { this.LastMove = LastMove;  }
 	
 	double evaluate(int dice)
 	{
@@ -54,80 +79,106 @@ public class HeuristicPlayer extends Player{
 		{
 			case 1: // Up
 				
-				for(int i = 1; i < 4; i++)
-					if(((currentTile + i*dimension) < dimension * dimension) && !board.getTile(getCurrentTile()).getUp())
-					{
-						if(board.getTile(currentTile + i*dimension).getSupply() && (NearSupplies == 0)) {
-							NearSupplies = 1 - 0.33*i;
-							tileDistSupply = i;
-						}
-
-						if((board.getMinotaurTile() == currentTile + i*dimension) && (OpponentDist == 0)) {			
-							OpponentDist = -1 + 0.33*i;
-							tileDistMinotaur = i;
+				for(int i = 1; i < 4; i++) {
+					if(board.getTile(getCurrentTile() + (i-1)*dimension).getUp()) break;
+					else {
+						if((currentTile + i*dimension) < dimension * dimension)
+						{
+							if(board.getTile(currentTile + i*dimension).getSupply() /*&& (NearSupplies == 0)*/) {
+								NearSupplies = 1 - 0.33*i;
+								tileDistSupply = i;
+								break;
+							}
+	
+							if((board.getMinotaurTile() == currentTile + i*dimension) /*&& (OpponentDist == 0)*/) {			
+								OpponentDist = -1 + 0.33*i;
+								tileDistMinotaur = i;
+							}
 						}
 					}
+				}
 					
 			break;
 				
 			case 3: // Right
 				
-				for(int i = 1; i < 4; i++)
-					if(((currentTile + i*1) < (getX()+1)*dimension-1) && !board.getTile(getCurrentTile()).getRight())
-					{
-						if(board.getTile(currentTile + i*1).getSupply() && (NearSupplies == 0)) {
-							NearSupplies = 1 - 0.33*i;
-							tileDistSupply = i;
-						}
-							
-						if((board.getMinotaurTile() == currentTile + i*1) && (OpponentDist == 0)) { 
-							OpponentDist = -1 + 0.33*i;
-							tileDistMinotaur = i;
+				for(int i = 1; i < 4; i++) {
+					if(board.getTile(getCurrentTile() + (i-1)).getRight()) break;
+					else {
+						if((currentTile + i*1) < (getX()+1)*dimension-1)
+						{
+							if(board.getTile(currentTile + i*1).getSupply() /*&& (NearSupplies == 0)*/) {
+								NearSupplies = 1 - 0.33*i;
+								tileDistSupply = i;
+								break;
+							}
+								
+							if((board.getMinotaurTile() == currentTile + i*1) /*&& (OpponentDist == 0)*/) { 
+								OpponentDist = -1 + 0.33*i;
+								tileDistMinotaur = i;
+							}
 						}
 					}
+				}
 			
 			break;
 		
 			case 5: // Down
 				
-				for(int i = 1; i < 4; i++) 
-					if(((currentTile - i*dimension) > 0) && !board.getTile(getCurrentTile()).getDown())if((!board.getTile(currentTile - i*dimension).getUp()))
-						{
-							if(board.getTile(currentTile - i*dimension).getSupply() && (NearSupplies == 0)) {
-								NearSupplies = 1 - 0.33*i;
-								tileDistSupply = i;
+				for(int i = 1; i < 4; i++) {
+					if(board.getTile(getCurrentTile() - (i-1)*dimension).getTileId() == 0) {
+						NearSupplies = -10;
+						OpponentDist = -10;
+						break; 
+					}
+					else if(board.getTile(getCurrentTile() - (i-1)*dimension).getDown()) break;
+						else{
+						if((currentTile - i*dimension) > 0)
+							{
+								if(board.getTile(currentTile - i*dimension).getSupply() /*&& (NearSupplies == 0)*/) {
+									NearSupplies = 1 - 0.33*i;
+									tileDistSupply = i;
+									break;
+								}
+									
+								if((board.getMinotaurTile() == currentTile - i*dimension) /*&& (OpponentDist == 0)*/) { 
+									OpponentDist = -1 + 0.33*i;
+									tileDistMinotaur = i;
+								}
 							}
-								
-							if((board.getMinotaurTile() == currentTile - i*dimension) && (OpponentDist == 0)) { 
-								OpponentDist = -1 + 0.33*i;
-								tileDistMinotaur = i;
-							}
-						}					
+						}
+					
+				}
 			break;
 		
 			case 7: // Left
 				
-				for(int i = 1; i < 4; i++) 
-					if(((currentTile - i*1) > getX()*dimension) && !board.getTile(getCurrentTile()).getLeft())
-					{
-						if(board.getTile(currentTile - i*1).getSupply() && (NearSupplies == 0)) {
-							NearSupplies = 1 - 0.33*i;
-							tileDistSupply = i;
+				for(int i = 1; i < 4; i++) {
+					if(board.getTile(getCurrentTile() - (i-1)).getLeft()) break;
+					else {
+						if(((currentTile - i*1) > getX()*dimension))
+						{
+							if(board.getTile(currentTile - i*1).getSupply() /*&& (NearSupplies == 0)*/) {
+								NearSupplies = 1 - 0.33*i;
+								tileDistSupply = i;
+								break;
+							}
+	
+							if((board.getMinotaurTile() == currentTile - i*1) /*&& (OpponentDist == 0)*/) {
+								OpponentDist = -1 + 0.33*i;	
+								tileDistMinotaur = i;
+							}
 						}
-
-						if((board.getMinotaurTile() == currentTile - i*1) && (OpponentDist == 0)) {
-							OpponentDist = -1 + 0.33*i;	
-							tileDistMinotaur = i;
-						}
-					}								
+					}
+				}
 			break;
 		}		
 		System.out.println("evaluation: " + (NearSupplies * 0.4 + OpponentDist * 0.6));
 		return (NearSupplies * 0.4 + OpponentDist * 0.6);		
 	}	
 	
-	int getNextMove()
-	{
+	public int getNextMove()
+	{	
 		double[][] evaluation = new double[4][2];
 		
 		for(int i = 0; i < 4; i++)
@@ -137,14 +188,18 @@ public class HeuristicPlayer extends Player{
 		}
 
 		double maxEvaluation = -2;
-		int bestDice  = 0;
+		int bestDice = 0;
 		
 		for(int i = 0; i < 4; i++)
 			if(maxEvaluation < evaluation[i][1])
 			{
-				maxEvaluation = evaluation[i][0];
-				bestDice = (int) evaluation[i][1];
+				maxEvaluation = evaluation[i][1];
+				bestDice = (int) evaluation[i][0];
 			}
+		
+		if(maxEvaluation == 0) {
+			bestDice = 0;
+		}
 		
 		if(bestDice == 0)
 		{
@@ -158,6 +213,10 @@ public class HeuristicPlayer extends Player{
 				switch(bestDice)
 				{
 					case 1:
+						if(LastMove == 5 && currentTile != 0) {
+							bestDice = DiceCalculation(bestDice);
+							continue;
+						}
 						if(board.getTile(currentTile).getUp())					
 							bestDice = DiceCalculation(bestDice);
 						else
@@ -165,6 +224,10 @@ public class HeuristicPlayer extends Player{
 						break;
 
 					case 3:
+						if(LastMove == 7) {
+							bestDice = DiceCalculation(bestDice);
+							continue;
+						}
 						if(board.getTile(currentTile).getRight())
 							bestDice = DiceCalculation(bestDice);
 						else
@@ -173,7 +236,11 @@ public class HeuristicPlayer extends Player{
 						break;
 					
 					case 5:
-						if(board.getTile(currentTile).getDown() || (getCurrentTile() == 0))
+						if(LastMove == 1) {
+							bestDice = DiceCalculation(bestDice);
+							continue;
+						}
+						if(board.getTile(currentTile).getDown() || (getCurrentTile() == 0)) //is it needed???
 							bestDice = DiceCalculation(bestDice);
 						else
 							flag = false;
@@ -181,6 +248,10 @@ public class HeuristicPlayer extends Player{
 						break;
 
 					case 7:
+						if(LastMove == 3) {
+							bestDice = DiceCalculation(bestDice);
+							continue;
+						}
 						if(board.getTile(currentTile).getLeft())
 							bestDice = DiceCalculation(bestDice);
 						else
@@ -189,7 +260,11 @@ public class HeuristicPlayer extends Player{
 						break;
 				}
 			}
+			
+			
 		}
+		
+		LastMove = bestDice;
 				
 		// path (info about the dice (0), points of the movement (1), is near to a supply (2), is near to enemy(3))
 		
