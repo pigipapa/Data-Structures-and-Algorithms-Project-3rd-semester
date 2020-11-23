@@ -1,5 +1,3 @@
-import java.util.*;
-
 /**
  * Class that contains the main and implements the game. 
  */
@@ -24,22 +22,17 @@ public class Game {
 	
 	
 	public static void main(String[] args)
-	{
-		Random rand = new Random(System.currentTimeMillis());
-		
+	{		
 		// Board variables
 		int Dimensions = 7;  
-		int Supplies = 4;
+		int Supplies = 9;
 		int Walls = (Dimensions*Dimensions*3+1)/2;
 		
 		Game game = new Game();
 		Board board = new Board(Dimensions, Supplies, Walls);
-		Player Minotaur = new Player(1, "Minotaur", board, 0, (Dimensions-1)/2, (Dimensions-1)/2); 
+		HeuristicPlayer Minotaur = new HeuristicPlayer(1, "Minotaur", board, 0, (Dimensions-1)/2, (Dimensions-1)/2, -1, -1, -1); 
 		HeuristicPlayer Theseus = new HeuristicPlayer(2, "Theseus", board, 0, 0, 0, -1, -1, -1); 
 		
-		
-		int direction = 0;	// The direction the player will move towards.
-		int n = 0;
 		int times;
 		for(times = 0; times < 35; times++)
 		{	
@@ -61,7 +54,8 @@ public class Game {
 			
 			// Time for Theseus to move
 			Theseus.move(Theseus.getNextMove());
-					    
+			Theseus.statistics("everyRound");
+
 		    // Prints the board after Theseus moves.
 			for (int i = 2*Dimensions; i >= 0; i--) {
 				for (int j = 0; j < Dimensions; j++) {
@@ -70,7 +64,6 @@ public class Game {
 				}
 				System.out.print(newLine);
 			}
-			Theseus.statistics();
 			
 			System.out.print(newLine);
 			
@@ -81,17 +74,9 @@ public class Game {
 			}			
 			
 			// Time for Minotaur to move
-			if(Minotaur.getCurrentTile() == 0) {	// If Minotaur is on the first tile he can't escape from the maze.
-				n = rand.nextInt(2);
-				direction = 2*n + 1;
-				Minotaur.move(direction);
-			}
-			else {
-				n = rand.nextInt(4);
-				direction = 2*n + 1;
-				Minotaur.move(direction);
-			}
-			
+			Minotaur.move(Minotaur.getNextMove());
+			Minotaur.statistics("everyRound");
+
 			// Prints the board after Theseus moves.
 			for (int i = 2*Dimensions; i >= 0; i--) {
 				for (int j = 0; j < Dimensions; j++) {
@@ -109,12 +94,17 @@ public class Game {
 			if(Theseus.getScore() == Supplies) 												// Theseus got all supplies.
 			{
 				System.out.println("Theseus gathered all supplies. Theseus is the winner.");
+				Theseus.statistics("finalRound");
+				Minotaur.statistics("finalRound");
 				break;
 			}
 		
 			if(Theseus.getCurrentTile() == Minotaur.getCurrentTile())	// Theseus went in the tile where Minotaur was.
 			{
 				System.out.println("Minotaur got Theseus. Minotaur is the winner.");
+				Theseus.statistics("finalRound");
+				System.out.println();
+				Minotaur.statistics("finalRound");
 				break;
 			}
 			
@@ -123,6 +113,12 @@ public class Game {
 		
 		}
 		
-		if(times == 200) System.out.println("Tie...");	// Nobody won...
+		if(times == 200) 
+		{
+			System.out.println("Tie...");	// Nobody won...
+			Theseus.statistics("finalRound");
+			System.out.println();
+			Minotaur.statistics("finalRound");
+		}
 	}
 }
