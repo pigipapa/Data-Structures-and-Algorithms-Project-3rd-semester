@@ -2,9 +2,9 @@ import java.util.*;
 
 public class HeuristicPlayer extends Player{
 	ArrayList <ArrayList<Integer>> path;
-	int tileDistOpponent;
-	int tileDistSupply; 
 	int LastMove;
+	int tileDistOpponent;
+	int tileDistSupply;
 	//Board boardH;
 		
 	public HeuristicPlayer() 
@@ -12,19 +12,14 @@ public class HeuristicPlayer extends Player{
 		super();
 		
 		path = new ArrayList<ArrayList<Integer>>();
-
-		tileDistOpponent = -1;
-		tileDistSupply = -1;
 		LastMove = -1;
 	}
 	
 
-	public HeuristicPlayer(int playerId, String name, Board board, int score, int x, int y, int tileDistOpponent, int tileDistSupply, int LastMove) 
+	public HeuristicPlayer(int playerId, String name, Board board, int score, int x, int y, int LastMove) 
 	{
 		super(playerId, name, board, score, x, y);
 		
-		this.tileDistOpponent = tileDistOpponent; // These two variables should initialized in Game as -1.
-		this.tileDistSupply = tileDistSupply;
 		this.LastMove = LastMove; //Initialized <1. Better as -1.
 		//boardH = board;
 		
@@ -47,123 +42,85 @@ public class HeuristicPlayer extends Player{
 
 	}
 
+	
+	int getLastMove() { return LastMove; }
+	
+	void setLastMove(int LastMove) { this.LastMove = LastMove; }
+	
 	int getTileDistOpponent(){ return tileDistOpponent; }
 
 	void setTileDistOpponent(int tileDistOpponent) {this.tileDistOpponent = tileDistOpponent;}
 	
 	int getTileDistSupply() { return tileDistSupply; } 
 	
-	void setTileDistSupply(int tileDistSupply) {this.tileDistSupply = tileDistSupply;} 
+	void setTileDistSupply(int tileDistSupply) {this.tileDistSupply = tileDistSupply;}
 	
-	int getLastMove() { return LastMove; }
-	
-	void setLastMove(int LastMove) { this.LastMove = LastMove; }
-	
-	double evaluate(int dice)
-	{
-		double NearSupplies = 0;
-		double OpponentDist = 0;
-		int dimension = board.getN();
-		tileDistSupply = -1;
-		tileDistOpponent = -1; // peritta? ston constructor
-		int sign = (playerId == 2) ? -1 : 1;
-		
+	public int getOpponentTile() {
 		int GetMinotaurTile = board.getMinotaurTile();
 		int GetTheseusTile = board.getTheseusTile();
 		int opp = 0;
 		opp = (playerId == 1) ? GetTheseusTile : GetMinotaurTile;
+		return opp;
+	}
+	
+	double evaluate(int dice, int tileDistSupply, int tileDistOpponent)
+	{
+		double NearSupplies = 0;
+		double OpponentDist = 0;
+		int dimension = board.getN();
+		//tileDistSupply = -1;
+		//tileDistOpponent = -1;
+		int sign = (playerId == 2) ? -1 : 1;
 		
 		switch(dice)
 		{
 			case 1: // Up
 				
-				for(int i = 1; i < 4; i++) {
-					if(board.getTile(getCurrentTile() + (i-1)*dimension).getUp()) break;
-					else {
-						if((currentTile + i*dimension) < dimension * dimension)
-						{
-							if(board.getTile(currentTile + i*dimension).getSupply() && (NearSupplies == 0)) {
-								NearSupplies = 1.0/i;
-								tileDistSupply = i;
-							}
+				if(tileDistSupply != -1) { 
+					NearSupplies = 1.0/tileDistSupply;
+				}
 	
-							if(opp == (currentTile + i*dimension)) {			
-								OpponentDist = sign*(1.0/i);
-								tileDistOpponent = i;
-							}
-						}
-					}
+				if(tileDistOpponent != -1) {			
+					OpponentDist = sign*(1.0/tileDistOpponent);
 				}
 					
 			break;
 				
 			case 3: // Right
-				
-				for(int i = 1; i < 4; i++) {
-					if(board.getTile(getCurrentTile() + (i-1)).getRight()) break;
-					else {
-						if((currentTile + i) < (getX()+1)*dimension-1)
-						{
-							if(board.getTile(currentTile + i*1).getSupply() && (NearSupplies == 0)) {
-								NearSupplies = 1.0/i;
-								tileDistSupply = i;
-							}
+			
+				if(tileDistSupply != -1) {
+					NearSupplies = 1.0/tileDistSupply ;
+				}
 								
-							if(opp == (currentTile + i)) { 
-								OpponentDist = sign*(1.0/i);
-								tileDistOpponent = i;
-							}
-						}
-					}
+				if(tileDistOpponent != -1) { 
+					OpponentDist = sign*(1.0/tileDistOpponent);
 				}
 			
 			break;
 		
 			case 5: // Down
-				
-				for(int i = 1; i < 4; i++) {
-					if(board.getTile(getCurrentTile() - (i-1)*dimension).getTileId() == 0) {
-						break; 
-					}
-					else if(board.getTile(getCurrentTile() - (i-1)*dimension).getDown()) break;
-						else{
-						if((currentTile - i*dimension) > 0)
-							{
-								if(board.getTile(currentTile - i*dimension).getSupply() && (NearSupplies == 0)) {
-									NearSupplies = 1.0/i;
-									tileDistSupply = i;
-									
-								}
-									
-								if(opp == (currentTile - i*dimension)) { 
-									OpponentDist = sign*(1.0/i);
-									tileDistOpponent = i;
-								}
-							}
-						}
-					
+								
+				if(tileDistSupply != -1) {
+					NearSupplies = 1.0/tileDistSupply ;
+										
 				}
+										
+				if(tileDistOpponent != -1) { 
+					OpponentDist = sign*(1.0/tileDistOpponent);
+				}
+
 			break;
 		
 			case 7: // Left
 				
-				for(int i = 1; i < 4; i++) {
-					if(board.getTile(getCurrentTile() - (i-1)).getLeft()) break;
-					else {
-						if(((currentTile - i*1) > getX()*dimension))
-						{
-							if(board.getTile(currentTile - i*1).getSupply() && (NearSupplies == 0)) {
-								NearSupplies = 1.0/i;
-								tileDistSupply = i;
-							}
-	
-							if(opp == (currentTile - i*1)) {
-								OpponentDist = sign*(1.0/i);
-								tileDistOpponent = i;
-							}
-						}
-					}
+				if(tileDistSupply != -1) {
+					NearSupplies = 1.0/tileDistSupply;
 				}
+		
+				if(tileDistOpponent != -1) {
+					OpponentDist = sign*(1.0/tileDistOpponent);
+				}
+
 			break;
 		}
 		
@@ -182,15 +139,133 @@ public class HeuristicPlayer extends Player{
 	
 	public int getNextMove()
 	{	
-		double[][] evaluation = new double[4][2];
-		boolean allEvaluationsAreZero = true;
+		int dimension = board.getN();
+		
+		int initialX = x;
+		int initialY = y;
+		int initialCurrentTile = currentTile;
+		
+		tileDistSupply = -1;
+		tileDistOpponent = -1;
+		
+		double[][] evaluation = new double[4][2]; 
+		
+		for(int i=0; i<4; i++) {
+			
+			int dice = 2*i+1;
+			evaluation[i][0] = dice;
+			tileDistSupply = -1;
+			tileDistOpponent = -1;
+			
+			for(int j=1; j<3; j++) {
+				
+				switch(dice) {
+				
+				case 1:
+					
+					if(board.getTile(currentTile).getUp()) break;
+					else {
+						int iterationTimes = (x + 1) - initialX;
+						if(board.getTile(currentTile + dimension).getSupply() && tileDistSupply == -1) {
+							tileDistSupply = iterationTimes;
+						}
+						if(currentTile + dimension == getOpponentTile()) {
+							tileDistOpponent = iterationTimes;
+						}
+						x = x + 1; 
+						y = y;
+						currentTile = y + x * dimension;
+					}
+				 break;
+				
+				case 3:
+					
+					if(board.getTile(currentTile).getRight()) break;
+					else {
+						int iterationTimes = (x + 1) - initialX;
+						if(board.getTile(currentTile + 1).getSupply() && tileDistSupply == -1) {
+							tileDistSupply = iterationTimes;
+						}
+						if(currentTile + 1 == getOpponentTile()) {
+							tileDistOpponent = iterationTimes;
+						}
+						x = x;
+						y = y + 1;
+						currentTile = y + x * dimension;
+					}
+				 break;
+				 
+				case 5:
+					
+					if(board.getTile(currentTile).getDown() || currentTile == 0) break;
+					else {
+						int iterationTimes = (x + 1) - initialX;
+						if(board.getTile(currentTile - dimension).getSupply() && tileDistSupply == -1) {
+							tileDistSupply = iterationTimes;
+						}
+						if(currentTile - dimension == getOpponentTile()) {
+							tileDistOpponent = iterationTimes;
+						}
+						x = x - 1;
+						y = y;
+						currentTile = y + x * dimension;
+					}
+				 break;
+				 
+				case 7:
+					
+					if(board.getTile(currentTile).getLeft()) break;
+					else {
+						int iterationTimes = (x + 1) - initialX;
+						if(board.getTile(currentTile - 1).getSupply() && tileDistSupply == -1) {
+							tileDistSupply = iterationTimes;
+						}
+						if(currentTile - 1 == getOpponentTile()) {
+							tileDistOpponent = iterationTimes;
+						}
+						x = x;
+						y = y - 1;
+						currentTile = y + x * dimension;
+					}
+				 break;
+				 
+				}
+				
+			}
+			evaluation[i][1] = evaluate(dice, tileDistSupply, tileDistOpponent);
 
-		for(int i = 0; i < 4; i++)
-		{
-			evaluation[i][0] = 2*i+1;
-			evaluation[i][1] = evaluate(2*i+1);	
 		}
+		
+		
+		x = initialX;
+		y = initialY;
+		currentTile = initialCurrentTile;
+		
+		
 
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		boolean allEvaluationsAreZero = true;
 		double maxEvaluation = -2;
 		double belowZeroEvaluation = 10;
 		int bestDice = 0;
@@ -341,8 +416,7 @@ public class HeuristicPlayer extends Player{
 		path.get(0).add(bestDice);
 		
 		int d = 0;
-		if(name == "Theseus") {
-		int dimension = board.getN();  //!!!!!! If player is Theseus.
+		if(name == "Theseus") {  // If player is Theseus.
 			switch(bestDice) {
 			
 				case 1:

@@ -64,11 +64,11 @@ public class Game {
 		
 		Game game = new Game();
 		Board board = new Board(Dimensions, Supplies, Walls);
-		HeuristicPlayer Minotaur = new HeuristicPlayer(1, "Minotaur", board, 0, (Dimensions-1)/2, (Dimensions-1)/2, -1, -1, -1); 
-		HeuristicPlayer Theseus = new HeuristicPlayer(2, "Theseus", board, 0, 0, 0, -1, -1, -1); 
+		HeuristicPlayer Minotaur = new HeuristicPlayer(1, "Minotaur", board, 0, (Dimensions-1)/2, (Dimensions-1)/2, -1); 
+		HeuristicPlayer Theseus = new HeuristicPlayer(2, "Theseus", board, 0, 0, 0, -1); 
 		
 		int times;
-		for(times = 0; times < 100; times++)
+		for(times = 0; times < 35; times++)
 		{	
 			game.setRound(game.getRound()+1);
 			System.out.println("Current round: " + game.getRound());
