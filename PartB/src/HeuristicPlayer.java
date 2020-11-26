@@ -294,7 +294,7 @@ public class HeuristicPlayer extends Player{
 						break;
 
 					case 3:
-						if(LastMove == 7) {
+						if(LastMove == 7 && currentTile != 0) {
 							bestDice = DiceCalculation(bestDice);
 							continue;
 						}
@@ -341,25 +341,26 @@ public class HeuristicPlayer extends Player{
 		path.get(0).add(bestDice);
 		
 		int d = 0;
+		if(name == "Theseus") {
 		int dimension = board.getN();  //!!!!!! If player is Theseus.
-		switch(bestDice) {
-		
-			case 1:
-				d = board.getTile(currentTile + dimension).getSupply() ? 1 : 0;
-				break;
+			switch(bestDice) {
 			
-			case 3:
-				d = board.getTile(currentTile + 1).getSupply() ? 1 : 0;
-				break;
-			case 5:
-				d = board.getTile(currentTile - dimension).getSupply() ? 1 : 0;
-				break;
-			case 7:
-				d = board.getTile(currentTile -1).getSupply() ? 1 : 0;
-				break;
-			
+				case 1:
+					d = board.getTile(currentTile + dimension).getSupply() ? 1 : 0;
+					break;
+				
+				case 3:
+					d = board.getTile(currentTile + 1).getSupply() ? 1 : 0;
+					break;
+				case 5:
+					d = board.getTile(currentTile - dimension).getSupply() ? 1 : 0;
+					break;
+				case 7:
+					d = board.getTile(currentTile -1).getSupply() ? 1 : 0;
+					break;
+				
+			}
 		}
-		
 		path.get(1).add(d); 
 		path.get(2).add(tileDistSupply);
 		path.get(3).add(tileDistOpponent);
