@@ -57,7 +57,7 @@ public class HeuristicPlayer extends Player{
 	
 	int getLastMove() { return LastMove; }
 	
-	void setLastMove(int LastMove) { this.LastMove = LastMove;  }
+	void setLastMove(int LastMove) { this.LastMove = LastMove; }
 	
 	double evaluate(int dice)
 	{

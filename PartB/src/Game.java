@@ -20,6 +20,17 @@ public class Game {
      */
 	public void setRound(int round) { this.round = round; }
 	
+	static public void printBoard(String[][] res, int Dimensions) {
+		String newLine = System.getProperty("line.separator");
+		for (int i = 2*Dimensions; i >= 0; i--) {
+			for (int j = 0; j < Dimensions; j++) {
+	
+				System.out.print(res[i][j]);
+			}
+				System.out.print(newLine);
+		}
+	}
+	
 	
 	public static void main(String[] args)
 	{		
@@ -42,13 +53,8 @@ public class Game {
 			
 			String newLine = System.getProperty("line.separator");
 			// Prints the board before players take their turn to play.
-			for (int i = 2*Dimensions; i >= 0; i--) {
-				for (int j = 0; j < Dimensions; j++) {
-
-					System.out.print(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile())[i][j]);
-				}
-				System.out.print(newLine);
-			}
+			
+			printBoard(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
 			
 			System.out.print(newLine);
 			
@@ -58,13 +64,15 @@ public class Game {
 			Theseus.statistics("everyRound");
 
 		    // Prints the board after Theseus moves.
-			for (int i = 2*Dimensions; i >= 0; i--) {
+			printBoard(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
+			
+			/*for (int i = 2*Dimensions; i >= 0; i--) {
 				for (int j = 0; j < Dimensions; j++) {
 
 					System.out.print(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile())[i][j]);
 				}
 				System.out.print(newLine);
-			}
+			}*/
 			
 			System.out.print(newLine);
 			
@@ -72,7 +80,15 @@ public class Game {
 			{
 				System.out.println("Minotaur got Theseus. Minotaur is the winner.");	// There is a possibility because the moves are random, Theseus walks onto Minotaur,
 				break;																	// so we check it here.
-			}			
+			}		
+			
+			if(Theseus.getScore() == Supplies) 												// Theseus got all supplies.
+			{
+				System.out.println("Theseus gathered all supplies. Theseus is the winner.");
+				Theseus.statistics("finalRound");
+				Minotaur.statistics("finalRound");
+				break;
+			}
 			
 			// Time for Minotaur to move
 			Minotaur.move(Minotaur.getNextMove());
@@ -80,13 +96,7 @@ public class Game {
 			Minotaur.statistics("everyRound");
 
 			// Prints the board after Theseus moves.
-			for (int i = 2*Dimensions; i >= 0; i--) {
-				for (int j = 0; j < Dimensions; j++) {
-
-					System.out.print(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile())[i][j]);
-				}
-				System.out.print(newLine);
-			}
+			printBoard(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
 			
 			System.out.print(newLine);
 			
