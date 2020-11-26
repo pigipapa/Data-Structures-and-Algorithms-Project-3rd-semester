@@ -145,8 +145,8 @@ public class HeuristicPlayer extends Player{
 		int initialY = y;
 		int initialCurrentTile = currentTile;
 		
-		tileDistSupply = -1;
-		tileDistOpponent = -1;
+		//tileDistSupply = -1;
+		//tileDistOpponent = -1;
 		
 		double[][] evaluation = new double[4][2]; 
 		
@@ -233,13 +233,14 @@ public class HeuristicPlayer extends Player{
 				
 			}
 			evaluation[i][1] = evaluate(dice, tileDistSupply, tileDistOpponent);
-
+			
+			x = initialX;
+			y = initialY;
+			currentTile = initialCurrentTile;
 		}
 		
 		
-		x = initialX;
-		y = initialY;
-		currentTile = initialCurrentTile;
+		
 		
 		
 
