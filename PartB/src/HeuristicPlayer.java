@@ -5,6 +5,7 @@ public class HeuristicPlayer extends Player{
 	int tileDistOpponent;
 	int tileDistSupply; 
 	int LastMove;
+	//Board boardH;
 		
 	public HeuristicPlayer() 
 	{
@@ -14,6 +15,7 @@ public class HeuristicPlayer extends Player{
 
 		tileDistOpponent = -1;
 		tileDistSupply = -1;
+		LastMove = -1;
 	}
 	
 
@@ -24,6 +26,7 @@ public class HeuristicPlayer extends Player{
 		this.tileDistOpponent = tileDistOpponent; // These two variables should initialized in Game as -1.
 		this.tileDistSupply = tileDistSupply;
 		this.LastMove = LastMove; //Initialized <1. Better as -1.
+		//boardH = board;
 		
 		path = new ArrayList<ArrayList<Integer>>();
 		
@@ -33,7 +36,7 @@ public class HeuristicPlayer extends Player{
 	
 	public HeuristicPlayer(Player player, ArrayList<ArrayList<Integer>> path) 
 	{
-		super(player);
+		super(player);				//??????
 		
 		for(int i = 0; i < path.size(); i++) {
 
@@ -62,8 +65,13 @@ public class HeuristicPlayer extends Player{
 		double OpponentDist = 0;
 		int dimension = board.getN();
 		tileDistSupply = -1;
-		tileDistOpponent = -1;
+		tileDistOpponent = -1; // peritta? ston constructor
 		int sign = (playerId == 2) ? -1 : 1;
+		
+		int GetMinotaurTile = board.getMinotaurTile();
+		int GetTheseusTile = board.getTheseusTile();
+		int opp = 0;
+		opp = (playerId == 1) ? GetTheseusTile : GetMinotaurTile;
 		
 		switch(dice)
 		{
@@ -79,7 +87,7 @@ public class HeuristicPlayer extends Player{
 								tileDistSupply = i;
 							}
 	
-							if(board.getMinotaurTile() == (currentTile + i*dimension)) {			
+							if(opp == (currentTile + i*dimension)) {			
 								OpponentDist = sign*(1.0/i);
 								tileDistOpponent = i;
 							}
@@ -101,7 +109,7 @@ public class HeuristicPlayer extends Player{
 								tileDistSupply = i;
 							}
 								
-							if(board.getMinotaurTile() == (currentTile + i)) { 
+							if(opp == (currentTile + i)) { 
 								OpponentDist = sign*(1.0/i);
 								tileDistOpponent = i;
 							}
@@ -127,7 +135,7 @@ public class HeuristicPlayer extends Player{
 									
 								}
 									
-								if(board.getMinotaurTile() == (currentTile - i*dimension)) { 
+								if(opp == (currentTile - i*dimension)) { 
 									OpponentDist = sign*(1.0/i);
 									tileDistOpponent = i;
 								}
@@ -149,7 +157,7 @@ public class HeuristicPlayer extends Player{
 								tileDistSupply = i;
 							}
 	
-							if(board.getMinotaurTile() == (currentTile - i*1)) {
+							if(opp == (currentTile - i*1)) {
 								OpponentDist = sign*(1.0/i);
 								tileDistOpponent = i;
 							}
@@ -157,8 +165,19 @@ public class HeuristicPlayer extends Player{
 					}
 				}
 			break;
-		}	
-		return (NearSupplies * 0.4 + OpponentDist * 0.6);		
+		}
+		
+		
+		if(playerId == 2)
+			System.out.println(name + " evaluation: " + (NearSupplies * 0.4 + OpponentDist * 0.6));
+		else
+			System.out.println(name + " evaluation: " + (NearSupplies * 0.2 + OpponentDist * 0.8));
+		
+			
+		if(playerId == 2)
+			return (NearSupplies * 0.4 + OpponentDist * 0.6);		
+		else 
+			return (NearSupplies * 0.2 + OpponentDist * 0.8);
 	}	
 	
 	public int getNextMove()
@@ -173,7 +192,9 @@ public class HeuristicPlayer extends Player{
 		}
 
 		double maxEvaluation = -2;
+		double belowZeroEvaluation = 10;
 		int bestDice = 0;
+		int worstDice = 0;
 		
 		for(int i = 0; i < 4; i++)
 		{
@@ -184,6 +205,70 @@ public class HeuristicPlayer extends Player{
 			}
 			if(evaluation[i][1] != 0)
 				allEvaluationsAreZero = false;
+			
+			if(belowZeroEvaluation > evaluation[i][1]) {
+				belowZeroEvaluation = evaluation[i][1];
+				worstDice = (int) evaluation[i][0];
+			}
+		}
+		
+		if(allEvaluationsAreZero == false && maxEvaluation == 0) {
+			boolean flag = true;
+
+			while(flag)
+			{
+				switch(bestDice)
+				{
+					case 1:
+						if(bestDice == worstDice) {
+							bestDice = DiceCalculation(bestDice);
+							continue;
+						}
+						if(board.getTile(currentTile).getUp())					
+							bestDice = DiceCalculation(bestDice);
+						else
+							flag = false;
+						break;
+	
+					case 3:
+						if(bestDice == worstDice) {
+							bestDice = DiceCalculation(bestDice);
+							continue;
+						}
+						if(board.getTile(currentTile).getRight())
+							bestDice = DiceCalculation(bestDice);
+						else
+							flag = false;
+						
+						break;
+					
+					case 5:
+						if(bestDice == worstDice) {
+							bestDice = DiceCalculation(bestDice);
+							continue;
+						}
+						if(board.getTile(currentTile).getDown() || (getCurrentTile() == 0)) 
+							bestDice = DiceCalculation(bestDice);
+						else
+							flag = false;
+	
+						break;
+	
+					case 7:
+						if(bestDice == worstDice) {
+							bestDice = DiceCalculation(bestDice);
+							continue;
+						}
+						if(board.getTile(currentTile).getLeft())
+							bestDice = DiceCalculation(bestDice);
+						else
+							flag = false;
+						
+						break;
+				}
+			}
+			
+			
 		}
 
 		if(allEvaluationsAreZero)
@@ -225,7 +310,7 @@ public class HeuristicPlayer extends Player{
 							bestDice = DiceCalculation(bestDice);
 							continue;
 						}
-						if(board.getTile(currentTile).getDown() || (getCurrentTile() == 0)) //is it needed???
+						if(board.getTile(currentTile).getDown() || (getCurrentTile() == 0)) 
 							bestDice = DiceCalculation(bestDice);
 						else
 							flag = false;
@@ -254,7 +339,28 @@ public class HeuristicPlayer extends Player{
 		// path (info about the dice (0), points of the movement (1), is near to a supply (2), is near to enemy(3))
 		
 		path.get(0).add(bestDice);
-		path.get(1).add(0); 
+		
+		int d = 0;
+		int dimension = board.getN();  //!!!!!! If player is Theseus.
+		switch(bestDice) {
+		
+			case 1:
+				d = board.getTile(currentTile + dimension).getSupply() ? 1 : 0;
+				break;
+			
+			case 3:
+				d = board.getTile(currentTile + 1).getSupply() ? 1 : 0;
+				break;
+			case 5:
+				d = board.getTile(currentTile - dimension).getSupply() ? 1 : 0;
+				break;
+			case 7:
+				d = board.getTile(currentTile -1).getSupply() ? 1 : 0;
+				break;
+			
+		}
+		
+		path.get(1).add(d); 
 		path.get(2).add(tileDistSupply);
 		path.get(3).add(tileDistOpponent);
 
@@ -282,12 +388,12 @@ public class HeuristicPlayer extends Player{
 		if(when == "everyRound")
 		{
 			// Dice
-			System.out.println(getName() + "'s' dice was " + path.get(0).get(path.get(0).size()-1) + ".");
+			System.out.println(getName() + "'s' dice is " + path.get(0).get(path.get(0).size()-1) + ".");
 			
 			// Supplies
 			if(playerId == 2)
 			{
-				System.out.println(getName() + " collected " + getScore() + " supplies.");
+				System.out.println(getName() + " has collected " + getScore() + " supplies.");
 
 				// Supply Distance
 				if(getTileDistSupply() != -1)

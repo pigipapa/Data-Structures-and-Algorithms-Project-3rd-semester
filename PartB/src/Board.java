@@ -155,8 +155,6 @@ public class Board {
 	public void setTheseusTile(int TheseusTile) {this.TheseusTile = TheseusTile;}
 	
 	public int getTheseusTile() {return TheseusTile;}
-
-	public int getOpponentTile(int playerId) { return (playerId == 1) ? getMinotaurTile() : getTheseusTile();}
 	
 	/**
 	 * Initializes the tiles in a random way.

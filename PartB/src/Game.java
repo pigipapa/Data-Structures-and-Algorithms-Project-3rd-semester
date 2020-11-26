@@ -25,7 +25,7 @@ public class Game {
 	{		
 		// Board variables
 		int Dimensions = 7;  
-		int Supplies = 9;
+		int Supplies = 4;
 		int Walls = (Dimensions*Dimensions*3+1)/2;
 		
 		Game game = new Game();
@@ -34,7 +34,7 @@ public class Game {
 		HeuristicPlayer Theseus = new HeuristicPlayer(2, "Theseus", board, 0, 0, 0, -1, -1, -1); 
 		
 		int times;
-		for(times = 0; times < 35; times++)
+		for(times = 0; times < 200; times++)
 		{	
 			game.setRound(game.getRound()+1);
 			
@@ -54,6 +54,7 @@ public class Game {
 			
 			// Time for Theseus to move
 			Theseus.move(Theseus.getNextMove());
+			Minotaur.board.setTheseusTile(Theseus.getCurrentTile());
 			Theseus.statistics("everyRound");
 
 		    // Prints the board after Theseus moves.
@@ -75,6 +76,7 @@ public class Game {
 			
 			// Time for Minotaur to move
 			Minotaur.move(Minotaur.getNextMove());
+			Theseus.board.setMinotaurTile(Minotaur.getCurrentTile());
 			Minotaur.statistics("everyRound");
 
 			// Prints the board after Theseus moves.
