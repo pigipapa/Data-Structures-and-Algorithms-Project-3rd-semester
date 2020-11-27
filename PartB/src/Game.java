@@ -58,17 +58,18 @@ public class Game {
 	public static void main(String[] args)
 	{		
 		// Board variables
-		int Dimensions = 7;  
-		int Supplies = 4;
+		int Dimensions = 10;  
+		int Supplies = 6;
 		int Walls = (Dimensions*Dimensions*3+1)/2;
-		
+		int maxRounds = 15;
+
 		Game game = new Game();
 		Board board = new Board(Dimensions, Supplies, Walls);
 		HeuristicPlayer Minotaur = new HeuristicPlayer(1, "Minotaur", board, 0, (Dimensions-1)/2, (Dimensions-1)/2, -1); 
 		HeuristicPlayer Theseus = new HeuristicPlayer(2, "Theseus", board, 0, 0, 0, -1); 
 		
 		int times;
-		for(times = 0; times < 35; times++)
+		for(times = 0; times < maxRounds; times++)
 		{	
 			game.setRound(game.getRound()+1);
 			System.out.println("Current round: " + game.getRound());
@@ -76,8 +77,7 @@ public class Game {
 			// Prints the board before players take their turn to play.
 			printBoard(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
 			System.out.println();
-			
-			
+						
 			// Time for Theseus to move
 			Theseus.move(Theseus.getNextMove());
 			Minotaur.board.setTheseusTile(Theseus.getCurrentTile());
@@ -104,12 +104,12 @@ public class Game {
 			// Check if game should be finished.
 			if(checkWin(Minotaur, Theseus, Supplies)) break;
 			
-			if(times<199)
+			if(times < (maxRounds-1))
 			System.out.println("==========================================");
 		
 		}
 		
-		if(times == 200) 
+		if(times == maxRounds) 
 		{
 			System.out.println("Tie...");	// Nobody won...
 			Theseus.statistics("finalRound");

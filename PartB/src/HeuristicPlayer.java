@@ -67,69 +67,50 @@ public class HeuristicPlayer extends Player{
 	{
 		double NearSupplies = 0;
 		double OpponentDist = 0;
-		int dimension = board.getN();
-		//tileDistSupply = -1;
-		//tileDistOpponent = -1;
 		int sign = (playerId == 2) ? -1 : 1;
 		
 		switch(dice)
 		{
 			case 1: // Up
 				
-				if(tileDistSupply != -1) { 
+				if(tileDistSupply != -1) 
 					NearSupplies = 1.0/tileDistSupply;
-				}
 	
-				if(tileDistOpponent != -1) {			
+				if(tileDistOpponent != -1) 			
 					OpponentDist = sign*(1.0/tileDistOpponent);
-				}
 					
 			break;
 				
 			case 3: // Right
 			
-				if(tileDistSupply != -1) {
+				if(tileDistSupply != -1) 
 					NearSupplies = 1.0/tileDistSupply ;
-				}
 								
-				if(tileDistOpponent != -1) { 
+				if(tileDistOpponent != -1) 
 					OpponentDist = sign*(1.0/tileDistOpponent);
-				}
 			
 			break;
 		
 			case 5: // Down
 								
-				if(tileDistSupply != -1) {
-					NearSupplies = 1.0/tileDistSupply ;
+				if(tileDistSupply != -1) 
+					NearSupplies = 1.0/tileDistSupply ;										
 										
-				}
-										
-				if(tileDistOpponent != -1) { 
+				if(tileDistOpponent != -1)  
 					OpponentDist = sign*(1.0/tileDistOpponent);
-				}
 
 			break;
 		
 			case 7: // Left
 				
-				if(tileDistSupply != -1) {
+				if(tileDistSupply != -1) 
 					NearSupplies = 1.0/tileDistSupply;
-				}
 		
-				if(tileDistOpponent != -1) {
+				if(tileDistOpponent != -1) 
 					OpponentDist = sign*(1.0/tileDistOpponent);
-				}
 
 			break;
 		}
-		
-		
-		if(playerId == 2)
-			System.out.println(name + " evaluation: " + (NearSupplies * 0.4 + OpponentDist * 0.6));
-		else
-			System.out.println(name + " evaluation: " + (NearSupplies * 0.2 + OpponentDist * 0.8));
-		
 			
 		if(playerId == 2)
 			return (NearSupplies * 0.4 + OpponentDist * 0.6);		
@@ -143,128 +124,136 @@ public class HeuristicPlayer extends Player{
 		
 		int initialX = x;
 		int initialY = y;
-		int initialCurrentTile = currentTile;
-		
-		//tileDistSupply = -1;
-		//tileDistOpponent = -1;
+		int initialCurrentTile = currentTile;		
+
+		tileDistSupply = -1;
+		tileDistOpponent = -1;
 		
 		double[][] evaluation = new double[4][2]; 
 		
 		for(int i=0; i<4; i++) {
 			
 			int dice = 2*i+1;
+			double cumulativeEvaluation = 0;
 			evaluation[i][0] = dice;
-			tileDistSupply = -1;
-			tileDistOpponent = -1;
 			
-			for(int j=1; j<3; j++) {
-				
+			for(int j=0; j<4; j++) {
+					
+				tileDistSupply = -1;
+				tileDistOpponent = -1;
+				double tempEvaluation = 0;
+
 				switch(dice) {
 				
-				case 1:
-					
-					if(board.getTile(currentTile).getUp()) break;
+				case 1:	
+
+					if(board.getTile(currentTile).getUp()) 
+						break;
 					else {
 						int iterationTimes = (x + 1) - initialX;
-						if(board.getTile(currentTile + dimension).getSupply() && tileDistSupply == -1) {
-							tileDistSupply = iterationTimes;
+						
+						if(board.getTile(currentTile + dimension).getSupply() && tileDistSupply == -1) 
+							tileDistSupply = iterationTimes;	
+
+						if(currentTile + dimension == getOpponentTile()) 
+							tileDistOpponent = iterationTimes;	
+													
+						tempEvaluation = evaluate(dice, tileDistSupply, tileDistOpponent);
+						cumulativeEvaluation += tempEvaluation;
+
+						if(j != 3)
+						{
+							x = x + 1; 
+							y = y;
+							currentTile = y + x * dimension;
 						}
-						if(currentTile + dimension == getOpponentTile()) {
-							tileDistOpponent = iterationTimes;
-						}
-						x = x + 1; 
-						y = y;
-						currentTile = y + x * dimension;
 					}
-				 break;
+					break;
 				
 				case 3:
 					
-					if(board.getTile(currentTile).getRight()) break;
+					if(board.getTile(currentTile).getRight()) 
+						break;
 					else {
-						int iterationTimes = (x + 1) - initialX;
-						if(board.getTile(currentTile + 1).getSupply() && tileDistSupply == -1) {
+						int iterationTimes = (y + 1) - initialY;
+
+						if(board.getTile(currentTile + 1).getSupply()) 
 							tileDistSupply = iterationTimes;
-						}
-						if(currentTile + 1 == getOpponentTile()) {
+
+						if(currentTile + 1 == getOpponentTile()) 
 							tileDistOpponent = iterationTimes;
-						}
-						x = x;
-						y = y + 1;
-						currentTile = y + x * dimension;
+
+						tempEvaluation = evaluate(dice, tileDistSupply, tileDistOpponent);
+						cumulativeEvaluation += tempEvaluation;
+
+						if(j != 3)
+						{
+							x = x;
+							y = y + 1;
+							currentTile = y + x * dimension;
+						}						
 					}
-				 break;
+					break;
 				 
 				case 5:
 					
-					if(board.getTile(currentTile).getDown() || currentTile == 0) break;
+					if(board.getTile(currentTile).getDown() || currentTile == 0) 
+						break;
 					else {
-						int iterationTimes = (x + 1) - initialX;
-						if(board.getTile(currentTile - dimension).getSupply() && tileDistSupply == -1) {
+						int iterationTimes = initialX - (x - 1);
+
+						if(board.getTile(currentTile - dimension).getSupply()) 
 							tileDistSupply = iterationTimes;
-						}
-						if(currentTile - dimension == getOpponentTile()) {
+
+						if(currentTile - dimension == getOpponentTile()) 
 							tileDistOpponent = iterationTimes;
-						}
-						x = x - 1;
-						y = y;
-						currentTile = y + x * dimension;
+
+						tempEvaluation = evaluate(dice, tileDistSupply, tileDistOpponent);
+						cumulativeEvaluation += tempEvaluation;
+					
+						if(j != 3)
+						{
+							x = x - 1;
+							y = y;
+							currentTile = y + x * dimension;
+						}						
 					}
-				 break;
+					break;
 				 
 				case 7:
 					
-					if(board.getTile(currentTile).getLeft()) break;
+					if(board.getTile(currentTile).getLeft()) 
+						break;
 					else {
-						int iterationTimes = (x + 1) - initialX;
-						if(board.getTile(currentTile - 1).getSupply() && tileDistSupply == -1) {
+						int iterationTimes = initialY - (y - 1);
+
+						if(board.getTile(currentTile - 1).getSupply()) 
 							tileDistSupply = iterationTimes;
-						}
-						if(currentTile - 1 == getOpponentTile()) {
+
+						if(currentTile - 1 == getOpponentTile()) 
 							tileDistOpponent = iterationTimes;
+						
+						tempEvaluation = evaluate(dice, tileDistSupply, tileDistOpponent);
+						cumulativeEvaluation += tempEvaluation;
+						
+						if(j != 3)
+						{
+							x = x;
+							y = y - 1;
+							currentTile = y + x * dimension;
 						}
-						x = x;
-						y = y - 1;
-						currentTile = y + x * dimension;
+
 					}
-				 break;
-				 
+					break;
 				}
 				
 			}
-			evaluation[i][1] = evaluate(dice, tileDistSupply, tileDistOpponent);
-			
+			evaluation[i][1] = cumulativeEvaluation;
+
 			x = initialX;
 			y = initialY;
 			currentTile = initialCurrentTile;
 		}
-		
-		
-		
-		
-		
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		boolean allEvaluationsAreZero = true;
 		double maxEvaluation = -2;

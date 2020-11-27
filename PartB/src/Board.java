@@ -262,9 +262,7 @@ public class Board {
 						
 						
 					}		
-					
-					
-					
+										
 			}while(walls>0);
 				
 	}
@@ -298,9 +296,9 @@ public class Board {
 					k++;
 				 }
 
-			}
+			}			
 		}
-				
+
 	}
 	
 	/**
