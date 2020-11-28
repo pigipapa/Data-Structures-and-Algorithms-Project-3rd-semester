@@ -58,10 +58,10 @@ public class Game {
 	public static void main(String[] args)
 	{		
 		// Board variables
-		int Dimensions = 10;  
-		int Supplies = 6;
+		int Dimensions = 7;  
+		int Supplies = 5;
 		int Walls = (Dimensions*Dimensions*3+1)/2;
-		int maxRounds = 15;
+		int maxRounds = 30;
 
 		Game game = new Game();
 		Board board = new Board(Dimensions, Supplies, Walls);

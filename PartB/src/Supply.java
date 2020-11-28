@@ -108,5 +108,4 @@ public class Supply {
 	public int getSupplyTileId() {
 		return supplyTileId;
 	}
-
 }

@@ -410,8 +410,6 @@ public class Board {
 	    	if(tileId == supplies[i].getSupplyTileId())
 	    		return supplies[i].getSupplyId();
 	    
-	    return -1;
-	    
+	    return -1;	    
 	}
-
 }
