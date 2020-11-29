@@ -11,6 +11,8 @@ public class Tile {
 	private boolean left;	// If true the tile has a left wall.
 	private boolean right;	// If true the tile has a right wall.	 
 	private boolean supply;	// Id true the tile has a supply.
+	private boolean Theseus;
+	private boolean Minotaur;
 
     /**
      * Initializes tile integer variables as zero (0) and boolean variables as false.
@@ -155,11 +157,20 @@ public class Tile {
      * @return supply, true if it has, false if it doesn't.
      */
     public boolean getSupply() { return supply; }
+    
     /**
      * Sets supply variable true or false.
      * @param supply
      */
     public void setSupply(boolean supply) { this.supply = supply; }
+    
+    public boolean hasTheseus() {return Theseus; }
+    
+    public void setTheseus(boolean Theseus) { this.Theseus = Theseus; }
+    
+    public boolean hasMinotaur() {return Minotaur; }
+    
+    public void setMinotaur(boolean Minotaur) { this.Minotaur = Minotaur; }
     
     /**
      * It counts how many walls the tile has.

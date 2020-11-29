@@ -10,8 +10,8 @@ public class Board {
 	private int W;				// The number of the walls that can be added in the maze. Walls are determined by N as (N*N*3+1)/2.
 	private Tile[] tiles;		// An array with Tile objects.
 	private Supply[] supplies;	// An array with Supply objects.
-	private int MinotaurTile;
-	private int TheseusTile;
+	//private int MinotaurTile;
+	//private int TheseusTile;
 	/**
      * Initializes board with zero values.
      */
@@ -47,7 +47,7 @@ public class Board {
 			supplies[i] = new Supply();
 		}
 		
-		createBoard();
+		//createBoard();
 	}
 	
 	/**
@@ -148,13 +148,13 @@ public class Board {
      */   
 	public Supply getSupply(int index) { return supplies[index]; }
 	
-	public void setMinotaurTile(int MinotaurTile) { this.MinotaurTile = MinotaurTile;}
-	
-	public int getMinotaurTile() {return MinotaurTile;}
-	
-	public void setTheseusTile(int TheseusTile) {this.TheseusTile = TheseusTile;}
-	
-	public int getTheseusTile() {return TheseusTile;}
+//	public void setMinotaurTile(int MinotaurTile) { this.MinotaurTile = MinotaurTile;}
+//	
+//	public int getMinotaurTile() {return MinotaurTile;}
+//	
+//	public void setTheseusTile(int TheseusTile) {this.TheseusTile = TheseusTile;}
+//	
+//	public int getTheseusTile() {return TheseusTile;}
 	
 	/**
 	 * Initializes the tiles in a random way.
@@ -304,7 +304,7 @@ public class Board {
 	/**
 	 * Creates the board using createTile() and createSupply() functions which are initializing the board in a random way. 
 	 */
-	private void createBoard() {
+	public void createBoard() {
 		
 		createTile();
 		createSupply();

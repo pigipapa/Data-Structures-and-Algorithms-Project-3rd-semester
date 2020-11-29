@@ -67,13 +67,13 @@ public class HeuristicPlayer extends Player{
 	
 	void setTileDistSupply(int tileDistSupply) {this.tileDistSupply = tileDistSupply;}
 	
-	public int getOpponentTile() {
+	/*public int getOpponentTile() {
 		int GetMinotaurTile = board.getMinotaurTile();
 		int GetTheseusTile = board.getTheseusTile();
 		int opp = 0;
 		opp = (playerId == 1) ? GetTheseusTile : GetMinotaurTile;
 		return opp;
-	}
+	}*/
 
 	double evaluate(int dice, int tileDistSupply, int tileDistOpponent)
 	{
@@ -81,9 +81,11 @@ public class HeuristicPlayer extends Player{
 		double OpponentDist = 0;
 		int sign = (playerId == 2) ? -1 : 1;
 		
+		int n=0;
+		
 		switch(dice)
 		{
-			case 0:
+			case 0:   //giati?????
 				break;
 
 			case 1: // Up
@@ -94,6 +96,7 @@ public class HeuristicPlayer extends Player{
 				if(tileDistOpponent != -1) 			
 					OpponentDist = sign*(1.0/tileDistOpponent);
 					
+				n=1;
 			break;
 				
 			case 3: // Right
@@ -104,6 +107,8 @@ public class HeuristicPlayer extends Player{
 				if(tileDistOpponent != -1) 
 					OpponentDist = sign*(1.0/tileDistOpponent);
 			
+				
+				n=3;
 			break;
 		
 			case 5: // Down
@@ -114,6 +119,7 @@ public class HeuristicPlayer extends Player{
 				if(tileDistOpponent != -1)  
 					OpponentDist = sign*(1.0/tileDistOpponent);
 
+				n=5;
 			break;
 		
 			case 7: // Left
@@ -124,9 +130,16 @@ public class HeuristicPlayer extends Player{
 				if(tileDistOpponent != -1) 
 					OpponentDist = sign*(1.0/tileDistOpponent);
 
+				
+				n=7;
 			break;
 		}
 			
+		if(playerId == 2)
+			System.out.println("Theseus evaluation " + n + ": " + NearSupplies * 0.4 + OpponentDist * 0.6);		
+		else 
+			System.out.println("Minotaur evaluation" + n + ": " + (NearSupplies * 0.2 + OpponentDist * 0.8));
+		
 		if(playerId == 2)
 			return (NearSupplies * 0.4 + OpponentDist * 0.6);		
 		else 
@@ -203,8 +216,12 @@ public class HeuristicPlayer extends Player{
 							if((playerId == 1)  && enoughTimesBeenOnTheSupply[currentTile + dimension])
 								tileDistSupply = -1;
 						}
-						if(currentTile + dimension == getOpponentTile()) 
+						
+						
+						if(playerId == 2 && board.getTile(currentTile + dimension).hasMinotaur()) 
 							tileDistOpponent = iterationTimes;	
+						else if(playerId == 1 && board.getTile(currentTile + dimension).hasTheseus())
+							tileDistOpponent = iterationTimes;
 													
 						tempEvaluation = evaluate(dice, tileDistSupply, tileDistOpponent);
 						cumulativeEvaluation += tempEvaluation;
@@ -232,7 +249,9 @@ public class HeuristicPlayer extends Player{
 							if((playerId == 1)  && enoughTimesBeenOnTheSupply[currentTile+1])
 								tileDistSupply = -1;
 						}
-						if(currentTile + 1 == getOpponentTile()) 
+						if(playerId == 2 && board.getTile(currentTile + 1).hasMinotaur()) 
+							tileDistOpponent = iterationTimes;	
+						else if(playerId == 1 && board.getTile(currentTile + 1).hasTheseus())
 							tileDistOpponent = iterationTimes;
 
 						tempEvaluation = evaluate(dice, tileDistSupply, tileDistOpponent);
@@ -262,7 +281,9 @@ public class HeuristicPlayer extends Player{
 								tileDistSupply = -1;
 						}
 
-						if(currentTile - dimension == getOpponentTile()) 
+						if(playerId == 2 && board.getTile(currentTile - dimension).hasMinotaur()) 
+							tileDistOpponent = iterationTimes;	
+						else if(playerId == 1 && board.getTile(currentTile - dimension).hasTheseus())
 							tileDistOpponent = iterationTimes;
 
 						tempEvaluation = evaluate(dice, tileDistSupply, tileDistOpponent);
@@ -291,7 +312,9 @@ public class HeuristicPlayer extends Player{
 							if((playerId == 1)  && enoughTimesBeenOnTheSupply[currentTile-1])
 								tileDistSupply = -1;
 						}
-						if(currentTile - 1 == getOpponentTile()) 
+						if(playerId == 2 && board.getTile(currentTile - 1).hasMinotaur()) 
+							tileDistOpponent = iterationTimes;	
+						else if(playerId == 1 && board.getTile(currentTile - 1).hasTheseus())
 							tileDistOpponent = iterationTimes;
 						
 						tempEvaluation = evaluate(dice, tileDistSupply, tileDistOpponent);

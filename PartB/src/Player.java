@@ -38,6 +38,12 @@ public class Player {
 		this.x = x;
 		this.y = y;
 		this.currentTile = y + x * board.getN();
+		
+		if(playerId == 2)
+			this.board.getTile(this.currentTile).setTheseus(true);
+		else if(playerId == 1)
+			this.board.getTile(this.currentTile).setMinotaur(true);
+			
 	}
 	
 	/**
@@ -145,7 +151,7 @@ public class Player {
 			this.board.setTile(i, board.getTile(i));
 		}
 		
-		for(int i=0; i<board.getW(); i++) {
+		for(int i=0; i<board.getS(); i++) {
 			this.board.setSupply(i, board.getSupply(i));
 		}
 		
@@ -188,8 +194,20 @@ public class Player {
 				else
 				{ 
 					System.out.println(getName() + " moved up.");
+					
+					if(playerId ==2)
+						board.getTile(currentTile).setTheseus(false);
+					else if(playerId == 1)
+						board.getTile(currentTile).setMinotaur(false);
+						
 					this.x = this.x + 1; 
 					this.currentTile = this.y + this.x * board.getN();
+					
+					if(playerId ==2)
+						board.getTile(currentTile).setTheseus(true);
+					else if(playerId == 1)
+						board.getTile(currentTile).setMinotaur(true);
+					
 					break;
 				}
 				
@@ -203,8 +221,20 @@ public class Player {
 				else
 				{ 
 					System.out.println(getName() + " moved right.");
+					
+					if(playerId ==2)
+						board.getTile(currentTile).setTheseus(false);
+					else if(playerId == 1)
+						board.getTile(currentTile).setMinotaur(false);
+					
 					this.y = this.y + 1; 
 					this.currentTile = this.y + this.x * board.getN();
+					
+					if(playerId ==2)
+						board.getTile(currentTile).setTheseus(true);
+					else if(playerId == 1)
+						board.getTile(currentTile).setMinotaur(true);
+					
 					break;
 				}
 				
@@ -218,8 +248,20 @@ public class Player {
 				else
 				{ 
 					System.out.println(getName() + " moved down.");
+					
+					if(playerId ==2)
+						board.getTile(currentTile).setTheseus(false);
+					else if(playerId == 1)
+						board.getTile(currentTile).setMinotaur(false);
+					
 					this.x = this.x - 1; 
 					this.currentTile = this.y + this.x * board.getN();
+					
+					if(playerId ==2)
+						board.getTile(currentTile).setTheseus(true);
+					else if(playerId == 1)
+						board.getTile(currentTile).setMinotaur(true);
+					
 					break;
 				}
 				
@@ -233,8 +275,20 @@ public class Player {
 				else 
 				{ 
 					System.out.println(getName() + " moved left.");
+					
+					if(playerId ==2)
+						board.getTile(currentTile).setTheseus(false);
+					else if(playerId == 1)
+						board.getTile(currentTile).setMinotaur(false);
+					
 					this.y = this.y - 1; 
 					this.currentTile = this.y + this.x * board.getN();
+					
+					if(playerId ==2)
+						board.getTile(currentTile).setTheseus(true);
+					else if(playerId == 1)
+						board.getTile(currentTile).setMinotaur(true);
+					
 					break;
 				}
 		}
@@ -267,9 +321,6 @@ public class Player {
 		array[0] = this.currentTile;
 		array[1] = this.x;
 		array[2] = this.y;
-		
-		if(playerId == 1) {board.setMinotaurTile(this.currentTile);}
-		else if(playerId == 2) {board.setTheseusTile(this.currentTile);}
 		
 		return array;
 	}
