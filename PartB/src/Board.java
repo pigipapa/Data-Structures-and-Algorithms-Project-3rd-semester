@@ -10,8 +10,7 @@ public class Board {
 	private int W;				// The number of the walls that can be added in the maze. Walls are determined by N as (N*N*3+1)/2.
 	private Tile[] tiles;		// An array with Tile objects.
 	private Supply[] supplies;	// An array with Supply objects.
-	//private int MinotaurTile;
-	//private int TheseusTile;
+	
 	/**
      * Initializes board with zero values.
      */
@@ -47,7 +46,6 @@ public class Board {
 			supplies[i] = new Supply();
 		}
 		
-		//createBoard();
 	}
 	
 	/**
@@ -148,21 +146,13 @@ public class Board {
      */   
 	public Supply getSupply(int index) { return supplies[index]; }
 	
-//	public void setMinotaurTile(int MinotaurTile) { this.MinotaurTile = MinotaurTile;}
-//	
-//	public int getMinotaurTile() {return MinotaurTile;}
-//	
-//	public void setTheseusTile(int TheseusTile) {this.TheseusTile = TheseusTile;}
-//	
-//	public int getTheseusTile() {return TheseusTile;}
-	
 	/**
 	 * Initializes the tiles in a random way.
 	 * The x, y and tileId variables of the tile objects in the array tile[] are set
 	 * and it is randomly decided if a wall will be built in any direction of the tile
 	 * if it's possible.
 	 */
-	private void createTile() {
+	public void createTile() {
 		
 		Random rand = new Random(System.currentTimeMillis());
 		
@@ -187,7 +177,7 @@ public class Board {
 		tiles[0].setDown(false); 			// The tile with 0 is considered to be the entrance. No wall is added.
 		int walls=getW()-(4*getN()-1); 		// The number of walls left to be used after setting the perimetric walls.
 		
-			do{
+		while(walls>0){
 				int xi = rand.nextInt(N); 	// Initialize a random x.
 				int yi = rand.nextInt(N); 	// Initialize a random y.
 				int n = rand.nextInt(4);  	// A random number between 0 and 3.
@@ -263,7 +253,7 @@ public class Board {
 						
 					}		
 										
-			}while(walls>0);
+			}
 				
 	}
 	

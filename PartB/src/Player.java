@@ -47,7 +47,7 @@ public class Player {
 	}
 	
 	/**
-     * Initializes Player with the values of another board.
+     * Initializes Player with the values of another player.
      */
 	public Player(Player player)
 	{
@@ -188,21 +188,23 @@ public class Player {
 				
 				if(board.getTile(currentTile).getUp() == true)
 				{
-					System.out.println(getName() + " didn't move. Wall ahead!");
+					System.out.println(getName() + " didn't move. Wall ahead!" + "\n");
 					break;					
 				}
 				else
 				{ 
 					System.out.println(getName() + " moved up.");
 					
+					// Player left from it's previous tile.
 					if(playerId ==2)
-						board.getTile(currentTile).setTheseus(false);
+						board.getTile(currentTile).setTheseus(false); 
 					else if(playerId == 1)
 						board.getTile(currentTile).setMinotaur(false);
 						
 					this.x = this.x + 1; 
 					this.currentTile = this.y + this.x * board.getN();
 					
+					// Player set on it's new current tile.
 					if(playerId ==2)
 						board.getTile(currentTile).setTheseus(true);
 					else if(playerId == 1)
@@ -215,7 +217,7 @@ public class Player {
 				
 				if(board.getTile(currentTile).getRight() == true)
 				{
-					System.out.println(getName() + " didn't move. Wall at the right side!");
+					System.out.println(getName() + " didn't move. Wall at the right side!" + "\n");
 					break;					
 				}
 				else
@@ -242,7 +244,7 @@ public class Player {
 				
 				if(board.getTile(currentTile).getDown() == true)
 				{
-					System.out.println(getName() + " didn't move. Wall down!");
+					System.out.println(getName() + " didn't move. Wall down!" + "\n");
 					break;					
 				}
 				else
@@ -269,7 +271,7 @@ public class Player {
 				
 				if(board.getTile(currentTile).getLeft() == true)
 				{
-					System.out.println(getName() + " didn't move. Wall at the left side!");
+					System.out.println(getName() + " didn't move. Wall at the left side!" + "\n");
 					break;					
 				}
 				else 
@@ -304,8 +306,6 @@ public class Player {
 				// Theseus got the supply, so it should be deleted. Deletion is made by setting supply's
 				// coordinates equal to -1 (outside board), and its id equal to -1 as well. 
 				// Also, tile's variable supply is set false.
-				
-				System.out.println("Theseus just got supply S" + supplyId + ".");
 				
 				board.getSupply(supplyId-1).setX(-1);
 				board.getSupply(supplyId-1).setY(-1);

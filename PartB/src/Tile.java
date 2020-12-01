@@ -3,16 +3,16 @@
  * Class that implements the tiles of the board. 
  */
 public class Tile {
-	private int tileId;		// Id number of the tile.
-	private int x;			// x coordinate of the tile.
-	private int y;			// y coordinate of the tile.	
-	private boolean up;		// If true the tile has an upper wall.
-	private boolean down;	// If true the tile has a bottom wall.
-	private boolean left;	// If true the tile has a left wall.
-	private boolean right;	// If true the tile has a right wall.	 
-	private boolean supply;	// Id true the tile has a supply.
-	private boolean Theseus;
-	private boolean Minotaur;
+	private int tileId;			// Id number of the tile.
+	private int x;				// x coordinate of the tile.
+	private int y;				// y coordinate of the tile.	
+	private boolean up;			// If true the tile has an upper wall.
+	private boolean down;		// If true the tile has a bottom wall.
+	private boolean left;		// If true the tile has a left wall.
+	private boolean right;		// If true the tile has a right wall.	 
+	private boolean supply;		// Id true the tile has a supply.
+	private boolean Theseus;	// It's true if Minotaur is on the tile.
+	private boolean Minotaur;	// It's true if Theseus is on the tile.
 
     /**
      * Initializes tile integer variables as zero (0) and boolean variables as false.
@@ -164,12 +164,28 @@ public class Tile {
      */
     public void setSupply(boolean supply) { this.supply = supply; }
     
+    /**
+     * Shows the absence or not of Theseus.
+     * @return Theseus
+     */
     public boolean hasTheseus() {return Theseus; }
     
+    /**
+     * Sets Theseus variable true or false;
+     * @param Theseus
+     */
     public void setTheseus(boolean Theseus) { this.Theseus = Theseus; }
     
+    /**
+     * Shows the absence or not of Minotaur.
+     * @return Minotaur
+     */
     public boolean hasMinotaur() {return Minotaur; }
     
+    /**
+     * Sets Minotaur variable true or false;
+     * @param Minotaur
+     */
     public void setMinotaur(boolean Minotaur) { this.Minotaur = Minotaur; }
     
     /**
