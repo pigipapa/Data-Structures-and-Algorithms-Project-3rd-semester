@@ -68,7 +68,7 @@ public class Game {
 	public static void main(String[] args)
 	{		
 		// Board variables
-		int Dimensions = 5;  
+		int Dimensions = 7;  
 		int Supplies = 5;
 		int Walls = (Dimensions*Dimensions*3+1)/2;
 		int maxRounds = 10;

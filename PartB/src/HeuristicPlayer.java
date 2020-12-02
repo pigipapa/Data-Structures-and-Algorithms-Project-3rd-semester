@@ -122,7 +122,7 @@ public class HeuristicPlayer extends Player{
 	 * @param tileDistOpponent
 	 * @return the evaluation of the player's single movement in the direction the dice implements. 
 	 */
-	double evaluate(int dice, int tileDistSupply, int tileDistOpponent)
+	double evaluate(int tileDistSupply, int tileDistOpponent)
 	{
 		// This variable's values can be 0.3, 0.5, 1 depending on the distance between the player and a supply, which he can see.
 		// If two tiles keep them apart then NearSupplies = 0.3, else if tile distance is 1 then NearSupplies = 0.5, else if they are neighboring NearSupplies = 1. 
@@ -133,60 +133,23 @@ public class HeuristicPlayer extends Player{
 		// A sign roulette. If player is Minotaur then sign = -1. If palyer is Theseus sign = 1. 
 		int sign = (playerId == 2) ? -1 : 1;
 		
-		switch(dice)
-		{
-			case 1: // Up
-				
-				if(tileDistSupply != -1)	// If player sees supply
-					// tileDistSupply can be 1, 2 and 3 depending on the distance between the player and the supply.
-					//1-> supply on the next tile in the direction player is heading 
-					//2-> one tile between the player and the supply
-					//3-> two tiles between the player and the supply
-					// The function we use is 1/x because 1/1=1, 1/2=0.5 and 1/3=0.33, which are the values NearSupplies is expected to have.
-					NearSupplies = 1.0/tileDistSupply;	
-	
-				if(tileDistOpponent != -1)	// If player sees his opponent
-					// The same comments as above, but this time player is looking for his opponent on the near tiles.
-					// If player is Theseus sign=-1 so OpponentDist<0.
-					// If palyer is Minotaur sign=1 so OpponentDist>0.
-					OpponentDist = sign*(1.0/tileDistOpponent);
-					
-			break;
-			
-			// Same logic as above...
-			
-			case 3: // Right
-			
-				if(tileDistSupply != -1) 
-					NearSupplies = 1.0/tileDistSupply ;
-								
-				if(tileDistOpponent != -1) 
-					OpponentDist = sign*(1.0/tileDistOpponent);
-			
-			break;
-		
-			case 5: // Down
-								
-				if(tileDistSupply != -1) 
-					NearSupplies = 1.0/tileDistSupply ;										
-										
-				if(tileDistOpponent != -1)  
-					OpponentDist = sign*(1.0/tileDistOpponent);
-				
-			break;
-		
-			case 7: // Left
-				
-				if(tileDistSupply != -1) 
-					NearSupplies = 1.0/tileDistSupply;
-		
-				if(tileDistOpponent != -1) 
-					OpponentDist = sign*(1.0/tileDistOpponent);
 
-			break;
-		}
-			
-		
+		// If player sees supply
+		// tileDistSupply can be 1, 2 and 3 depending on the distance between the player and the supply.
+		//1-> supply on the next tile in the direction player is heading 
+		//2-> one tile between the player and the supply
+		//3-> two tiles between the player and the supply
+		// The function we use is 1/x because 1/1=1, 1/2=0.5 and 1/3=0.33, which are the values NearSupplies is expected to have.
+		if(tileDistSupply != -1)	
+			NearSupplies = 1.0/tileDistSupply;	
+	
+		// If player sees his opponent
+		// The same comments as above, but this time player is looking for his opponent on the near tiles.
+		// If player is Theseus sign=-1 so OpponentDist<0.
+		// If palyer is Minotaur sign=1 so OpponentDist>0.
+		if(tileDistOpponent != -1)	
+			OpponentDist = sign*(1.0/tileDistOpponent);
+				
 		if(playerId == 2)
 			// Theseus' evaluation function 
 			return (NearSupplies * 0.4 + OpponentDist * 0.6);		
@@ -264,7 +227,6 @@ public class HeuristicPlayer extends Player{
 					
 				tileDistSupply = -1;
 				tileDistOpponent = -1;
-				double tempEvaluation = 0;
 
 				switch(dice) {
 				
@@ -298,8 +260,7 @@ public class HeuristicPlayer extends Player{
 							path.get(3).add(tileDistOpponent);
 						}
 													
-						tempEvaluation = evaluate(dice, tileDistSupply, tileDistOpponent);
-						cumulativeEvaluation += tempEvaluation;
+						cumulativeEvaluation += evaluate(tileDistSupply, tileDistOpponent);
 
 						if(j != 3)
 						{
@@ -338,8 +299,7 @@ public class HeuristicPlayer extends Player{
 							path.get(3).add(tileDistOpponent);
 						}
 
-						tempEvaluation = evaluate(dice, tileDistSupply, tileDistOpponent);
-						cumulativeEvaluation += tempEvaluation;
+						cumulativeEvaluation += evaluate(tileDistSupply, tileDistOpponent);
 
 						if(j != 3)
 						{
@@ -379,8 +339,7 @@ public class HeuristicPlayer extends Player{
 							path.get(3).add(tileDistOpponent);
 						}
 
-						tempEvaluation = evaluate(dice, tileDistSupply, tileDistOpponent);
-						cumulativeEvaluation += tempEvaluation;
+						cumulativeEvaluation += evaluate(tileDistSupply, tileDistOpponent);
 					
 						if(j != 3)
 						{
@@ -419,8 +378,7 @@ public class HeuristicPlayer extends Player{
 							path.get(3).add(tileDistOpponent);
 						}
 						
-						tempEvaluation = evaluate(dice, tileDistSupply, tileDistOpponent);
-						cumulativeEvaluation += tempEvaluation;
+						cumulativeEvaluation += evaluate(tileDistSupply, tileDistOpponent);
 						
 						if(j != 3)
 						{
