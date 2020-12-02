@@ -64,45 +64,6 @@ public class Game {
 		return false;
 	}
 	
-	static Board getPlayerBoard(Player player, Board board)
-	{
-		int Dimensions = board.getN();
-		int Supplies = board.getS();
-
-		Board playerBoard = new Board(Dimensions, Supplies, 0);
-
-		playerBoard.createTile();
-		playerBoard.setTile(player.getCurrentTile(), board.getTile(player.getCurrentTile()));
-
-		if(board.getTile(player.getCurrentTile()).getSupply())
-			playerBoard.setSupply((board.TileIdToSupplyId(player.getCurrentTile())-1), board.getSupply(board.TileIdToSupplyId(player.getCurrentTile())-1));
-		
-		for(int i=1; i<4; i++) { // Set up player board
-			if(player.getCurrentTile() + i*Dimensions < Dimensions * Dimensions) {
-				playerBoard.setTile(player.getCurrentTile() + i*Dimensions, board.getTile(player.getCurrentTile() + i*Dimensions));
-				if(playerBoard.getTile(player.getCurrentTile() + i*Dimensions).getSupply())
-					playerBoard.setSupply(board.TileIdToSupplyId(player.getCurrentTile() + i*Dimensions)-1, board.getSupply(board.TileIdToSupplyId(player.getCurrentTile() + i*Dimensions)-1));
-			}
-			if(player.getCurrentTile() - i*Dimensions > 0) {
-				playerBoard.setTile(player.getCurrentTile() - i*Dimensions, board.getTile(player.getCurrentTile() - i*Dimensions));
-				if(playerBoard.getTile(player.getCurrentTile() - i*Dimensions).getSupply())
-					playerBoard.setSupply(board.TileIdToSupplyId(player.getCurrentTile() - i*Dimensions)-1, board.getSupply(board.TileIdToSupplyId(player.getCurrentTile() - i*Dimensions)-1));
-			}
-			if(player.getCurrentTile() + i <= (player.getX()+1)*Dimensions - 1) {
-				playerBoard.setTile(player.getCurrentTile() + i, board.getTile(player.getCurrentTile() + i));
-				if(playerBoard.getTile(player.getCurrentTile() + i).getSupply())
-					playerBoard.setSupply(board.TileIdToSupplyId(player.getCurrentTile() + i)-1, board.getSupply(board.TileIdToSupplyId(player.getCurrentTile() + i)-1));
-			}
-			if(player.getCurrentTile() - i >= player.getX()*Dimensions) {
-				playerBoard.setTile(player.getCurrentTile() - i, board.getTile(player.getCurrentTile() - i));
-				if(playerBoard.getTile(player.getCurrentTile() - i).getSupply())
-					playerBoard.setSupply(board.TileIdToSupplyId(player.getCurrentTile() - i)-1, board.getSupply(board.TileIdToSupplyId(player.getCurrentTile() - i)-1));
-			}
-		}
-
-		return playerBoard;
-	}
-	
 	public static void main(String[] args)
 	{		
 		// Board variables
@@ -120,9 +81,9 @@ public class Game {
 		int times;
 		for(times = 0; times < maxRounds; times++)
 		{	
-			System.out.println("==========================================");
-			
 			game.setRound(game.getRound()+1);
+			
+			System.out.println("==========================================");
 			System.out.println("Current round: " + game.getRound());
 			
 			// Prints the board before players take their turn to play.
@@ -130,7 +91,7 @@ public class Game {
 			System.out.println();
 						
 			// Time for Theseus to move
-			Theseus.setBoard(getPlayerBoard(Theseus, board));
+			Theseus.setBoard(board.getPlayerBoard(Theseus));
 			Theseus.move(Theseus.getNextMove());
 
 		    // Prints the board after Theseus moves.
@@ -142,7 +103,7 @@ public class Game {
 			if(checkWin(Minotaur, Theseus, Supplies)) break;
 						
 			// Time for Minotaur to move
-			Minotaur.setBoard(getPlayerBoard(Minotaur, board));
+			Minotaur.setBoard(board.getPlayerBoard(Minotaur));
 			Minotaur.move(Minotaur.getNextMove());
 
 			// Prints the board after Theseus moves.
