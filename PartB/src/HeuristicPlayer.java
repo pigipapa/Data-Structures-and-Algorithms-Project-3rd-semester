@@ -31,7 +31,7 @@ public class HeuristicPlayer extends Player{
 		path = new ArrayList<ArrayList<Integer>>();
 		LastMove = -1;
 		timesBeenOnTheSupply = new int[board.getS()];
-		enoughTimesBeenOnTheSupply = new boolean[board.getN()*board.getN()];
+		enoughTimesBeenOnTheSupply = new boolean[board.getS()];
 	}
 	
 	/**
@@ -60,9 +60,9 @@ public class HeuristicPlayer extends Player{
 		for(int i = 0; i < board.getS(); i++)
 			timesBeenOnTheSupply[i] = 0;
 
-		enoughTimesBeenOnTheSupply = new boolean[board.getN()*board.getN()];
+		enoughTimesBeenOnTheSupply = new boolean[board.getS()];
 
-		for(int i = 0; i < (board.getN()*board.getN()); i++)
+		for(int i = 0; i < (board.getS()); i++)
 			enoughTimesBeenOnTheSupply[i] = false;
 	}
 	
@@ -222,7 +222,7 @@ public class HeuristicPlayer extends Player{
 		// Checks how many times Minotaur has been on the same supply (Minotaur is attracted by supplies because he may find Theseus near to them)
 		if((playerId == 1) && board.getTile(currentTile).getSupply())
 		{
-			if(!enoughTimesBeenOnTheSupply[currentTile]) 
+			if(!enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile)-1]) 
 				timesBeenOnTheSupply[board.TileIdToSupplyId(currentTile)-1] += 1;
 
 			// Minotaur can be in the same tile as a supply only two times
@@ -230,7 +230,7 @@ public class HeuristicPlayer extends Player{
 			{
 				// The supply which is been watched out by Minotaur is been deactivated
 				timesBeenOnTheSupply[board.TileIdToSupplyId(currentTile)-1] = -1;
-				enoughTimesBeenOnTheSupply[currentTile] = true;	
+				enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile)-1] = true;	
 				deactivatedSupplyId = board.TileIdToSupplyId(currentTile)-1;
 			}	
 		}
@@ -248,7 +248,7 @@ public class HeuristicPlayer extends Player{
 			if(timesBeenOnTheSupply[i] == -4 && board.getSupply(i).getSupplyTileId() != -1) // Supply reactivation
 			{
 				timesBeenOnTheSupply[i] = 0;
-				enoughTimesBeenOnTheSupply[board.getSupply(i).getSupplyTileId()] = false;
+				enoughTimesBeenOnTheSupply[i] = false;
 			}
 		}
 		
@@ -284,7 +284,7 @@ public class HeuristicPlayer extends Player{
 								isTheClosestSupply = false;
 							}
 						
-							if((playerId == 1)  && enoughTimesBeenOnTheSupply[currentTile + dimension])
+							if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile + dimension)-1])
 								tileDistSupply = -1;
 						}
 						
@@ -326,7 +326,7 @@ public class HeuristicPlayer extends Player{
 								isTheClosestSupply = false;
 							}
 
-							if((playerId == 1)  && enoughTimesBeenOnTheSupply[currentTile+1])
+							if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile + 1)-1])
 								tileDistSupply = -1;
 						}
 						if(playerId == 2 && board.getTile(currentTile + 1).hasMinotaur()) {
@@ -366,7 +366,7 @@ public class HeuristicPlayer extends Player{
 								isTheClosestSupply = false;
 							}
 
-							if((playerId == 1)  && enoughTimesBeenOnTheSupply[currentTile - dimension])
+							if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile - dimension)-1])
 								tileDistSupply = -1;
 						}
 
@@ -407,7 +407,7 @@ public class HeuristicPlayer extends Player{
 								isTheClosestSupply = false;
 							}
 
-							if((playerId == 1)  && enoughTimesBeenOnTheSupply[currentTile-1])
+							if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile - 1)-1])
 								tileDistSupply = -1;
 						}
 						if(playerId == 2 && board.getTile(currentTile - 1).hasMinotaur()) { 
