@@ -402,43 +402,4 @@ public class Board {
 	    
 	    return -1;	    
 	}
-
-	Board getPlayerBoard(Player player)
-	{
-		int Dimensions = N;
-		int Supplies = S;
-
-		Board playerBoard = new Board(Dimensions, Supplies, 0);
-
-		playerBoard.createTile();
-		playerBoard.setTile(player.getCurrentTile(), getTile(player.getCurrentTile()));
-
-		if(getTile(player.getCurrentTile()).getSupply())
-			playerBoard.setSupply((TileIdToSupplyId(player.getCurrentTile())-1), getSupply(TileIdToSupplyId(player.getCurrentTile())-1));
-		
-		for(int i=1; i<4; i++) { // Set up player board
-			if(player.getCurrentTile() + i*Dimensions < Dimensions * Dimensions) {
-				playerBoard.setTile(player.getCurrentTile() + i*Dimensions, getTile(player.getCurrentTile() + i*Dimensions));
-				if(playerBoard.getTile(player.getCurrentTile() + i*Dimensions).getSupply())
-					playerBoard.setSupply(TileIdToSupplyId(player.getCurrentTile() + i*Dimensions)-1, getSupply(TileIdToSupplyId(player.getCurrentTile() + i*Dimensions)-1));
-			}
-			if(player.getCurrentTile() - i*Dimensions > 0) {
-				playerBoard.setTile(player.getCurrentTile() - i*Dimensions, getTile(player.getCurrentTile() - i*Dimensions));
-				if(playerBoard.getTile(player.getCurrentTile() - i*Dimensions).getSupply())
-					playerBoard.setSupply(TileIdToSupplyId(player.getCurrentTile() - i*Dimensions)-1, getSupply(TileIdToSupplyId(player.getCurrentTile() - i*Dimensions)-1));
-			}
-			if(player.getCurrentTile() + i <= (player.getX()+1)*Dimensions - 1) {
-				playerBoard.setTile(player.getCurrentTile() + i, getTile(player.getCurrentTile() + i));
-				if(playerBoard.getTile(player.getCurrentTile() + i).getSupply())
-					playerBoard.setSupply(TileIdToSupplyId(player.getCurrentTile() + i)-1, getSupply(TileIdToSupplyId(player.getCurrentTile() + i)-1));
-			}
-			if(player.getCurrentTile() - i >= player.getX()*Dimensions) {
-				playerBoard.setTile(player.getCurrentTile() - i, getTile(player.getCurrentTile() - i));
-				if(playerBoard.getTile(player.getCurrentTile() - i).getSupply())
-					playerBoard.setSupply(TileIdToSupplyId(player.getCurrentTile() - i)-1, getSupply(TileIdToSupplyId(player.getCurrentTile() - i)-1));
-			}
-		}
-
-		return playerBoard;
-	}
 }
