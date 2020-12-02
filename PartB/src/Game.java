@@ -64,6 +64,44 @@ public class Game {
 		return false;
 	}
 	
+	static Board getPlayerBoard(Player player, Board board)
+	{
+		int Dimensions = board.getN();
+		int Supplies = board.getS();
+
+		Board playerBoard = new Board(Dimensions, Supplies, 0);
+
+		playerBoard.createTile();
+		playerBoard.setTile(player.getCurrentTile(), board.getTile(player.getCurrentTile()));
+
+		if(board.getTile(player.getCurrentTile()).getSupply())
+			playerBoard.setSupply((board.TileIdToSupplyId(player.getCurrentTile())-1), board.getSupply(board.TileIdToSupplyId(player.getCurrentTile())-1));
+		
+		for(int i=1; i<4; i++) { // Set up player board
+			if(player.getCurrentTile() + i*Dimensions < Dimensions * Dimensions) {
+				playerBoard.setTile(player.getCurrentTile() + i*Dimensions, board.getTile(player.getCurrentTile() + i*Dimensions));
+				if(playerBoard.getTile(player.getCurrentTile() + i*Dimensions).getSupply())
+					playerBoard.setSupply(board.TileIdToSupplyId(player.getCurrentTile() + i*Dimensions)-1, board.getSupply(board.TileIdToSupplyId(player.getCurrentTile() + i*Dimensions)-1));
+			}
+			if(player.getCurrentTile() - i*Dimensions > 0) {
+				playerBoard.setTile(player.getCurrentTile() - i*Dimensions, board.getTile(player.getCurrentTile() - i*Dimensions));
+				if(playerBoard.getTile(player.getCurrentTile() - i*Dimensions).getSupply())
+					playerBoard.setSupply(board.TileIdToSupplyId(player.getCurrentTile() - i*Dimensions)-1, board.getSupply(board.TileIdToSupplyId(player.getCurrentTile() - i*Dimensions)-1));
+			}
+			if(player.getCurrentTile() + i <= (player.getX()+1)*Dimensions - 1) {
+				playerBoard.setTile(player.getCurrentTile() + i, board.getTile(player.getCurrentTile() + i));
+				if(playerBoard.getTile(player.getCurrentTile() + i).getSupply())
+					playerBoard.setSupply(board.TileIdToSupplyId(player.getCurrentTile() + i)-1, board.getSupply(board.TileIdToSupplyId(player.getCurrentTile() + i)-1));
+			}
+			if(player.getCurrentTile() - i >= player.getX()*Dimensions) {
+				playerBoard.setTile(player.getCurrentTile() - i, board.getTile(player.getCurrentTile() - i));
+				if(playerBoard.getTile(player.getCurrentTile() - i).getSupply())
+					playerBoard.setSupply(board.TileIdToSupplyId(player.getCurrentTile() - i)-1, board.getSupply(board.TileIdToSupplyId(player.getCurrentTile() - i)-1));
+			}
+		}
+
+		return playerBoard;
+	}
 	
 	public static void main(String[] args)
 	{		
@@ -83,10 +121,6 @@ public class Game {
 		for(times = 0; times < maxRounds; times++)
 		{	
 			System.out.println("==========================================");
-			Board TheseusBoard = new Board(Dimensions, Supplies, 0);
-			TheseusBoard.createTile();
-			Board MinotaurBoard = new Board(Dimensions, Supplies, 0);
-			MinotaurBoard.createTile();
 			
 			game.setRound(game.getRound()+1);
 			System.out.println("Current round: " + game.getRound());
@@ -94,88 +128,26 @@ public class Game {
 			// Prints the board before players take their turn to play.
 			printBoard(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
 			System.out.println();
-			
-			//printBoard(playerBoard.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
-			
-			TheseusBoard.setTile(Theseus.getCurrentTile(), board.getTile(Theseus.getCurrentTile()));
-			if(board.getTile(Theseus.getCurrentTile()).getSupply())
-				TheseusBoard.setSupply((board.TileIdToSupplyId(Theseus.getCurrentTile())-1), board.getSupply(board.TileIdToSupplyId(Theseus.getCurrentTile())-1));
-			
-			for(int i=1; i<4; i++) { // Set up player board
-				if(Theseus.getCurrentTile() + i*Dimensions < Dimensions * Dimensions) {
-					TheseusBoard.setTile(Theseus.getCurrentTile() + i*Dimensions, board.getTile(Theseus.getCurrentTile() + i*Dimensions));
-					if(TheseusBoard.getTile(Theseus.getCurrentTile() + i*Dimensions).getSupply())
-						TheseusBoard.setSupply(board.TileIdToSupplyId(Theseus.getCurrentTile() + i*Dimensions)-1, board.getSupply(board.TileIdToSupplyId(Theseus.getCurrentTile() + i*Dimensions)-1));
-				}
-				if(Theseus.getCurrentTile() - i*Dimensions > 0) {
-					TheseusBoard.setTile(Theseus.getCurrentTile() - i*Dimensions, board.getTile(Theseus.getCurrentTile() - i*Dimensions));
-					if(TheseusBoard.getTile(Theseus.getCurrentTile() - i*Dimensions).getSupply())
-						TheseusBoard.setSupply(board.TileIdToSupplyId(Theseus.getCurrentTile() - i*Dimensions)-1, board.getSupply(board.TileIdToSupplyId(Theseus.getCurrentTile() - i*Dimensions)-1));
-				}
-				if(Theseus.getCurrentTile() + i <= (Theseus.getX()+1)*Dimensions - 1) {
-					TheseusBoard.setTile(Theseus.getCurrentTile() + i, board.getTile(Theseus.getCurrentTile() + i));
-					if(TheseusBoard.getTile(Theseus.getCurrentTile() + i).getSupply())
-						TheseusBoard.setSupply(board.TileIdToSupplyId(Theseus.getCurrentTile() + i)-1, board.getSupply(board.TileIdToSupplyId(Theseus.getCurrentTile() + i)-1));
-				}
-				if(Theseus.getCurrentTile() - i >= Theseus.getX()*Dimensions) {
-					TheseusBoard.setTile(Theseus.getCurrentTile() - i, board.getTile(Theseus.getCurrentTile() - i));
-					if(TheseusBoard.getTile(Theseus.getCurrentTile() - i).getSupply())
-						TheseusBoard.setSupply(board.TileIdToSupplyId(Theseus.getCurrentTile() - i)-1, board.getSupply(board.TileIdToSupplyId(Theseus.getCurrentTile() - i)-1));
-				}
-			}
-			
-			Theseus.setBoard(TheseusBoard);
-			
-			//printBoard(TheseusBoard.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
-			
+						
 			// Time for Theseus to move
-			System.out.println("------------------------------------------");
-			System.out.println("Theseus' turn to move\n");
+			Theseus.setBoard(getPlayerBoard(Theseus, board));
 			Theseus.move(Theseus.getNextMove());
 
 		    // Prints the board after Theseus moves.
+			System.out.println("------------------------------------------");
+			System.out.println("Theseus' turn to move\n");
 			printBoard(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
 			System.out.println();
 			
 			if(checkWin(Minotaur, Theseus, Supplies)) break;
-			
-			MinotaurBoard.setTile(Minotaur.getCurrentTile(), board.getTile(Minotaur.getCurrentTile()));
-			if(board.getTile(Minotaur.getCurrentTile()).getSupply())
-				MinotaurBoard.setSupply((board.TileIdToSupplyId(Minotaur.getCurrentTile())-1), board.getSupply(board.TileIdToSupplyId(Minotaur.getCurrentTile())-1));
-			
-			for(int i=1; i<4; i++) { // Set up player board
-				if(Minotaur.getCurrentTile() + i*Dimensions < Dimensions * Dimensions) {
-					MinotaurBoard.setTile(Minotaur.getCurrentTile() + i*Dimensions, board.getTile(Minotaur.getCurrentTile() + i*Dimensions));
-					if(MinotaurBoard.getTile(Minotaur.getCurrentTile() + i*Dimensions).getSupply())
-					MinotaurBoard.setSupply(board.TileIdToSupplyId(Minotaur.getCurrentTile() + i*Dimensions)-1, board.getSupply(board.TileIdToSupplyId(Minotaur.getCurrentTile() + i*Dimensions)-1));
-				}
-				if(Minotaur.getCurrentTile() - i*Dimensions > 0) {
-					MinotaurBoard.setTile(Minotaur.getCurrentTile() - i*Dimensions, board.getTile(Minotaur.getCurrentTile() - i*Dimensions));
-					if(MinotaurBoard.getTile(Minotaur.getCurrentTile() - i*Dimensions).getSupply())
-						MinotaurBoard.setSupply(board.TileIdToSupplyId(Minotaur.getCurrentTile() - i*Dimensions)-1, board.getSupply(board.TileIdToSupplyId(Minotaur.getCurrentTile() - i*Dimensions)-1));
-				}
-				if(Minotaur.getCurrentTile() + i <= (Minotaur.getX()+1)*Dimensions - 1) {
-					MinotaurBoard.setTile(Minotaur.getCurrentTile() + i, board.getTile(Minotaur.getCurrentTile() + i));
-					if(MinotaurBoard.getTile(Minotaur.getCurrentTile() + i).getSupply())
-						MinotaurBoard.setSupply(board.TileIdToSupplyId(Minotaur.getCurrentTile() + i)-1, board.getSupply(board.TileIdToSupplyId(Minotaur.getCurrentTile() + i)-1));
-				}
-				if(Minotaur.getCurrentTile() - i >= Minotaur.getX()*Dimensions) {
-					MinotaurBoard.setTile(Minotaur.getCurrentTile() - i, board.getTile(Minotaur.getCurrentTile() - i));
-					if(MinotaurBoard.getTile(Minotaur.getCurrentTile() - i).getSupply())
-						MinotaurBoard.setSupply(board.TileIdToSupplyId(Minotaur.getCurrentTile() - i)-1, board.getSupply(board.TileIdToSupplyId(Minotaur.getCurrentTile() - i)-1));
-				}
-			}
-			
-			Minotaur.setBoard(MinotaurBoard);
-			
-			//printBoard(MinotaurBoard.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
-			
+						
 			// Time for Minotaur to move
-			System.out.println("------------------------------------------");
-			System.out.println("Minotaur's turn to move\n"); 	
+			Minotaur.setBoard(getPlayerBoard(Minotaur, board));
 			Minotaur.move(Minotaur.getNextMove());
 
 			// Prints the board after Theseus moves.
+			System.out.println("------------------------------------------");
+			System.out.println("Minotaur's turn to move\n"); 	
 			printBoard(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
 			System.out.println();
 
