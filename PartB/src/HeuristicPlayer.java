@@ -185,18 +185,17 @@ public class HeuristicPlayer extends Player{
 
 			break;
 		}
-			
 		
 		if(playerId == 2)
 			// Theseus' evaluation function 
 			return (NearSupplies * 0.4 + OpponentDist * 0.6);		
 		else 
-			// Minotaurs's evaluation function
+			// Minotaur's evaluation function
 			return (NearSupplies * 0.2 + OpponentDist * 0.8);
 	}	
 	
 	/**
-	 * The function that returns the dice player is going to use in Game to move. 
+	 * The function that returns the best dice player can decide after evaluating his moves in each directions. 
 	 * @return bestDice
 	 */
 	public int getNextMove()
@@ -239,63 +238,72 @@ public class HeuristicPlayer extends Player{
 
 		for(int i = 0; i < board.getS(); i++)
 		{
+			// Just deactivated supply is not being considered into reactivation process.
 			if(i == deactivatedSupplyId)
 				continue;
 
+			// The supply is reactivated after three rounds.
 			if((timesBeenOnTheSupply[i] <= -1) && (timesBeenOnTheSupply[i] > -4))
 				timesBeenOnTheSupply[i] -= 1;
 
-			if(timesBeenOnTheSupply[i] == -4 && board.getSupply(i).getSupplyTileId() != -1) // Supply reactivation
+			// Supply reactivation.
+			if(timesBeenOnTheSupply[i] == -4 && board.getSupply(i).getSupplyTileId() != -1) 
 			{
 				timesBeenOnTheSupply[i] = 0;
 				enoughTimesBeenOnTheSupply[board.getSupply(i).getSupplyTileId()] = false;
 			}
 		}
 		
+		// Variable that implements if a close supply is the closest one to the player, in case there are more than 1 supplies he can see.
 		boolean isTheClosestSupply = true;
 		
-		for(int i=0; i<4; i++) {
+		// Player is moving tile to tile in each direction(1->up, 3->right, 5->down, 7->left) for two times,
+		// in order to test what is on the next tile (supply , opponent).
+		// Thus, he sees in a distance of three tiles from his current tile and therefore he evaluates the move in every direction.
+		
+		for(int i=0; i<4; i++) {				// Loop for every direction
 			
-			int dice = 2*i+1;
-			double cumulativeEvaluation = 0;
-			evaluation[i][0] = dice;
+			int dice = 2*i+1;					// Dice transformation from the set [0, 1, 2, 3] to [1, 3, 5, 7].
+			double cumulativeEvaluation = 0;	// Sum of evaluations in one direction.
+			evaluation[i][0] = dice;			// Dice is stored in the first column of evaluation array.
 			
-			for(int j=0; j<4; j++) {
+			for(int j=0; j<4; j++) {	 		// Loop for every movement
 					
 				tileDistSupply = -1;
 				tileDistOpponent = -1;
-				double tempEvaluation = 0;
+				
+				double tempEvaluation = 0;		// The evaluation after each testing movement.
 
 				switch(dice) {
 				
-				case 1:	
+				case 1:	//up
 
-					if(board.getTile(currentTile).getUp()) 
+					if(board.getTile(currentTile).getUp())						// Checks if there is a wall ahead.
 						break;
 					else {
-						int iterationTimes = (x + 1) - initialX;
+						int iterationTimes = (x + 1) - initialX;				// Computing the distance between players initial position and his posotion after his testing move 
 						
-						if(board.getTile(currentTile + dimension).getSupply())
+						if(board.getTile(currentTile + dimension).getSupply())	// Checks if the upper tile has supply.
 						{	
-							tileDistSupply = iterationTimes;
+							tileDistSupply = iterationTimes;	
 							
-							if(isTheClosestSupply) {
-								path.get(2).add(tileDistSupply);
-								isTheClosestSupply = false;
+							if(isTheClosestSupply) {	
+								path.get(2).add(tileDistSupply);										// Store to path the distance between the closest supply and Theseus,  
+								isTheClosestSupply = false;												// in case there are more than one supplies near to him.
 							}
 						
-							if((playerId == 1)  && enoughTimesBeenOnTheSupply[currentTile + dimension])
-								tileDistSupply = -1;
+							if((playerId == 1)  && enoughTimesBeenOnTheSupply[currentTile + dimension])	// Checks if Minotaur is the player. 
+								tileDistSupply = -1;													// If his has been enough times on the supply in front of him it's been deactivated.
 						}
 						
 						
-						if(playerId == 2 && board.getTile(currentTile + dimension).hasMinotaur()) {
+						if(playerId == 2 && board.getTile(currentTile + dimension).hasMinotaur()) {		//Checks if Minotaur is on Theseus' upper tile.
 							tileDistOpponent = iterationTimes;	
-							path.get(3).add(tileDistOpponent);
+							path.get(3).add(tileDistOpponent);											// Adds in Theseus' path his distance from Minotaur.
 						}
-						else if(playerId == 1 && board.getTile(currentTile + dimension).hasTheseus()) {
+						else if(playerId == 1 && board.getTile(currentTile + dimension).hasTheseus()) {	//Checks if Theseus is on Minotaur's upper tile.
 							tileDistOpponent = iterationTimes;
-							path.get(3).add(tileDistOpponent);
+							path.get(3).add(tileDistOpponent);											// Adds in Minotaur's path his distance from Theseus.
 						}
 													
 						tempEvaluation = evaluate(dice, tileDistSupply, tileDistOpponent);
@@ -303,14 +311,16 @@ public class HeuristicPlayer extends Player{
 
 						if(j != 3)
 						{
-							x = x + 1; 
+							x = x + 1;																	// Player moves up.
 							y = y;
 							currentTile = y + x * dimension;
 						}
 					}
 					break;
 				
-				case 3:
+					// The same logic as described above is used in the rest cases.
+					
+				case 3:	//right
 					
 					if(board.getTile(currentTile).getRight()) 
 						break;
@@ -350,7 +360,7 @@ public class HeuristicPlayer extends Player{
 					}
 					break;
 				 
-				case 5:
+				case 5:	//down
 					
 					if(board.getTile(currentTile).getDown() || currentTile == 0) 
 						break;
@@ -391,7 +401,7 @@ public class HeuristicPlayer extends Player{
 					}
 					break;
 				 
-				case 7:
+				case 7:	//left
 					
 					if(board.getTile(currentTile).getLeft()) 
 						break;
@@ -434,36 +444,46 @@ public class HeuristicPlayer extends Player{
 				}
 				
 			}
-			evaluation[i][1] = cumulativeEvaluation;
+			evaluation[i][1] = cumulativeEvaluation;	// Total evaluation of the movement is stored in the second column of evaluation array.
 
-			x = initialX;
+			x = initialX;								// Player returns in his initial position.
 			y = initialY;
 			currentTile = initialCurrentTile;
 		}
 		
 		boolean allEvaluationsAreZero = true;
+		
 		double maxEvaluation = -2;
 		double belowZeroEvaluation = 10;
+		
 		int bestDice = 0;
 		int worstDice = 0;
 		
 		for(int i = 0; i < 4; i++)
 		{
-			if(maxEvaluation < evaluation[i][1])
-			{
+			// Find maximum evaluation in evaluation array.
+			if(maxEvaluation < evaluation[i][1]){
 				maxEvaluation = evaluation[i][1];
 				bestDice = (int) evaluation[i][0];
 			}
+			
+			// Check if all evaluations are zero.
 			if(evaluation[i][1] != 0)
 				allEvaluationsAreZero = false;
 			
+			// Find minimum evaluation.
 			if(belowZeroEvaluation > evaluation[i][1]) {
 				belowZeroEvaluation = evaluation[i][1];
 				worstDice = (int) evaluation[i][0];
 			}
 		}
 		
+		// If Theseus has a negative evaluation, meaning he can detect Minotaur.
+		// Then maximum evaluation is zero but Theseus must not move randomly.
+		// He must move in a direction different than the one Minotaur is tracked.
+		// So he checks if he can move away, towards a direction that has zero evaluation. 
 		if(allEvaluationsAreZero == false && maxEvaluation == 0) {
+			
 			boolean flag = true;
 
 			while(flag)
@@ -471,16 +491,18 @@ public class HeuristicPlayer extends Player{
 				switch(bestDice)
 				{
 					case 1:
-						if(bestDice == worstDice) {
-							bestDice = DiceCalculation(bestDice);
+						if(bestDice == worstDice) {					// If after the first access in loop bestDice is changed, it may become equal to worstDice. 
+							bestDice = DiceCalculation(bestDice);	// So we calculate it again.
 							continue;
 						}
-						if(board.getTile(currentTile).getUp())					
+						if(board.getTile(currentTile).getUp())		// If there is an upper wall then calculate another dice until the problem is solved.		
 							bestDice = DiceCalculation(bestDice);
 						else
-							flag = false;
+							flag = false;							// If no wall is found then flag becomes false and we break from the while loop.
 						break;
 	
+					// Same logic as above.
+						
 					case 3:
 						if(bestDice == worstDice) {
 							bestDice = DiceCalculation(bestDice);
@@ -522,28 +544,35 @@ public class HeuristicPlayer extends Player{
 			
 		}
 
+		// If all evaluations are zero then player moves in a random way. 
 		if(allEvaluationsAreZero)
 		{
 			Random rand = new Random();
+			
+			// Calculate a random dice.
 			int n = rand.nextInt(4);
 			bestDice = 2*n + 1;
+			
 			boolean flag = true;
 
+			// Checks if the movement bestDice implements is done, player is not going to fall on a wall or is not going to perform a move same to his last one.
 			while(flag)
 			{
 				switch(bestDice)
 				{
 					case 1:
-						if(LastMove == 5 && currentTile != 0) {
-							bestDice = DiceCalculation(bestDice);
-							continue;
+						if(LastMove == 5 && currentTile != 0) { 	// If last move was down, it means that moving up Theseus will return to his previous position, so we calculate another dice.  
+							bestDice = DiceCalculation(bestDice);	// If player is at the first tile of the board, where the peripheral walls are open and the available moves are up and right
+							continue;								// he can easily get stuck there, so calculate new dice.
 						}
-						if(board.getTile(currentTile).getUp())					
+						if(board.getTile(currentTile).getUp())		// If there is a wall in the direction dice implements then calculate new dice.			
 							bestDice = DiceCalculation(bestDice);
 						else
-							flag = false;
+							flag = false;							// Calculate new dice until flag=false.
 						break;
 
+					// Same logic as above. 
+						
 					case 3:
 						if(LastMove == 7 && currentTile != 0) {
 							bestDice = DiceCalculation(bestDice);
@@ -581,16 +610,19 @@ public class HeuristicPlayer extends Player{
 						break;
 				}
 			}
-		
 		}
-			LastMove = bestDice;
-				
-		// path (info about the dice (0), points of the movement (1), is near to a supply (2), is near to enemy(3))
 		
-		path.get(0).add(bestDice);
+			LastMove = bestDice; 
+			
+				
+		// path (info about the dice (0), got supply or not (1), is near to a supply (2), is near to enemy (3), times moved up (4), times moved right (5), times moved down (6), times moved left (7))
+		
+		path.get(0).add(bestDice);	// Add bestDice in path's first ArrayList
 		
 		int gotSupply = 0;
+		
 		if(name == "Theseus") {  // If player is Theseus.
+			// If he gets supply in his next move then add 1 in path's second ArrayList else add 0 (added through variable gotSupply)
 			switch(bestDice) {
 			
 				case 1:
@@ -612,12 +644,18 @@ public class HeuristicPlayer extends Player{
 
 		path.get(1).add(gotSupply); 
 		
+		// If he has found a supply then isTheClosestSupply becomes false at the first code lines of the method.
+		// If he hasn't found a supply isTheClosestSupply is true so -1 is added in third ArrayList of path.
 		if(isTheClosestSupply)
 			path.get(2).add(-1);
 		
+		// The third and fourth ArrayLists of path must have the same size (same as the round count up)
+		// If they haven't it means no element has been added in the fourth array list so no opponent has been found near to the player.
+		// So, in this case, add -1.
 		if(path.get(2).size() != path.get(3).size())
 			path.get(3).add(-1);
 
+		// Adds dice in the suitable ArrayList for each move to add them up in statistics() in order to overlook how many times the player moved in each direction. 
 		switch(bestDice)
 		{
 			case 1:
@@ -633,6 +671,8 @@ public class HeuristicPlayer extends Player{
 				path.get(7).add(7);
 				break;
 		}
+		
+		
 		return bestDice;
 	}
 	
@@ -652,16 +692,23 @@ public class HeuristicPlayer extends Player{
 			// Supplies
 			if(playerId == 2) // If player is Theseus. 
 			{
-				System.out.println(getName() + " has collected " + getScore() + " supplies.");
+				System.out.println(getName() + " had collected " + getScore() + " supplies.");
 
 				// Supply Distance
 				System.out.print("Before moving ");
 				if(path.get(2).get(i) != -1)
-					System.out.println(getName() + " had " + path.get(2).get(i) + " tiles distance from the closest supply.\n");
+					System.out.println(getName() + " had " + path.get(2).get(i) + " tiles distance from the closest supply.");
 				else
-					System.out.println(getName() + " didn't see any supply." + "\n");
+					System.out.println(getName() + " didn't see any supply.");
 				
 			}
+			
+			System.out.print("Before moving ");
+			if(path.get(3).get(i) != -1)
+				System.out.println(getName() + " had " + path.get(3).get(i) + " tiles distance from his opponent.\n");
+			else
+				System.out.println(getName() + " couldn't detect his opponent." + "\n");
+				
 		}
 
 		// Moves
@@ -675,7 +722,7 @@ public class HeuristicPlayer extends Player{
 	}
 
 	/**
-	 * Takes as parameter a dice and returns a random new value different from the initial that can be dice. 
+	 * Returns a random dice excluding the one that got as input. 
 	 * For instance if bestDice=3 the function may return 1, 5, 7.  
 	 * @param bestDice
 	 * @return a dice different from the given 

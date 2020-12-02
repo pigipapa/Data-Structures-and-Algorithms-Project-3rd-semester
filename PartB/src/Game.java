@@ -68,10 +68,10 @@ public class Game {
 	public static void main(String[] args)
 	{		
 		// Board variables
-		int Dimensions = 15;  
+		int Dimensions = 5;  
 		int Supplies = 5;
 		int Walls = (Dimensions*Dimensions*3+1)/2;
-		int maxRounds = 100;
+		int maxRounds = 5;
 
 		Game game = new Game();
 		Board board = new Board(Dimensions, Supplies, Walls);
@@ -126,7 +126,7 @@ public class Game {
 			
 			Theseus.setBoard(TheseusBoard);
 			
-			//printBoard(TheseusBoard.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
+			printBoard(TheseusBoard.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
 			
 			// Time for Theseus to move
 			System.out.println("------------------------------------------");
