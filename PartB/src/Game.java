@@ -36,19 +36,28 @@ public class Game {
 	static public boolean checkWin(HeuristicPlayer Minotaur, HeuristicPlayer Theseus, int Supplies) {
 		if(Theseus.getCurrentTile() == Minotaur.getCurrentTile())	// Theseus went in the tile where Minotaur was.
 		{
-			System.out.println("\n==========================================");
-			System.out.println("Minotaur got Theseus. Minotaur is the winner.");	// There is a possibility because the moves are random, Theseus walks onto Minotaur,
-			Theseus.statistics("finalRound");										// so we check it here.
-			Minotaur.statistics("finalRound");		
+			System.out.println("==========================================");
+			System.out.println("\nMinotaur got Theseus. Minotaur is the winner.");	// There is a possibility because the moves are random, Theseus walks onto Minotaur,
+																					// so we check it here.
+			System.out.println("\n------------------------------------------");
+			System.out.println("\nEach round's statistics for Theseus:");
+			Theseus.statistics();
+			System.out.println("------------------------------------------");
+			System.out.println("\nEach round's statistics for Minotaur:");
+			Minotaur.statistics();
 			return true;
 		}		
 		
 		if(Theseus.getScore() == Supplies) 											// Theseus got all supplies.
 		{
-			System.out.println("\n==========================================");
-			System.out.println("Theseus gathered all supplies. Theseus is the winner.");
-			Theseus.statistics("finalRound");
-			Minotaur.statistics("finalRound");
+			System.out.println("==========================================");
+			System.out.println("\nTheseus gathered all supplies. Theseus is the winner.");
+			System.out.println("\n------------------------------------------");
+			System.out.println("\nEach round's statistics for Theseus:");
+			Theseus.statistics();
+			System.out.println("------------------------------------------");
+			System.out.println("\nEach round's statistics for Minotaur:");
+			Minotaur.statistics();
 			return true;
 		}
 		
@@ -59,10 +68,10 @@ public class Game {
 	public static void main(String[] args)
 	{		
 		// Board variables
-		int Dimensions = 5;  
+		int Dimensions = 15;  
 		int Supplies = 5;
 		int Walls = (Dimensions*Dimensions*3+1)/2;
-		int maxRounds = 30;
+		int maxRounds = 100;
 
 		Game game = new Game();
 		Board board = new Board(Dimensions, Supplies, Walls);
@@ -126,7 +135,7 @@ public class Game {
 
 		    // Prints the board after Theseus moves.
 			printBoard(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
-			Theseus.statistics("everyRound");
+			System.out.println();
 			
 			if(checkWin(Minotaur, Theseus, Supplies)) break;
 			
@@ -168,8 +177,8 @@ public class Game {
 
 			// Prints the board after Theseus moves.
 			printBoard(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
-			Minotaur.statistics("everyRound");
-			
+			System.out.println();
+
 			// Check if game should be finished.
 			if(checkWin(Minotaur, Theseus, Supplies)) break;
 		
@@ -178,9 +187,13 @@ public class Game {
 		if(times == maxRounds) 
 		{
 			System.out.println("==========================================");
-			System.out.println("Tie...");	// Nobody won...
-			Theseus.statistics("finalRound");
-			Minotaur.statistics("finalRound");
+			System.out.println("\nTie...");	// Nobody won...
+			System.out.println("\n------------------------------------------");
+			System.out.println("\nEach round's statistics for Theseus:");
+			Theseus.statistics();
+			System.out.println("------------------------------------------");
+			System.out.println("\nEach round's statistics for Minotaur:");
+			Minotaur.statistics();
 		}
 	}
 }

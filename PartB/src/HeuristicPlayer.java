@@ -640,14 +640,14 @@ public class HeuristicPlayer extends Player{
 	 * This function prints the data of the player.
 	 * @param when
 	 */
-	void statistics(String when) {
+	void statistics() {
 		
-		if(when == "everyRound")
+		for(int i = 0; i < path.get(1).size(); i++)
 		{
-			System.out.println("\nThis round's statistics for " + getName() + ": ");
+			System.out.println("\nRound " + (i+1)+":");
 			
 			// Dice
-			System.out.println(getName() + " had dice " + path.get(0).get(path.get(0).size()-1) + ".");
+			System.out.println(getName() + " had dice " + path.get(0).get(i) + ".");
 			
 			// Supplies
 			if(playerId == 2) // If player is Theseus. 
@@ -656,8 +656,8 @@ public class HeuristicPlayer extends Player{
 
 				// Supply Distance
 				System.out.print("Before moving ");
-				if(path.get(2).get(path.get(2).size()-1) != -1)
-					System.out.println(getName() + " had " + path.get(2).get(path.get(2).size()-1) + " tiles distance from the closest supply.\n");
+				if(path.get(2).get(i) != -1)
+					System.out.println(getName() + " had " + path.get(2).get(i) + " tiles distance from the closest supply.\n");
 				else
 					System.out.println(getName() + " didn't see any supply." + "\n");
 				
@@ -665,14 +665,12 @@ public class HeuristicPlayer extends Player{
 		}
 
 		// Moves
-		if(when == "finalRound")
-		{
-			System.out.println("\nFinal statistics for " + getName() + ": ");
-			System.out.println(getName() + " moved up " + path.get(4).size() + " times.");
-			System.out.println(getName() + " moved right " + path.get(5).size() + " times.");
-			System.out.println(getName() + " moved down " + path.get(6).size() + " times.");
-			System.out.println(getName() + " moved left " + path.get(7).size() + " times.");
-		}
+	
+		System.out.println("\nTotal statistics for " + getName() + ":\n");
+		System.out.println(getName() + " moved up " + path.get(4).size() + " times.");
+		System.out.println(getName() + " moved right " + path.get(5).size() + " times.");
+		System.out.println(getName() + " moved down " + path.get(6).size() + " times.");
+		System.out.println(getName() + " moved left " + path.get(7).size() + " times.\n");
 
 	}
 
