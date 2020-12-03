@@ -67,17 +67,10 @@ public class Game {
 	public static void main(String[] args)
 	{		
 		// Board variables
-<<<<<<< HEAD
-		int Dimensions = 5;  
-		int Supplies = 5;
-		int Walls = (Dimensions*Dimensions*3+1)/2;
-		int maxRounds = 5;
-=======
 		int Dimensions = 7;  
 		int Supplies = 5;
 		int Walls = (Dimensions*Dimensions*3+1)/2;
 		int maxRounds = 10;
->>>>>>> PartB
 
 		Game game = new Game();
 		Board board = new Board(Dimensions, Supplies, Walls);
@@ -96,44 +89,7 @@ public class Game {
 			// Prints the board before players take their turn to play.
 			printBoard(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
 			System.out.println();
-<<<<<<< HEAD
-			
-			//printBoard(playerBoard.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
-			
-			TheseusBoard.setTile(Theseus.getCurrentTile(), board.getTile(Theseus.getCurrentTile()));
-			if(board.getTile(Theseus.getCurrentTile()).getSupply())
-				TheseusBoard.setSupply((board.TileIdToSupplyId(Theseus.getCurrentTile())-1), board.getSupply(board.TileIdToSupplyId(Theseus.getCurrentTile())-1));
-			
-			for(int i=1; i<4; i++) { // Set up player board
-				if(Theseus.getCurrentTile() + i*Dimensions < Dimensions * Dimensions) {
-					TheseusBoard.setTile(Theseus.getCurrentTile() + i*Dimensions, board.getTile(Theseus.getCurrentTile() + i*Dimensions));
-					if(TheseusBoard.getTile(Theseus.getCurrentTile() + i*Dimensions).getSupply())
-						TheseusBoard.setSupply(board.TileIdToSupplyId(Theseus.getCurrentTile() + i*Dimensions)-1, board.getSupply(board.TileIdToSupplyId(Theseus.getCurrentTile() + i*Dimensions)-1));
-				}
-				if(Theseus.getCurrentTile() - i*Dimensions > 0) {
-					TheseusBoard.setTile(Theseus.getCurrentTile() - i*Dimensions, board.getTile(Theseus.getCurrentTile() - i*Dimensions));
-					if(TheseusBoard.getTile(Theseus.getCurrentTile() - i*Dimensions).getSupply())
-						TheseusBoard.setSupply(board.TileIdToSupplyId(Theseus.getCurrentTile() - i*Dimensions)-1, board.getSupply(board.TileIdToSupplyId(Theseus.getCurrentTile() - i*Dimensions)-1));
-				}
-				if(Theseus.getCurrentTile() + i <= (Theseus.getX()+1)*Dimensions - 1) {
-					TheseusBoard.setTile(Theseus.getCurrentTile() + i, board.getTile(Theseus.getCurrentTile() + i));
-					if(TheseusBoard.getTile(Theseus.getCurrentTile() + i).getSupply())
-						TheseusBoard.setSupply(board.TileIdToSupplyId(Theseus.getCurrentTile() + i)-1, board.getSupply(board.TileIdToSupplyId(Theseus.getCurrentTile() + i)-1));
-				}
-				if(Theseus.getCurrentTile() - i >= Theseus.getX()*Dimensions) {
-					TheseusBoard.setTile(Theseus.getCurrentTile() - i, board.getTile(Theseus.getCurrentTile() - i));
-					if(TheseusBoard.getTile(Theseus.getCurrentTile() - i).getSupply())
-						TheseusBoard.setSupply(board.TileIdToSupplyId(Theseus.getCurrentTile() - i)-1, board.getSupply(board.TileIdToSupplyId(Theseus.getCurrentTile() - i)-1));
-				}
-			}
-			
-			Theseus.setBoard(TheseusBoard);
-			
-			printBoard(TheseusBoard.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
-			
-=======
 						
->>>>>>> PartB
 			// Time for Theseus to move
 			Theseus.setBoard(board.getPlayerBoard(Theseus));
 			Theseus.move(Theseus.getNextMove());

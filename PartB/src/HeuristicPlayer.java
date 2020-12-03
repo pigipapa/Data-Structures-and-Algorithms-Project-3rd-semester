@@ -150,18 +150,6 @@ public class HeuristicPlayer extends Player{
 		if(tileDistOpponent != -1)	
 			OpponentDist = sign*(1.0/tileDistOpponent);
 				
-<<<<<<< HEAD
-				if(tileDistSupply != -1) 
-					NearSupplies = 1.0/tileDistSupply;
-		
-				if(tileDistOpponent != -1) 
-					OpponentDist = sign*(1.0/tileDistOpponent);
-
-			break;
-		}
-		
-=======
->>>>>>> PartB
 		if(playerId == 2)
 			// Theseus' evaluation function 
 			return (NearSupplies * 0.4 + OpponentDist * 0.6);		
@@ -247,11 +235,6 @@ public class HeuristicPlayer extends Player{
 					
 				tileDistSupply = -1;
 				tileDistOpponent = -1;
-<<<<<<< HEAD
-				
-				double tempEvaluation = 0;		// The evaluation after each testing movement.
-=======
->>>>>>> PartB
 
 				switch(dice) {
 				
@@ -271,13 +254,8 @@ public class HeuristicPlayer extends Player{
 								isTheClosestSupply = false;												// in case there are more than one supplies near to him.
 							}
 						
-<<<<<<< HEAD
-							if((playerId == 1)  && enoughTimesBeenOnTheSupply[currentTile + dimension])	// Checks if Minotaur is the player. 
-								tileDistSupply = -1;													// If his has been enough times on the supply in front of him it's been deactivated.
-=======
 							if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile + dimension)-1])
 								tileDistSupply = -1;
->>>>>>> PartB
 						}
 						
 						
