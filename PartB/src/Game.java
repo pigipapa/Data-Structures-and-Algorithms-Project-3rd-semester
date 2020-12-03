@@ -68,10 +68,17 @@ public class Game {
 	public static void main(String[] args)
 	{		
 		// Board variables
+<<<<<<< HEAD
 		int Dimensions = 5;  
 		int Supplies = 5;
 		int Walls = (Dimensions*Dimensions*3+1)/2;
 		int maxRounds = 5;
+=======
+		int Dimensions = 7;  
+		int Supplies = 5;
+		int Walls = (Dimensions*Dimensions*3+1)/2;
+		int maxRounds = 10;
+>>>>>>> PartB
 
 		Game game = new Game();
 		Board board = new Board(Dimensions, Supplies, Walls);
@@ -94,6 +101,7 @@ public class Game {
 			// Prints the board before players take their turn to play.
 			printBoard(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
 			System.out.println();
+<<<<<<< HEAD
 			
 			//printBoard(playerBoard.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
 			
@@ -128,6 +136,9 @@ public class Game {
 			
 			printBoard(TheseusBoard.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
 			
+=======
+						
+>>>>>>> PartB
 			// Time for Theseus to move
 			System.out.println("------------------------------------------");
 			System.out.println("Theseus' turn to move\n");
