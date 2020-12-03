@@ -20,6 +20,11 @@ public class Game {
      */
 	public void setRound(int round) { this.round = round; }
 	
+	/**
+	 * Function that prints board.
+	 * @param res, a 2-Dimensional board  
+	 * @param Dimensions, dimensions of board
+	 */
 	static public void printBoard(String[][] res, int Dimensions) {
 	
 		for (int i = 2*Dimensions; i >= 0; i--) {
@@ -33,20 +38,14 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * This function checks if Theseus or Minotaur won.
+	 * @param Minotaur
+	 * @param Theseus
+	 * @param Supplies, number of supplies 
+	 * @return true if some player is the winner, otherwise it returns false 
+	 */
 	static public boolean checkWin(HeuristicPlayer Minotaur, HeuristicPlayer Theseus, int Supplies) {
-		if(Theseus.getCurrentTile() == Minotaur.getCurrentTile())	// Theseus went in the tile where Minotaur was.
-		{
-			System.out.println("==========================================");
-			System.out.println("\nMinotaur got Theseus. Minotaur is the winner.");	// There is a possibility because the moves are random, Theseus walks onto Minotaur,
-																					// so we check it here.
-			System.out.println("\n------------------------------------------");
-			System.out.println("\nEach round's statistics for Theseus:");
-			Theseus.statistics();
-			System.out.println("------------------------------------------");
-			System.out.println("\nEach round's statistics for Minotaur:");
-			Minotaur.statistics();
-			return true;
-		}		
 		
 		if(Theseus.getScore() == Supplies) 											// Theseus got all supplies.
 		{
@@ -60,6 +59,20 @@ public class Game {
 			Minotaur.statistics();
 			return true;
 		}
+		
+		if(Theseus.getCurrentTile() == Minotaur.getCurrentTile())					// Theseus went in the tile where Minotaur was.
+		{
+			System.out.println("==========================================");
+			System.out.println("\nMinotaur got Theseus. Minotaur is the winner.");	
+																				
+			System.out.println("\n------------------------------------------");
+			System.out.println("\nEach round's statistics for Theseus:");
+			Theseus.statistics();
+			System.out.println("------------------------------------------");
+			System.out.println("\nEach round's statistics for Minotaur:");
+			Minotaur.statistics();
+			return true;
+		}		
 		
 		return false;
 	}
@@ -86,7 +99,7 @@ public class Game {
 			System.out.println("==========================================");
 			System.out.println("Current round: " + game.getRound());
 			
-			// Prints the board before players take their turn to play.
+			// Prints board before players take their turn to play.
 			printBoard(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
 			System.out.println();
 						

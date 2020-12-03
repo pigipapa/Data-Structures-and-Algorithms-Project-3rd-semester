@@ -11,15 +11,15 @@ public class HeuristicPlayer extends Player{
 	// path.get(5)->times player moved right
 	// path.get(6)->times player moved down
 	// path.get(7)->times player moved left
-	ArrayList <ArrayList<Integer>> path;
+	private ArrayList <ArrayList<Integer>> path;
 	// Variable that keeps the last dice of the player.
-	int LastMove;							
+	private int LastMove;							
 	// !Used only by Minotaur! 
 	// Array that consists of counters for each supply, that show how many times Minotaur has been on a tile that has a specific supply on it. 
-	int[] timesBeenOnTheSupply;			
+	private int[] timesBeenOnTheSupply;			
 	// !Used only by Minotaur!
 	// Array that implements if Minotaur has crossed a tile that contains supply enough time by now.
-	boolean[] enoughTimesBeenOnTheSupply;	
+	private boolean[] enoughTimesBeenOnTheSupply;	
 		
 	/**
 	 * Initializes a clever/heuristic player. Variables are initialized to -1, arrays and structures are initialized without content.  
@@ -93,26 +93,26 @@ public class HeuristicPlayer extends Player{
 	 * Returns last dice.
 	 * @return LastMove
 	 */
-	int getLastMove() { return LastMove; }
+	public int getLastMove() { return LastMove; }
 	
 	/**
 	 * Sets last dice.
 	 * @param LastMove
 	 */
-	void setLastMove(int LastMove) { this.LastMove = LastMove; }
+	public void setLastMove(int LastMove) { this.LastMove = LastMove; }
 	
 	/**
 	 * Sets path.
 	 * @param path
 	 */
-	void setPath(ArrayList<ArrayList<Integer>> path){ this.path = path; }
+	public void setPath(ArrayList<ArrayList<Integer>> path){ this.path = path; }
 	
 	/**
 	 *Returns path. 
 	 * @return path
 	 */
 
-	ArrayList<ArrayList<Integer>> getPath(){ return this.path; } 
+	public ArrayList<ArrayList<Integer>> getPath(){ return this.path; } 
 	
 	
 	/**
@@ -122,7 +122,7 @@ public class HeuristicPlayer extends Player{
 	 * @param tileDistOpponent
 	 * @return the evaluation of the player's single movement in the direction the dice implements. 
 	 */
-	double evaluate(int tileDistSupply, int tileDistOpponent)	{
+	private double evaluate(int tileDistSupply, int tileDistOpponent)	{
 		// This variable's values can be 0.3, 0.5, 1 depending on the distance between the player and a supply, which he can see.
 		// If two tiles keep them apart then NearSupplies = 0.3, else if tile distance is 1 then NearSupplies = 0.5, else if they are neighboring NearSupplies = 1. 
 		double NearSupplies = 0;
@@ -139,7 +139,7 @@ public class HeuristicPlayer extends Player{
 		//3-> two tiles between the player and the supply
 		// The function we use is 1/x because 1/1=1, 1/2=0.5 and 1/3=0.33, which are the values NearSupplies is expected to have.
 		if(tileDistSupply != -1)	
-				NearSupplies = 1.0/tileDistSupply;	
+			NearSupplies = 1.0/tileDistSupply;	
 	
 		// If player sees his opponent
 		// The same comments as above, but this time player is looking for his opponent on the near tiles.
@@ -636,7 +636,7 @@ public class HeuristicPlayer extends Player{
 	 * This function prints the data of the player.
 	 * @param when
 	 */
-	void statistics() {
+	public void statistics() {
 		
 		for(int i = 0; i < path.get(1).size(); i++)
 		{
@@ -683,7 +683,7 @@ public class HeuristicPlayer extends Player{
 	 * @param bestDice
 	 * @return a dice different from the given 
 	 */
-	int DiceCalculation(int bestDice)
+	private int DiceCalculation(int bestDice)
 	{
 		Random rand = new Random(System.currentTimeMillis());
 		int n = rand.nextInt(3);
