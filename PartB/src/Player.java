@@ -1,5 +1,4 @@
-//@authors Pigi Papanikolaou (10062), +0306978806503, pigipapa@ece.auth.gr
-// 		   Vasiliki Pappa (09981), +0306984119813, vasilikip@ece.auth.gr
+
 
 /**
  * Class that implements game's players.
@@ -244,7 +243,7 @@ public class Player {
 				
 			case 5:	//down
 				
-				if(board.getTile(currentTile).getDown() == true)
+				if(board.getTile(currentTile).getDown() == true && currentTile==0)
 				{
 					System.out.println(getName() + " didn't move. Wall down!" + "\n");
 					break;					

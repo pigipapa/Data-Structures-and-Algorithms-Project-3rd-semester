@@ -1,5 +1,4 @@
-//@authors Pigi Papanikolaou (10062), +0306978806503, pigipapa@ece.auth.gr
-// 		   Vasiliki Pappa (09981), +0306984119813, vasilikip@ece.auth.gr
+
 
 /**
  * Class that contains the main and implements the game. 
@@ -83,11 +82,11 @@ public class Game {
 	public static void main(String[] args)
 	{		
 		// Board variables
-		int Dimensions = 7;  
-		int Supplies = 5;
+		int Dimensions = 15;  
+		int Supplies = 4;
 		int Walls = (Dimensions*Dimensions*3+1)/2;
-		int maxRounds = 10;
-
+		int maxRounds = 100;	// If max dices to tie up the game are 200, max rounds are 100.
+		
 		Game game = new Game();
 		Board board = new Board(Dimensions, Supplies, Walls);
 		board.createBoard();
@@ -144,5 +143,6 @@ public class Game {
 			System.out.println("\nEach round's statistics for Minotaur:");
 			Minotaur.statistics();
 		}
+
 	}
 }

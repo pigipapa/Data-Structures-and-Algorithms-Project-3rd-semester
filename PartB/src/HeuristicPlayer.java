@@ -1,7 +1,6 @@
 import java.util.*;
 
-//@authors Pigi Papanikolaou (10062), +0306978806503, pigipapa@ece.auth.gr
-//		   Vasiliki Pappa (09981), +0306984119813, vasilikip@ece.auth.gr
+
 
 /**
  * Class that implements a heuristic player.
@@ -454,7 +453,7 @@ public class HeuristicPlayer extends Player{
 				switch(bestDice)
 				{
 					case 1:
-						if(bestDice == worstDice) {					// If after the first access in loop bestDice is changed, it may become equal to worstDice. 
+						if(bestDice == worstDice && currentTile!=0) {					// If after the first access in loop bestDice is changed, it may become equal to worstDice. 
 							bestDice = DiceCalculation(bestDice);	// So we calculate it again.
 							continue;
 						}
@@ -467,7 +466,7 @@ public class HeuristicPlayer extends Player{
 					// Same logic as above.
 						
 					case 3:
-						if(bestDice == worstDice) {
+						if(bestDice == worstDice && currentTile!=0) {
 							bestDice = DiceCalculation(bestDice);
 							continue;
 						}
