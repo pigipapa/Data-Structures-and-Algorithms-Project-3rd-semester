@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import java.util.*;
 
 public class Node
@@ -54,3 +55,9 @@ public class Node
 
     void setNodeEvaluation(double nodeEvaluation) {this.nodeEvaluation = nodeEvaluation;}
 }
+=======
+
+public class Node {
+
+}
+>>>>>>> Stashed changes
