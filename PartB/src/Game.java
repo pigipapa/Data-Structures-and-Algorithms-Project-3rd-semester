@@ -55,10 +55,10 @@ public class Game {
 			System.out.println("\nTheseus gathered all supplies. Theseus is the winner.");
 			System.out.println("\n------------------------------------------");
 			System.out.println("\nEach round's statistics for Theseus:");
-			Theseus.statistics();
+			// Theseus.statistics();
 			System.out.println("------------------------------------------");
 			System.out.println("\nEach round's statistics for Minotaur:");
-			Minotaur.statistics();
+			// Minotaur.statistics();
 			return true;
 		}
 		
@@ -69,10 +69,10 @@ public class Game {
 																				
 			System.out.println("\n------------------------------------------");
 			System.out.println("\nEach round's statistics for Theseus:");
-			Theseus.statistics();
+			// Theseus.statistics();
 			System.out.println("------------------------------------------");
 			System.out.println("\nEach round's statistics for Minotaur:");
-			Minotaur.statistics();
+			// Minotaur.statistics();
 			return true;
 		}		
 		
@@ -82,10 +82,10 @@ public class Game {
 	public static void main(String[] args)
 	{		
 		// Board variables
-		int Dimensions = 7;  
+		int Dimensions = 5;  
 		int Supplies = 4;
 		int Walls = (Dimensions*Dimensions*3+1)/2;
-		int maxRounds = 20;	// If max dices to tie up the game are 200, max rounds are 100.
+		int maxRounds = 10;	// If max dices to tie up the game are 200, max rounds are 100.
 		
 		Game game = new Game();
 		Board board = new Board(Dimensions, Supplies, Walls);
@@ -141,10 +141,10 @@ public class Game {
 			System.out.println("\nTie...");	// Nobody won...
 			System.out.println("\n------------------------------------------");
 			System.out.println("\nEach round's statistics for Theseus:");
-			Theseus.statistics();
+			// Theseus.statistics();
 			System.out.println("------------------------------------------");
 			System.out.println("\nEach round's statistics for Minotaur:");
-			Minotaur.statistics();
+			// Minotaur.statistics();
 		}
 
 	}

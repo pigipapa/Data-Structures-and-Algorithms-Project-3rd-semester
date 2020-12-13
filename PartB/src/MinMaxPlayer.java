@@ -141,68 +141,46 @@ public class MinMaxPlayer extends Player{
 	private double evaluate(int dice, Board board)	{
 		int dimension = board.getN();
 		
-		// Save the initial values of the player variables that show his position on the board. 
 		int initialX = x;
 		int initialY = y;
 		int initialCurrentTile = currentTile;
 		
-		// If this variable is -1 then no supply is deactivated for Minotaur. 
-		// Else the variable has the value of the supply id that has been deactivated.
-		int deactivatedSupplyId = -1;
+		// int deactivatedSupplyId = -1;
 		
-		// Initialized to -1.
 		int tileDistSupply = -1;
 		int tileDistOpponent = -1;
 
-		// In the first column we store dice [1, 3, 5, 7] and in the second column we save the evaluations for each of these moves. 
-		double evaluation; 
-		
-		// Checks how many times Minotaur has been on the same supply (Minotaur is attracted by supplies because he may find Theseus near to them)
-		if((playerId == 1) && board.getTile(currentTile).getSupply())
-		{
-			if(!enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile)-1]) 
-				timesBeenOnTheSupply[board.TileIdToSupplyId(currentTile)-1] += 1;
+		// if((playerId == 1) && board.getTile(currentTile).getSupply())
+		// {
+		// 	if(!enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile)-1]) 
+		// 		timesBeenOnTheSupply[board.TileIdToSupplyId(currentTile)-1] += 1;
 
-			// Minotaur can be in the same tile as a supply only two times
-			if(timesBeenOnTheSupply[board.TileIdToSupplyId(currentTile)-1] == 2) 
-			{
-				// The supply which is been watched out by Minotaur is been deactivated
-				timesBeenOnTheSupply[board.TileIdToSupplyId(currentTile)-1] = -1;
-				enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile)-1] = true;	
-				deactivatedSupplyId = board.TileIdToSupplyId(currentTile)-1;
-			}	
-		}
+		// 	if(timesBeenOnTheSupply[board.TileIdToSupplyId(currentTile)-1] == 2) 
+		// 	{
+		// 		timesBeenOnTheSupply[board.TileIdToSupplyId(currentTile)-1] = -1;
+		// 		enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile)-1] = true;	
+		// 		deactivatedSupplyId = board.TileIdToSupplyId(currentTile)-1;
+		// 	}	
+		// }
 
-		// Road to supply reactivation for Minotaur
+		// for(int i = 0; i < board.getS(); i++)
+		// {
+		// 	if(i == deactivatedSupplyId)
+		// 		continue;
 
-		for(int i = 0; i < board.getS(); i++)
-		{
-			// Just deactivated supply is not being considered into reactivation process.
-			if(i == deactivatedSupplyId)
-				continue;
+		// 	if((timesBeenOnTheSupply[i] <= -1) && (timesBeenOnTheSupply[i] > -4))
+		// 		timesBeenOnTheSupply[i] -= 1;
 
-			// The supply is reactivated after three rounds.
-			if((timesBeenOnTheSupply[i] <= -1) && (timesBeenOnTheSupply[i] > -4))
-				timesBeenOnTheSupply[i] -= 1;
-
-			// Supply reactivation.
-			if(timesBeenOnTheSupply[i] == -4 && board.getSupply(i).getSupplyTileId() != -1) 
-			{
-				timesBeenOnTheSupply[i] = 0;
-				enoughTimesBeenOnTheSupply[i] = false;
-			}
-		}
+		// 	if(timesBeenOnTheSupply[i] == -4 && board.getSupply(i).getSupplyTileId() != -1) 
+		// 	{
+		// 		timesBeenOnTheSupply[i] = 0;
+		// 		enoughTimesBeenOnTheSupply[i] = false;
+		// 	}
+		// }
 		
+		double cumulativeEvaluation = 0;	
 		
-		
-		// Player is moving tile to tile in each direction(1->up, 3->right, 5->down, 7->left) for two times,
-		// in order to test what is on the next tile (supply , opponent).
-		// Thus, he sees in a distance of three tiles from his current tile and therefore he evaluates the move in every direction.
-		
-
-		double cumulativeEvaluation = 0;	// Sum of evaluations in one direction.
-		
-		for(int j=0; j<4; j++) {	 		// Loop for every movement
+		for(int j=0; j<4; j++) {	 		
 				
 			tileDistSupply = -1;
 			tileDistOpponent = -1;
@@ -211,32 +189,32 @@ public class MinMaxPlayer extends Player{
 			
 			case 1:	//up
 
-				if(board.getTile(currentTile).getUp())						// Checks if there is a wall ahead.
+				if(board.getTile(currentTile).getUp())					
 					break;
 				else {
-					int iterationTimes = (x + 1) - initialX;				// Computing the distance between players initial position and his posotion after his testing move 
+					int iterationTimes = (x + 1) - initialX;				 
 					
-					if(board.getTile(currentTile + dimension).getSupply())	// Checks if the upper tile has supply.
+					if(board.getTile(currentTile + dimension).getSupply())	
 					{	
 						tileDistSupply = iterationTimes;	
 						
-						if(isTheClosestSupply) {	
-							path.get(2).add(tileDistSupply);										// Store to path the distance between the closest supply and Theseus,  
-							isTheClosestSupply = false;												// in case there are more than one supplies near to him.
-						}
+						// if(isTheClosestSupply) {	
+						// 	path.get(2).add(tileDistSupply);										
+						// 	isTheClosestSupply = false;											
+						// }
 					
-						if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile + dimension) - 1])	// Checks if Minotaur is the player. 
-							tileDistSupply = -1;													// If his has been enough times on the supply in front of him it's been deactivated.
+						// if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile + dimension) - 1])	
+							// tileDistSupply = -1;												
 					}
 					
 					
-					if(playerId == 2 && board.getTile(currentTile + dimension).hasMinotaur()) {		//Checks if Minotaur is on Theseus' upper tile.
+					if(playerId == 2 && board.getTile(currentTile + dimension).hasMinotaur()) {		
 						tileDistOpponent = iterationTimes;	
-						path.get(3).add(tileDistOpponent);											// Adds in Theseus' path his distance from Minotaur.
+						// path.get(3).add(tileDistOpponent);											
 					}
-					else if(playerId == 1 && board.getTile(currentTile + dimension).hasTheseus()) {	//Checks if Theseus is on Minotaur's upper tile.
+					else if(playerId == 1 && board.getTile(currentTile + dimension).hasTheseus()) {	
 						tileDistOpponent = iterationTimes;
-						path.get(3).add(tileDistOpponent);											// Adds in Minotaur's path his distance from Theseus.
+						path.get(3).add(tileDistOpponent);										
 					}
 
 					double NearSupplies = 0;
@@ -257,14 +235,12 @@ public class MinMaxPlayer extends Player{
 
 					if(j != 3)
 					{
-						x = x + 1;																	// Player moves up.
+						x = x + 1;															
 						y = y;
 						currentTile = y + x * dimension;
 					}
 				}
 				break;
-			
-				// The same logic as described above is used in the rest cases.
 				
 			case 3:	//right
 				
@@ -423,51 +399,54 @@ public class MinMaxPlayer extends Player{
 			}
 			
 		}
-		evaluation = cumulativeEvaluation;	// Total evaluation of the movement is stored in the second column of evaluation array.
 
-		x = initialX;								// Player returns in his initial position.
+		x = initialX;								
 		y = initialY;
 		currentTile = initialCurrentTile;
 
-		return evaluation;
+		System.out.println(name + " cumulativeEvaluation: " + cumulativeEvaluation + " dice: "+ dice);
+		return cumulativeEvaluation;	
 	}		
-	
-	
-	
-	
-		int chooseMinMaxMove(Node node, int depth, boolean isMaximizing) {
+
+	int chooseMinMaxMove(Node node, int depth, boolean isMaximizing) {
 		
 		if(depth == 0) {
-			return root.getNodeMove()[2]; //dice
+			// System.out.println(name + " final dice: " + node.getNodeMove()[2]);
+			return node.getNodeMove()[2]; //dice
 		}
 		
 		double inf = Double.POSITIVE_INFINITY;
 		if(isMaximizing) {
 			double bestEval = -(1)*inf;
 			for(int i=0; i<node.getChildren().size(); i++) 
+			{
 				bestEval = Math.max(bestEval,chooseMinMaxMove(node.getChildren().get(i), depth-1, false));
-			
+				node.getChildren().get(i).setNodeEvaluation(bestEval);			
+				node.setNodeMove(node.getChildren().get(i).getNodeMove());
+			}			
+
+			// System.out.println(name + " bestEval " + bestEval);
 			return (int)bestEval;
 		}
 		
 		else {
 			double bestEval = inf;
 			for(int i=0; i<node.getChildren().size(); i++) 
+			{
 				bestEval = Math.min(bestEval,chooseMinMaxMove(node.getChildren().get(i), depth-1, true));
-			
+				node.getChildren().get(i).setNodeEvaluation(bestEval);		
+				node.setNodeMove(node.getChildren().get(i).getNodeMove());	
+			}
+			// System.out.println(name + " bestEval " + bestEval);
 			return (int)bestEval;
 		}
 	
 		
 	}
 	
-	
-	
-	
-	
 	boolean canMove(int direction) {
 		
-		switch(2*direction+1) 
+		switch(direction) 
 		{
 			case 1:	//up
 				
@@ -486,7 +465,7 @@ public class MinMaxPlayer extends Player{
 				
 			case 5:	//down
 				
-				if(board.getTile(currentTile).getDown() == true && currentTile==0)
+				if(board.getTile(currentTile).getDown() == true || currentTile==0)
 					return false;					
 				else
 					return true;
@@ -501,16 +480,14 @@ public class MinMaxPlayer extends Player{
 					return false;
 		}
 	}
-	
-	
-	
-	
-	
-	
+		
 	void createMySubtree(int depth) {
 		
 		for(int i=0; i<4; i++) {
-			if(canMove(i)) {
+
+			int direction = 2*i+1;
+
+			if(canMove(direction)) {
 				
 				Board childrenBoard = new Board(root.getNodeBoard());
 				int[] childrenArray = new int[3];
@@ -521,9 +498,9 @@ public class MinMaxPlayer extends Player{
 				this.x = tempX;
 				this.y = tempY;
 				this.currentTile =  tempCurrentTile ;
-				int[] newChildren = {childrenArray[1], childrenArray[2], 2*i+1};
+				int[] newChildren = {childrenArray[1], childrenArray[2], direction};
 				
-				double evaluation = evaluate(2*i+1, childrenBoard);
+				double evaluation = evaluate(direction, childrenBoard);
 				root.setChildren(new Node(root, new ArrayList<Node>(), depth+1, newChildren, childrenBoard, evaluation, root.getNodePlayer()));
 				createOpponentSubtree(root.getChildren().get(root.getChildren().size()-1), depth+2, evaluation);
 			}
@@ -534,7 +511,10 @@ public class MinMaxPlayer extends Player{
 	void createOpponentSubtree(Node parent, int depth, double parentEval) {
 		
 		for(int i=0; i<4; i++) {
-			if(canMove(i)) {
+
+			int direction = 2*i+1;
+			
+			if(canMove(direction)) {
 				
 				Board childrenBoard = new Board(parent.getNodeBoard());
 				int[] childrenArray = new int[3];
@@ -546,21 +526,13 @@ public class MinMaxPlayer extends Player{
 				parent.getNodePlayer().setX(tempX);
 				parent.getNodePlayer().setY(tempY);
 				parent.getNodePlayer().setCurrentTile(tempCurrentTile);
-				int[] newChildren = {childrenArray[1], childrenArray[2], 2*i+1};
+				int[] newChildren = {childrenArray[1], childrenArray[2], direction};
 				
-				double evaluation = parent.getNodePlayer().evaluate(2*i+1, childrenBoard);
+				double evaluation = parent.getNodePlayer().evaluate(direction, childrenBoard);
 				parent.setChildren(new Node(parent, new ArrayList<Node>(), depth+1, newChildren, childrenBoard, evaluation - parentEval, parent.getNodePlayer()));
 			}
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	/**
@@ -678,20 +650,5 @@ public class MinMaxPlayer extends Player{
 		System.out.println(getName() + " moved down " + path.get(6).size() + " times.");
 		System.out.println(getName() + " moved left " + path.get(7).size() + " times.\n");
 
-	}
-
-	/**
-	 * Returns a random dice excluding the one that got as input. 
-	 * For instance if bestDice=3 the function may return 1, 5, 7.  
-	 * @param bestDice
-	 * @return a dice different from the given 
-	 */
-	private int DiceCalculation(int bestDice)
-	{
-		Random rand = new Random(System.currentTimeMillis());
-		int n = rand.nextInt(3);
-		n = (n + 1)*2;
-
-		return ((bestDice + n) % 8);
 	}
 }

@@ -189,12 +189,12 @@ public class Player {
 				
 				if(board.getTile(currentTile).getUp() == true)
 				{
-					System.out.println(getName() + " didn't move. Wall ahead!" + "\n");
+					// System.out.println(getName() + " didn't move. Wall ahead!" + "\n");
 					break;					
 				}
 				else
 				{ 
-					System.out.println(getName() + " moved up.");
+					// System.out.println(getName() + " moved up.");
 					
 					// Player left from it's previous tile.
 					if(playerId ==2)
@@ -218,12 +218,12 @@ public class Player {
 				
 				if(board.getTile(currentTile).getRight() == true)
 				{
-					System.out.println(getName() + " didn't move. Wall at the right side!" + "\n");
+					// System.out.println(getName() + " didn't move. Wall at the right side!" + "\n");
 					break;					
 				}
 				else
 				{ 
-					System.out.println(getName() + " moved right.");
+					// System.out.println(getName() + " moved right.");
 					
 					if(playerId ==2)
 						board.getTile(currentTile).setTheseus(false);
@@ -245,12 +245,12 @@ public class Player {
 				
 				if(board.getTile(currentTile).getDown() == true || currentTile==0)
 				{
-					System.out.println(getName() + " didn't move. Wall down!" + "\n");
+					// System.out.println(getName() + " didn't move. Wall down!" + "\n");
 					break;					
 				}
 				else
 				{ 
-					System.out.println(getName() + " moved down.");
+					// System.out.println(getName() + " moved down.");
 					
 					if(playerId ==2)
 						board.getTile(currentTile).setTheseus(false);
@@ -272,12 +272,12 @@ public class Player {
 				
 				if(board.getTile(currentTile).getLeft() == true)
 				{
-					System.out.println(getName() + " didn't move. Wall at the left side!" + "\n");
+					// System.out.println(getName() + " didn't move. Wall at the left side!" + "\n");
 					break;					
 				}
 				else 
 				{ 
-					System.out.println(getName() + " moved left.");
+					// System.out.println(getName() + " moved left.");
 					
 					if(playerId ==2)
 						board.getTile(currentTile).setTheseus(false);
