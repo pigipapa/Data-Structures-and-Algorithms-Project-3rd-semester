@@ -177,7 +177,7 @@ public class Player {
      *
      * @param direction, the direction (1 -> Up, 5 -> Down, 7 -> Left, 3 -> Right) chosen for the player to be moved to.
      */
-	public int[] move(int direction)
+	public int[] move(int direction, Board board)
 	{				
 		int supplyId = -1;			// When no supply is got, supplyId's value is -1.
 		
@@ -243,7 +243,7 @@ public class Player {
 				
 			case 5:	//down
 				
-				if(board.getTile(currentTile).getDown() == true && currentTile==0)
+				if(board.getTile(currentTile).getDown() == true || currentTile==0)
 				{
 					System.out.println(getName() + " didn't move. Wall down!" + "\n");
 					break;					

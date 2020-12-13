@@ -23,6 +23,11 @@ public class MinMaxPlayer extends Player{
 	// !Used only by Minotaur!
 	// Array that implements if Minotaur has crossed a tile that contains supply enough time by now.
 	private boolean[] enoughTimesBeenOnTheSupply;	
+	
+	private Node root;
+	
+	// Variable that implements if a close supply is the closest one to the player, in case there are more than 1 supplies he can see.
+	boolean isTheClosestSupply = true;
 		
 	/**
 	 * Initializes a clever/heuristic player. Variables are initialized to -1, arrays and structures are initialized without content.  
@@ -30,7 +35,7 @@ public class MinMaxPlayer extends Player{
 	public MinMaxPlayer() 
 	{
 		super();
-		
+		root = new Node();
 		path = new ArrayList<ArrayList<Integer>>();
 		LastMove = -1;
 		timesBeenOnTheSupply = new int[board.getS()];
@@ -47,7 +52,7 @@ public class MinMaxPlayer extends Player{
 	 * @param y
 	 * @param LastMove
 	 */
-	public MinMaxPlayer(int playerId, String name, Board board, int score, int x, int y, int LastMove) 
+	public MinMaxPlayer(int playerId, String name, Board board, int score, int x, int y, int LastMove, Node root) 
 	{
 		super(playerId, name, board, score, x, y);
 		
@@ -67,6 +72,8 @@ public class MinMaxPlayer extends Player{
 
 		for(int i = 0; i < board.getS(); i++)
 			enoughTimesBeenOnTheSupply[i] = false;
+		
+		this.root = new Node(root);
 	}
 	
 	/**
@@ -90,6 +97,7 @@ public class MinMaxPlayer extends Player{
 		
 		this.enoughTimesBeenOnTheSupply =player.enoughTimesBeenOnTheSupply.clone();
 
+		this.root = new Node(player.root);
 	}
 	
 	/**
@@ -117,6 +125,11 @@ public class MinMaxPlayer extends Player{
 
 	public ArrayList<ArrayList<Integer>> getPath(){ return this.path; } 
 	
+	public Node getRoot() {return root;}
+	
+	public void setRoot(Node root) {this.root = root;}
+	
+	
 	
 	/**
 	 * This function evaluates the quality of player's single movements on the board in the directions that is given by dice, considering if he sees supplies or his opponent. 
@@ -125,46 +138,7 @@ public class MinMaxPlayer extends Player{
 	 * @param tileDistOpponent
 	 * @return the evaluation of the player's single movement in the direction the dice implements. 
 	 */
-	private double evaluate(int tileDistSupply, int tileDistOpponent)	{
-		// This variable's values can be 0.3, 0.5, 1 depending on the distance between the player and a supply, which he can see.
-		// If two tiles keep them apart then NearSupplies = 0.3, else if tile distance is 1 then NearSupplies = 0.5, else if they are neighboring NearSupplies = 1. 
-		double NearSupplies = 0;
-		// This variable's values can be 0.3, 0.5, 1 if player is Minotaur and is close to Theseus at distance 2,1 and 0 tiles.
-		// If player is Theseus, OppponentDist values can be -0.3 when his distance from Minotaur is 2 tiles, -0.5 if it's 1 tile and -1 if Minotaur is next to him.  
-		double OpponentDist = 0;
-		// A sign roulette. If player is Minotaur then sign = -1. If player is Theseus sign = 1. 
-		int sign = (playerId == 2) ? -1 : 1;
-		
-		// If player sees supply
-		// tileDistSupply can be 1, 2 and 3 depending on the distance between the player and the supply.
-		//1-> supply on the next tile in the direction player is heading 
-		//2-> one tile between the player and the supply
-		//3-> two tiles between the player and the supply
-		// The function we use is 1/x because 1/1=1, 1/2=0.5 and 1/3=0.33, which are the values NearSupplies is expected to have.
-		if(tileDistSupply != -1)	
-			NearSupplies = 1.0/tileDistSupply;	
-	
-		// If player sees his opponent
-		// The same comments as above, but this time player is looking for his opponent on the near tiles.
-		// If player is Theseus sign=-1 so OpponentDist<0.
-		// If palyer is Minotaur sign=1 so OpponentDist>0.
-		if(tileDistOpponent != -1)	
-			OpponentDist = sign*(1.0/tileDistOpponent);								
-		
-		if(playerId == 2)
-			// Theseus' evaluation function 
-			return (NearSupplies * 0.4 + OpponentDist * 0.6);		
-		else 
-			// Minotaur's evaluation function
-			return (NearSupplies * 0.2 + OpponentDist * 0.8);
-	}	
-	
-	/**
-	 * The function that returns the best dice player can decide after evaluating his moves in each directions. 
-	 * @return bestDice
-	 */
-	public int getNextMove()
-	{	
+	private double evaluate(int dice, Board board)	{
 		int dimension = board.getN();
 		
 		// Save the initial values of the player variables that show his position on the board. 
@@ -181,7 +155,7 @@ public class MinMaxPlayer extends Player{
 		int tileDistOpponent = -1;
 
 		// In the first column we store dice [1, 3, 5, 7] and in the second column we save the evaluations for each of these moves. 
-		double[][] evaluation = new double[4][2]; 
+		double evaluation; 
 		
 		// Checks how many times Minotaur has been on the same supply (Minotaur is attracted by supplies because he may find Theseus near to them)
 		if((playerId == 1) && board.getTile(currentTile).getSupply())
@@ -219,360 +193,386 @@ public class MinMaxPlayer extends Player{
 			}
 		}
 		
-		// Variable that implements if a close supply is the closest one to the player, in case there are more than 1 supplies he can see.
-		boolean isTheClosestSupply = true;
+		
 		
 		// Player is moving tile to tile in each direction(1->up, 3->right, 5->down, 7->left) for two times,
 		// in order to test what is on the next tile (supply , opponent).
 		// Thus, he sees in a distance of three tiles from his current tile and therefore he evaluates the move in every direction.
 		
-		for(int i=0; i<4; i++) {				// Loop for every direction
+
+		double cumulativeEvaluation = 0;	// Sum of evaluations in one direction.
+		
+		for(int j=0; j<4; j++) {	 		// Loop for every movement
+				
+			tileDistSupply = -1;
+			tileDistOpponent = -1;
 			
-			int dice = 2*i+1;					// Dice transformation from the set [0, 1, 2, 3] to [1, 3, 5, 7].
-			double cumulativeEvaluation = 0;	// Sum of evaluations in one direction.
-			evaluation[i][0] = dice;			// Dice is stored in the first column of evaluation array.
+			switch(dice) {
 			
-			for(int j=0; j<4; j++) {	 		// Loop for every movement
+			case 1:	//up
+
+				if(board.getTile(currentTile).getUp())						// Checks if there is a wall ahead.
+					break;
+				else {
+					int iterationTimes = (x + 1) - initialX;				// Computing the distance between players initial position and his posotion after his testing move 
 					
-				tileDistSupply = -1;
-				tileDistOpponent = -1;
+					if(board.getTile(currentTile + dimension).getSupply())	// Checks if the upper tile has supply.
+					{	
+						tileDistSupply = iterationTimes;	
+						
+						if(isTheClosestSupply) {	
+							path.get(2).add(tileDistSupply);										// Store to path the distance between the closest supply and Theseus,  
+							isTheClosestSupply = false;												// in case there are more than one supplies near to him.
+						}
+					
+						if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile + dimension) - 1])	// Checks if Minotaur is the player. 
+							tileDistSupply = -1;													// If his has been enough times on the supply in front of him it's been deactivated.
+					}
+					
+					
+					if(playerId == 2 && board.getTile(currentTile + dimension).hasMinotaur()) {		//Checks if Minotaur is on Theseus' upper tile.
+						tileDistOpponent = iterationTimes;	
+						path.get(3).add(tileDistOpponent);											// Adds in Theseus' path his distance from Minotaur.
+					}
+					else if(playerId == 1 && board.getTile(currentTile + dimension).hasTheseus()) {	//Checks if Theseus is on Minotaur's upper tile.
+						tileDistOpponent = iterationTimes;
+						path.get(3).add(tileDistOpponent);											// Adds in Minotaur's path his distance from Theseus.
+					}
+
+					double NearSupplies = 0;
+					double OpponentDist = 0;
+					int sign = (playerId == 2) ? -1 : 1;
+					
+					if(tileDistSupply != -1)	
+						NearSupplies = 1.0/tileDistSupply;	
 				
-				switch(dice) {
-				
-				case 1:	//up
+					if(tileDistOpponent != -1)	
+						OpponentDist = sign*(1.0/tileDistOpponent);								
+					
+					if(playerId == 2)
+						cumulativeEvaluation += (NearSupplies * 0.4 + OpponentDist * 0.6)*10;		
+					else 
+						cumulativeEvaluation += (NearSupplies * 0.2 + OpponentDist * 0.8)*10;
+												
 
-					if(board.getTile(currentTile).getUp())						// Checks if there is a wall ahead.
-						break;
-					else {
-						int iterationTimes = (x + 1) - initialX;				// Computing the distance between players initial position and his posotion after his testing move 
-						
-						if(board.getTile(currentTile + dimension).getSupply())	// Checks if the upper tile has supply.
-						{	
-							tileDistSupply = iterationTimes;	
-							
-							if(isTheClosestSupply) {	
-								path.get(2).add(tileDistSupply);										// Store to path the distance between the closest supply and Theseus,  
-								isTheClosestSupply = false;												// in case there are more than one supplies near to him.
-							}
-						
-							if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile + dimension) - 1])	// Checks if Minotaur is the player. 
-								tileDistSupply = -1;													// If his has been enough times on the supply in front of him it's been deactivated.
-						}
-						
-						
-						if(playerId == 2 && board.getTile(currentTile + dimension).hasMinotaur()) {		//Checks if Minotaur is on Theseus' upper tile.
-							tileDistOpponent = iterationTimes;	
-							path.get(3).add(tileDistOpponent);											// Adds in Theseus' path his distance from Minotaur.
-						}
-						else if(playerId == 1 && board.getTile(currentTile + dimension).hasTheseus()) {	//Checks if Theseus is on Minotaur's upper tile.
-							tileDistOpponent = iterationTimes;
-							path.get(3).add(tileDistOpponent);											// Adds in Minotaur's path his distance from Theseus.
-						}
-													
-						cumulativeEvaluation += evaluate(tileDistSupply, tileDistOpponent);
-
-						if(j != 3)
-						{
-							x = x + 1;																	// Player moves up.
-							y = y;
-							currentTile = y + x * dimension;
-						}
+					if(j != 3)
+					{
+						x = x + 1;																	// Player moves up.
+						y = y;
+						currentTile = y + x * dimension;
 					}
-					break;
-				
-					// The same logic as described above is used in the rest cases.
-					
-				case 3:	//right
-					
-					if(board.getTile(currentTile).getRight()) 
-						break;
-					else {
-						int iterationTimes = (y + 1) - initialY;
-
-						if(board.getTile(currentTile + 1).getSupply()) 
-						{
-							tileDistSupply = iterationTimes;	
-							
-							if(isTheClosestSupply) {
-								path.get(2).add(tileDistSupply);
-								isTheClosestSupply = false;
-							}
-
-							if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile+1)-1])
-								tileDistSupply = -1;
-						}
-						if(playerId == 2 && board.getTile(currentTile + 1).hasMinotaur()) {
-							tileDistOpponent = iterationTimes;	
-							path.get(3).add(tileDistOpponent);
-						}
-						else if(playerId == 1 && board.getTile(currentTile + 1).hasTheseus()) {
-							tileDistOpponent = iterationTimes;
-							path.get(3).add(tileDistOpponent);
-						}
-
-						cumulativeEvaluation += evaluate(tileDistSupply, tileDistOpponent);
-
-						if(j != 3)
-						{
-							x = x;
-							y = y + 1;
-							currentTile = y + x * dimension;
-						}						
-					}
-					break;
-				 
-				case 5:	//down
-					
-					if(board.getTile(currentTile).getDown() || currentTile == 0) 
-						break;
-					else {
-						int iterationTimes = initialX - (x - 1);
-
-						if(board.getTile(currentTile - dimension).getSupply()) 
-						{
-							tileDistSupply = iterationTimes;	
-							
-							if(isTheClosestSupply) {
-								path.get(2).add(tileDistSupply);
-								isTheClosestSupply = false;
-							}
-
-							if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile - dimension)-1])
-								tileDistSupply = -1;
-						}
-
-						if(playerId == 2 && board.getTile(currentTile - dimension).hasMinotaur()) {
-							tileDistOpponent = iterationTimes;	
-							path.get(3).add(tileDistOpponent);
-						}
-						else if(playerId == 1 && board.getTile(currentTile - dimension).hasTheseus()) {
-							tileDistOpponent = iterationTimes;
-							path.get(3).add(tileDistOpponent);
-						}
-
-						cumulativeEvaluation += evaluate(tileDistSupply, tileDistOpponent);
-					
-						if(j != 3)
-						{
-							x = x - 1;
-							y = y;
-							currentTile = y + x * dimension;
-						}						
-					}
-					break;
-				 
-				case 7:	//left
-					
-					if(board.getTile(currentTile).getLeft()) 
-						break;
-					else {
-						int iterationTimes = initialY - (y - 1);
-
-						if(board.getTile(currentTile - 1).getSupply()) 
-						{
-							tileDistSupply = iterationTimes;	
-							
-							if(isTheClosestSupply) {
-								path.get(2).add(tileDistSupply);
-								isTheClosestSupply = false;
-							}
-
-							if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile-1) - 1])
-								tileDistSupply = -1;
-						}
-						if(playerId == 2 && board.getTile(currentTile - 1).hasMinotaur()) { 
-							tileDistOpponent = iterationTimes;	
-							path.get(3).add(tileDistOpponent);
-						}
-						else if(playerId == 1 && board.getTile(currentTile - 1).hasTheseus()) {
-							tileDistOpponent = iterationTimes;
-							path.get(3).add(tileDistOpponent);
-						}
-						
-						cumulativeEvaluation += evaluate(tileDistSupply, tileDistOpponent);
-						
-						if(j != 3)
-						{
-							x = x;
-							y = y - 1;
-							currentTile = y + x * dimension;
-						}
-
-					}
-					break;
 				}
+				break;
+			
+				// The same logic as described above is used in the rest cases.
 				
-			}
-			evaluation[i][1] = cumulativeEvaluation;	// Total evaluation of the movement is stored in the second column of evaluation array.
+			case 3:	//right
+				
+				if(board.getTile(currentTile).getRight()) 
+					break;
+				else {
+					int iterationTimes = (y + 1) - initialY;
 
-			x = initialX;								// Player returns in his initial position.
-			y = initialY;
-			currentTile = initialCurrentTile;
+					if(board.getTile(currentTile + 1).getSupply()) 
+					{
+						tileDistSupply = iterationTimes;	
+						
+						if(isTheClosestSupply) {
+							path.get(2).add(tileDistSupply);
+							isTheClosestSupply = false;
+						}
+
+						if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile+1)-1])
+							tileDistSupply = -1;
+					}
+					if(playerId == 2 && board.getTile(currentTile + 1).hasMinotaur()) {
+						tileDistOpponent = iterationTimes;	
+						path.get(3).add(tileDistOpponent);
+					}
+					else if(playerId == 1 && board.getTile(currentTile + 1).hasTheseus()) {
+						tileDistOpponent = iterationTimes;
+						path.get(3).add(tileDistOpponent);
+					}
+
+					double NearSupplies = 0;
+					double OpponentDist = 0;
+					int sign = (playerId == 2) ? -1 : 1;
+					
+					if(tileDistSupply != -1)	
+						NearSupplies = 1.0/tileDistSupply;	
+				
+					if(tileDistOpponent != -1)	
+						OpponentDist = sign*(1.0/tileDistOpponent);								
+					
+					if(playerId == 2)
+						cumulativeEvaluation += (NearSupplies * 0.4 + OpponentDist * 0.6)*10;		
+					else 
+						cumulativeEvaluation += (NearSupplies * 0.2 + OpponentDist * 0.8)*10;
+					if(j != 3)
+					{
+						x = x;
+						y = y + 1;
+						currentTile = y + x * dimension;
+					}						
+				}
+				break;
+			 
+			case 5:	//down
+				
+				if(board.getTile(currentTile).getDown() || currentTile == 0) 
+					break;
+				else {
+					int iterationTimes = initialX - (x - 1);
+
+					if(board.getTile(currentTile - dimension).getSupply()) 
+					{
+						tileDistSupply = iterationTimes;	
+						
+						if(isTheClosestSupply) {
+							path.get(2).add(tileDistSupply);
+							isTheClosestSupply = false;
+						}
+
+						if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile - dimension)-1])
+							tileDistSupply = -1;
+					}
+
+					if(playerId == 2 && board.getTile(currentTile - dimension).hasMinotaur()) {
+						tileDistOpponent = iterationTimes;	
+						path.get(3).add(tileDistOpponent);
+					}
+					else if(playerId == 1 && board.getTile(currentTile - dimension).hasTheseus()) {
+						tileDistOpponent = iterationTimes;
+						path.get(3).add(tileDistOpponent);
+					}
+
+					double NearSupplies = 0;
+					double OpponentDist = 0;
+					int sign = (playerId == 2) ? -1 : 1;
+					
+					if(tileDistSupply != -1)	
+						NearSupplies = 1.0/tileDistSupply;	
+				
+					if(tileDistOpponent != -1)	
+						OpponentDist = sign*(1.0/tileDistOpponent);								
+					
+					if(playerId == 2)
+						cumulativeEvaluation += (NearSupplies * 0.4 + OpponentDist * 0.6)*10;		
+					else 
+						cumulativeEvaluation += (NearSupplies * 0.2 + OpponentDist * 0.8)*10;				
+					if(j != 3)
+					{
+						x = x - 1;
+						y = y;
+						currentTile = y + x * dimension;
+					}						
+				}
+				break;
+			 
+			case 7:	//left
+				
+				if(board.getTile(currentTile).getLeft()) 
+					break;
+				else {
+					int iterationTimes = initialY - (y - 1);
+
+					if(board.getTile(currentTile - 1).getSupply()) 
+					{
+						tileDistSupply = iterationTimes;	
+						
+						if(isTheClosestSupply) {
+							path.get(2).add(tileDistSupply);
+							isTheClosestSupply = false;
+						}
+
+						if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile-1) - 1])
+							tileDistSupply = -1;
+					}
+					if(playerId == 2 && board.getTile(currentTile - 1).hasMinotaur()) { 
+						tileDistOpponent = iterationTimes;	
+						path.get(3).add(tileDistOpponent);
+					}
+					else if(playerId == 1 && board.getTile(currentTile - 1).hasTheseus()) {
+						tileDistOpponent = iterationTimes;
+						path.get(3).add(tileDistOpponent);
+					}
+					
+					double NearSupplies = 0;
+					double OpponentDist = 0;
+					int sign = (playerId == 2) ? -1 : 1;
+					
+					if(tileDistSupply != -1)	
+						NearSupplies = 1.0/tileDistSupply;	
+				
+					if(tileDistOpponent != -1)	
+						OpponentDist = sign*(1.0/tileDistOpponent);								
+					
+					if(playerId == 2)
+						cumulativeEvaluation += (NearSupplies * 0.4 + OpponentDist * 0.6)*10;		
+					else 
+						cumulativeEvaluation += (NearSupplies * 0.2 + OpponentDist * 0.8)*10;					
+					if(j != 3)
+					{
+						x = x;
+						y = y - 1;
+						currentTile = y + x * dimension;
+					}
+
+				}
+				break;
+			}
+			
+		}
+		evaluation = cumulativeEvaluation;	// Total evaluation of the movement is stored in the second column of evaluation array.
+
+		x = initialX;								// Player returns in his initial position.
+		y = initialY;
+		currentTile = initialCurrentTile;
+
+		return evaluation;
+	}		
+	
+	
+	
+	
+		int chooseMinMaxMove(Node node, int depth, boolean isMaximizing) {
+		
+		if(depth == 0) {
+			return root.getNodeMove()[2]; //dice
 		}
 		
-		boolean allEvaluationsAreZero = true;
+		double inf = Double.POSITIVE_INFINITY;
+		if(isMaximizing) {
+			double bestEval = -(1)*inf;
+			for(int i=0; i<node.getChildren().size(); i++) 
+				bestEval = Math.max(bestEval,chooseMinMaxMove(node.getChildren().get(i), depth-1, false));
+			
+			return (int)bestEval;
+		}
 		
-		double maxEvaluation = -2;
-		double belowZeroEvaluation = 10;
+		else {
+			double bestEval = inf;
+			for(int i=0; i<node.getChildren().size(); i++) 
+				bestEval = Math.min(bestEval,chooseMinMaxMove(node.getChildren().get(i), depth-1, true));
+			
+			return (int)bestEval;
+		}
+	
 		
-		int bestDice = 0;
-		int worstDice = 0;
+	}
+	
+	
+	
+	
+	
+	boolean canMove(int direction) {
 		
-		for(int i = 0; i < 4; i++)
+		switch(2*direction+1) 
 		{
-			// Find maximum evaluation in evaluation array.
-			if(maxEvaluation < evaluation[i][1]){
-				maxEvaluation = evaluation[i][1];
-				bestDice = (int) evaluation[i][0];
-			}
-			
-			// Check if all evaluations are zero.
-			if(evaluation[i][1] != 0)
-				allEvaluationsAreZero = false;
-			
-			// Find minimum evaluation.
-			if(belowZeroEvaluation > evaluation[i][1]) {
-				belowZeroEvaluation = evaluation[i][1];
-				worstDice = (int) evaluation[i][0];
+			case 1:	//up
+				
+				if(board.getTile(currentTile).getUp() == true)
+					return false;				
+				else 
+					return true;
+					
+				
+			case 3:	//right
+				
+				if(board.getTile(currentTile).getRight() == true)
+					return false;				
+				else
+					return true;
+				
+			case 5:	//down
+				
+				if(board.getTile(currentTile).getDown() == true && currentTile==0)
+					return false;					
+				else
+					return true;
+				
+			case 7:	//left
+				
+				if(board.getTile(currentTile).getLeft() == true)
+					return false;				
+				else 
+					return true;
+			default: 
+					return false;
+		}
+	}
+	
+	
+	
+	
+	
+	
+	void createMySubtree(int depth) {
+		
+		for(int i=0; i<4; i++) {
+			if(canMove(i)) {
+				
+				Board childrenBoard = new Board(root.getNodeBoard());
+				int[] childrenArray = new int[3];
+				int tempX = this.x;
+				int tempY = this.y;
+				int tempCurrentTile = this.currentTile;
+				childrenArray = move(2*i+1, childrenBoard);
+				this.x = tempX;
+				this.y = tempY;
+				this.currentTile =  tempCurrentTile ;
+				int[] newChildren = {childrenArray[1], childrenArray[2], 2*i+1};
+				
+				double evaluation = evaluate(2*i+1, childrenBoard);
+				root.setChildren(new Node(root, new ArrayList<Node>(), depth+1, newChildren, childrenBoard, evaluation, root.getNodePlayer()));
+				createOpponentSubtree(root.getChildren().get(root.getChildren().size()-1), depth+2, evaluation);
 			}
 		}
 		
-		// If Theseus has a negative evaluation, meaning he can detect Minotaur.
-		// Then maximum evaluation is zero but Theseus must not move randomly.
-		// He must move in a direction different than the one Minotaur is tracked.
-		// So he checks if he can move away, towards a direction that has zero evaluation. 
-		if(allEvaluationsAreZero == false && maxEvaluation == 0) {
-			
-			boolean flag = true;
-
-			while(flag)
-			{
-				switch(bestDice)
-				{
-					case 1:
-						if(bestDice == worstDice && currentTile!=0) {					// If after the first access in loop bestDice is changed, it may become equal to worstDice. 
-							bestDice = DiceCalculation(bestDice);	// So we calculate it again.
-							continue;
-						}
-						if(board.getTile(currentTile).getUp())		// If there is an upper wall then calculate another dice until the problem is solved.		
-							bestDice = DiceCalculation(bestDice);
-						else
-							flag = false;							// If no wall is found then flag becomes false and we break from the while loop.
-						break;
+	}
 	
-					// Same logic as above.
-						
-					case 3:
-						if(bestDice == worstDice && currentTile!=0) {
-							bestDice = DiceCalculation(bestDice);
-							continue;
-						}
-						if(board.getTile(currentTile).getRight())
-							bestDice = DiceCalculation(bestDice);
-						else
-							flag = false;
-						
-						break;
-					
-					case 5:
-						if(bestDice == worstDice) {
-							bestDice = DiceCalculation(bestDice);
-							continue;
-						}
-						if(board.getTile(currentTile).getDown() || (getCurrentTile() == 0)) 
-							bestDice = DiceCalculation(bestDice);
-						else
-							flag = false;
-	
-						break;
-	
-					case 7:
-						if(bestDice == worstDice) {
-							bestDice = DiceCalculation(bestDice);
-							continue;
-						}
-						if(board.getTile(currentTile).getLeft())
-							bestDice = DiceCalculation(bestDice);
-						else
-							flag = false;
-						
-						break;
-				}
-			}
-			
-			
-		}
-
-		// If all evaluations are zero then player moves in a random way. 
-		if(allEvaluationsAreZero)
-		{
-			Random rand = new Random();
-			
-			// Calculate a random dice.
-			int n = rand.nextInt(4);
-			bestDice = 2*n + 1;
-			
-			boolean flag = true;
-
-			// Checks if the movement bestDice implements is done, player is not going to fall on a wall or is not going to perform a move same to his last one.
-			while(flag)
-			{
-				switch(bestDice)
-				{
-					case 1:
-						if(LastMove == 5 && currentTile != 0) { 	// If last move was down, it means that moving up Theseus will return to his previous position, so we calculate another dice.  
-							bestDice = DiceCalculation(bestDice);	// If player is at the first tile of the board, where the peripheral walls are open and the available moves are up and right
-							continue;								// he can easily get stuck there, so calculate new dice.
-						}
-						if(board.getTile(currentTile).getUp())		// If there is a wall in the direction dice implements then calculate new dice.			
-							bestDice = DiceCalculation(bestDice);
-						else
-							flag = false;							// Calculate new dice until flag=false.
-						break;
-
-					// Same logic as above. 
-						
-					case 3:
-						if(LastMove == 7 && currentTile != 0) {
-							bestDice = DiceCalculation(bestDice);
-							continue;
-						}
-						if(board.getTile(currentTile).getRight())
-							bestDice = DiceCalculation(bestDice);
-						else
-							flag = false;
-						
-						break;
-					
-					case 5:
-						if(LastMove == 1) {
-							bestDice = DiceCalculation(bestDice);
-							continue;
-						}
-						if(board.getTile(currentTile).getDown() || (getCurrentTile() == 0)) 
-							bestDice = DiceCalculation(bestDice);
-						else
-							flag = false;
-
-						break;
-
-					case 7:
-						if(LastMove == 3) {
-							bestDice = DiceCalculation(bestDice);
-							continue;
-						}
-						if(board.getTile(currentTile).getLeft())
-							bestDice = DiceCalculation(bestDice);
-						else
-							flag = false;
-						
-						break;
-				}
-			}
-		}
+	void createOpponentSubtree(Node parent, int depth, double parentEval) {
 		
-			LastMove = bestDice; 
-			
+		for(int i=0; i<4; i++) {
+			if(canMove(i)) {
+				
+				Board childrenBoard = new Board(parent.getNodeBoard());
+				int[] childrenArray = new int[3];
+				
+				int tempX = parent.getNodePlayer().getX();
+				int tempY = parent.getNodePlayer().getY();
+				int tempCurrentTile = parent.getNodePlayer().getCurrentTile();
+				childrenArray = parent.getNodePlayer().move(2*i+1, childrenBoard);
+				parent.getNodePlayer().setX(tempX);
+				parent.getNodePlayer().setY(tempY);
+				parent.getNodePlayer().setCurrentTile(tempCurrentTile);
+				int[] newChildren = {childrenArray[1], childrenArray[2], 2*i+1};
+				
+				double evaluation = parent.getNodePlayer().evaluate(2*i+1, childrenBoard);
+				parent.setChildren(new Node(parent, new ArrayList<Node>(), depth+1, newChildren, childrenBoard, evaluation - parentEval, parent.getNodePlayer()));
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * The function that returns the best dice player can decide after evaluating his moves in each directions. 
+	 * @return bestDice
+	 */
+	public int getNextMove()
+	{	
+		int dimension = board.getN();
+		createMySubtree(2);
+		int bestDice = chooseMinMaxMove(root, 2, true);
+		
 				
 		// path (info about the dice (0), got supply or not (1), is near to a supply (2), is near to enemy (3), times moved up (4), times moved right (5), times moved down (6), times moved left (7))
 		
