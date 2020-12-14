@@ -189,7 +189,7 @@ public class Player {
 				
 				if(board.getTile(currentTile).getUp() == true)
 				{
-					// System.out.println(getName() + " didn't move. Wall ahead!" + "\n");
+					System.out.println(getName() + " didn't move. Wall ahead!" + "\n");
 					break;					
 				}
 				else
@@ -218,7 +218,7 @@ public class Player {
 				
 				if(board.getTile(currentTile).getRight() == true)
 				{
-					// System.out.println(getName() + " didn't move. Wall at the right side!" + "\n");
+					System.out.println(getName() + " didn't move. Wall at the right side!" + "\n");
 					break;					
 				}
 				else
@@ -245,7 +245,7 @@ public class Player {
 				
 				if(board.getTile(currentTile).getDown() == true || currentTile==0)
 				{
-					// System.out.println(getName() + " didn't move. Wall down!" + "\n");
+					System.out.println(getName() + " didn't move. Wall down!" + "\n");
 					break;					
 				}
 				else
@@ -272,7 +272,7 @@ public class Player {
 				
 				if(board.getTile(currentTile).getLeft() == true)
 				{
-					// System.out.println(getName() + " didn't move. Wall at the left side!" + "\n");
+					System.out.println(getName() + " didn't move. Wall at the left side!" + "\n");
 					break;					
 				}
 				else 

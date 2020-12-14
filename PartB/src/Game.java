@@ -91,8 +91,8 @@ public class Game {
 		Board board = new Board(Dimensions, Supplies, Walls);
 		board.createBoard();
 		double inf = Double.POSITIVE_INFINITY;
-		Node MinotaurNode = new Node(new Node(), new ArrayList<Node>(), 0, new int[3], board, (-1)*inf, new MinMaxPlayer(2, "Theseus", new Board(Dimensions, Supplies, 0), 0, 0, 0, -1, new Node()));
-		Node TheseusNode = new Node(new Node(), new ArrayList<Node>(), 0, new int[3], board, (-1)*inf, new MinMaxPlayer(1, "Minotaur", new Board(Dimensions, Supplies, 0), 0, (Dimensions-1)/2, (Dimensions-1)/2, -1, new Node()));
+		Node MinotaurNode = new Node(new Node(), new ArrayList<Node>(), 0, new int[3], board, (-1)*inf, new MinMaxPlayer(2, "Theseus", board, 0, 0, 0, -1, new Node()));
+		Node TheseusNode = new Node(new Node(), new ArrayList<Node>(), 0, new int[3], board, (-1)*inf, new MinMaxPlayer(1, "Minotaur", board, 0, (Dimensions-1)/2, (Dimensions-1)/2, -1, new Node()));
 		MinMaxPlayer Minotaur = new MinMaxPlayer(1, "Minotaur", board, 0, (Dimensions-1)/2, (Dimensions-1)/2, -1, MinotaurNode); 
 		MinMaxPlayer Theseus = new MinMaxPlayer(2, "Theseus", board, 0, 0, 0, -1, TheseusNode); 
 		

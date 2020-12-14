@@ -422,7 +422,7 @@ public class MinMaxPlayer extends Player{
 			{
 				if(bestEval<chooseMinMaxMove(node.getChildren().get(i), depth-1, false))
 					bestEval = chooseMinMaxMove(node.getChildren().get(i), depth-1, false);
-				//bestEval = Math.max(bestEval,chooseMinMaxMove(node.getChildren().get(i), depth-1, false));
+				bestEval = Math.max(bestEval,chooseMinMaxMove(node.getChildren().get(i), depth-1, false));
 				node.getChildren().get(i).setNodeEvaluation(bestEval);			
 				node.setNodeMove(node.getChildren().get(i).getNodeMove());
 			}			
@@ -437,7 +437,7 @@ public class MinMaxPlayer extends Player{
 			{
 				if(bestEval>chooseMinMaxMove(node.getChildren().get(i), depth-1, true))
 					bestEval = chooseMinMaxMove(node.getChildren().get(i), depth-1, true);
-				//bestEval = Math.min(bestEval,chooseMinMaxMove(node.getChildren().get(i), depth-1, true));
+				bestEval = Math.min(bestEval,chooseMinMaxMove(node.getChildren().get(i), depth-1, true));
 				node.getChildren().get(i).setNodeEvaluation(bestEval);		
 				node.setNodeMove(node.getChildren().get(i).getNodeMove());	
 			}
@@ -448,13 +448,13 @@ public class MinMaxPlayer extends Player{
 		
 	}
 	
-	boolean canMove(int direction) {
+	boolean canMove(int direction, Board cloneboard) {
 		
 		switch(direction) 
 		{
 			case 1:	//up
 				
-				if(board.getTile(currentTile).getUp() == true)
+				if(cloneboard.getTile(currentTile).getUp() == true)
 					return false;				
 				else 
 					return true;
@@ -462,27 +462,173 @@ public class MinMaxPlayer extends Player{
 				
 			case 3:	//right
 				
-				if(board.getTile(currentTile).getRight() == true)
+				if(cloneboard.getTile(currentTile).getRight() == true)
 					return false;				
 				else
 					return true;
 				
 			case 5:	//down
 				
-				if(board.getTile(currentTile).getDown() == true || currentTile==0)
+				if(cloneboard.getTile(currentTile).getDown() == true || currentTile==0)
 					return false;					
 				else
 					return true;
 				
 			case 7:	//left
 				
-				if(board.getTile(currentTile).getLeft() == true)
+				if(cloneboard.getTile(currentTile).getLeft() == true)
 					return false;				
 				else 
 					return true;
 			default: 
-					return false;
+					return true;
 		}
+	}
+
+	public int[] fakemove(int fakeX, int fakeY, int direction, Board cloneboard)
+	{				
+		int supplyId = -1;			// When no supply is got, supplyId's value is -1.
+		
+		int[] array = new int[2];
+		
+		switch(direction) 
+		{
+			case 1:	//up
+				
+				if(cloneboard.getTile(currentTile).getUp() == true)
+				{
+					System.out.println(getName() + " didn't move. Wall ahead!" + "\n");
+					break;					
+				}
+				else
+				{ 
+					// System.out.println(getName() + " moved up.");
+					
+					// Player left from it's previous tile.
+					if(playerId ==2)
+						cloneboard.getTile(currentTile).setTheseus(false); 
+					else if(playerId == 1)
+						cloneboard.getTile(currentTile).setMinotaur(false);
+						
+					fakeX = fakeX + 1; 
+					int fakeCurrentTile = fakeY + fakeX * cloneboard.getN();
+
+					// Player set on it's new current tile.
+					if(playerId ==2)
+						cloneboard.getTile(fakeCurrentTile).setTheseus(true);
+					else if(playerId == 1)
+						cloneboard.getTile(fakeCurrentTile).setMinotaur(true);
+					
+					break;
+				}
+				
+			case 3:	//right
+				
+				if(cloneboard.getTile(currentTile).getRight() == true)
+				{
+					System.out.println(getName() + " didn't move. Wall at the right side!" + "\n");
+					break;					
+				}
+				else
+				{ 
+					// System.out.println(getName() + " moved right.");
+					
+					if(playerId ==2)
+						cloneboard.getTile(currentTile).setTheseus(false);
+					else if(playerId == 1)
+						cloneboard.getTile(currentTile).setMinotaur(false);
+					
+					fakeY = fakeY + 1;
+					int fakeCurrentTile = fakeY + fakeX * cloneboard.getN();
+
+					if(playerId ==2)
+						cloneboard.getTile(fakeCurrentTile).setTheseus(true);
+					else if(playerId == 1)
+						cloneboard.getTile(fakeCurrentTile).setMinotaur(true);
+					
+					break;
+				}
+				
+			case 5:	//down
+				
+				if(cloneboard.getTile(currentTile).getDown() == true || currentTile==0)
+				{
+					System.out.println(getName() + " didn't move. Wall down!" + "\n");
+					break;					
+				}
+				else
+				{ 
+					// System.out.println(getName() + " moved down.");
+					
+					if(playerId ==2)
+						cloneboard.getTile(currentTile).setTheseus(false);
+					else if(playerId == 1)
+						cloneboard.getTile(currentTile).setMinotaur(false);
+					
+					fakeX = fakeX - 1;
+					int fakeCurrentTile = fakeY + fakeX * cloneboard.getN();
+	
+					if(playerId ==2)
+						cloneboard.getTile(fakeCurrentTile).setTheseus(true);
+					else if(playerId == 1)
+						cloneboard.getTile(fakeCurrentTile).setMinotaur(true);
+					
+					break;
+				}
+				
+			case 7:	//left
+				
+				if(cloneboard.getTile(currentTile).getLeft() == true)
+				{
+					System.out.println(getName() + " didn't move. Wall at the left side!" + "\n");
+					break;					
+				}
+				else 
+				{ 
+					// System.out.println(getName() + " moved left.");
+					
+					if(playerId ==2)
+						cloneboard.getTile(currentTile).setTheseus(false);
+					else if(playerId == 1)
+						cloneboard.getTile(currentTile).setMinotaur(false);
+
+					fakeY = fakeY - 1;
+					int fakeCurrentTile = fakeY + fakeX * cloneboard.getN();
+
+					if(playerId ==2)
+						cloneboard.getTile(fakeCurrentTile).setTheseus(true);
+					else if(playerId == 1)
+						cloneboard.getTile(fakeCurrentTile).setMinotaur(true);
+					
+					break;
+				}
+		}
+				
+		if(playerId == 2)										// Checks if Theseus is the player.
+		{
+			if(board.getTile(currentTile).getSupply() == true)	// Checks if there is a supply in the current tile.
+			{   
+				supplyId = cloneboard.TileIdToSupplyId(currentTile);
+								
+				// Theseus got the supply, so it should be deleted. Deletion is made by setting supply's
+				// coordinates equal to -1 (outside board), and its id equal to -1 as well. 
+				// Also, tile's variable supply is set false.
+				
+				cloneboard.getSupply(supplyId-1).setX(-1);
+				cloneboard.getSupply(supplyId-1).setY(-1);
+				cloneboard.getSupply(supplyId-1).setSupplyId(-1);
+				cloneboard.getSupply(supplyId-1).setSupplyTileId(-1);
+				cloneboard.getTile(currentTile).setSupply(false);
+				
+				score++; 
+				
+			}
+		} 
+		
+		array[0] = fakeX; 
+		array[1] = fakeY; 
+		
+		return array;
 	}
 		
 	void createMySubtree(int depth) {
@@ -490,22 +636,21 @@ public class MinMaxPlayer extends Player{
 		for(int i=0; i<4; i++) {
 
 			int direction = 2*i+1;
+			Board childrenBoard = new Board(root.getNodeBoard());
 
-			if(canMove(direction)) {
+			if(canMove(direction, childrenBoard)) {
 				
-				Board childrenBoard = new Board(root.getNodeBoard());
 				int[] childrenArray = new int[3];
-				int tempX = this.x;
-				int tempY = this.y;
-				int tempCurrentTile = this.currentTile;
-				childrenArray = move(2*i+1, childrenBoard);
-				this.x = tempX;
-				this.y = tempY;
-				this.currentTile =  tempCurrentTile ;
-				int[] newChildren = {childrenArray[1], childrenArray[2], direction};
-				
+				int[] tempArray = new int[2];
+
 				double evaluation = evaluate(direction, childrenBoard);
-				root.setChildren(new Node(root, new ArrayList<Node>(), depth+1, newChildren, childrenBoard, evaluation, root.getNodePlayer()));
+				tempArray = fakemove(this.x, this.y, 2*i+1, childrenBoard);
+
+				childrenArray[0] = tempArray[0];
+				childrenArray[1] = tempArray[1];
+				childrenArray[2] = direction;
+
+				root.setChildren(new Node(root, new ArrayList<Node>(), depth+1, childrenArray, childrenBoard, evaluation, root.getNodePlayer()));
 				createOpponentSubtree(root.getChildren().get(root.getChildren().size()-1), depth+2, evaluation);
 			}
 		}
@@ -517,23 +662,20 @@ public class MinMaxPlayer extends Player{
 		for(int i=0; i<4; i++) {
 
 			int direction = 2*i+1;
+			Board childrenBoard = new Board(parent.getNodeBoard());
 			
-			if(canMove(direction)) {
+			if(canMove(direction, childrenBoard)) {
 				
-				Board childrenBoard = new Board(parent.getNodeBoard());
 				int[] childrenArray = new int[3];
-				
-				int tempX = parent.getNodePlayer().getX();
-				int tempY = parent.getNodePlayer().getY();
-				int tempCurrentTile = parent.getNodePlayer().getCurrentTile();
-				childrenArray = parent.getNodePlayer().move(2*i+1, childrenBoard);
-				parent.getNodePlayer().setX(tempX);
-				parent.getNodePlayer().setY(tempY);
-				parent.getNodePlayer().setCurrentTile(tempCurrentTile);
-				int[] newChildren = {childrenArray[1], childrenArray[2], direction};
-				
+				int[] tempArray = new int[2];
 				double evaluation = parent.getNodePlayer().evaluate(direction, childrenBoard);
-				parent.setChildren(new Node(parent, new ArrayList<Node>(), depth+1, newChildren, childrenBoard, evaluation - parentEval, parent.getNodePlayer()));
+				tempArray = parent.getNodePlayer().fakemove(parent.getNodePlayer().getX(), parent.getNodePlayer().getY(), 2*i+1, childrenBoard);
+				
+				childrenArray[0] = tempArray[0];
+				childrenArray[1] = tempArray[1];
+				childrenArray[2] = direction;
+
+				parent.setChildren(new Node(parent, new ArrayList<Node>(), depth+1, childrenArray, childrenBoard, evaluation - parentEval, parent.getNodePlayer()));
 			}
 		}
 	}
@@ -545,67 +687,67 @@ public class MinMaxPlayer extends Player{
 	 */
 	public int getNextMove()
 	{	
-		int dimension = board.getN();
+		// int dimension = board.getN();
 		createMySubtree(0);
 		int bestDice = chooseMinMaxMove(root, 2, true);
 		
 				
-		// path (info about the dice (0), got supply or not (1), is near to a supply (2), is near to enemy (3), times moved up (4), times moved right (5), times moved down (6), times moved left (7))
+		// // path (info about the dice (0), got supply or not (1), is near to a supply (2), is near to enemy (3), times moved up (4), times moved right (5), times moved down (6), times moved left (7))
 		
-		path.get(0).add(bestDice);	// Add bestDice in path's first ArrayList
+		// path.get(0).add(bestDice);	// Add bestDice in path's first ArrayList
 		
-		int gotSupply = 0;
+		// int gotSupply = 0;
 		
-		if(name == "Theseus") {  // If player is Theseus.
-			// If he gets supply in his next move then add 1 in path's second ArrayList else add 0 (added through variable gotSupply)
-			switch(bestDice) {
+		// if(name == "Theseus") {  // If player is Theseus.
+		// 	// If he gets supply in his next move then add 1 in path's second ArrayList else add 0 (added through variable gotSupply)
+		// 	switch(bestDice) {
 			
-				case 1:
-					gotSupply = board.getTile(currentTile + dimension).getSupply() ? 1 : 0;
-					break;
+		// 		case 1:
+		// 			gotSupply = board.getTile(currentTile + dimension).getSupply() ? 1 : 0;
+		// 			break;
 				
-				case 3:
-					gotSupply = board.getTile(currentTile + 1).getSupply() ? 1 : 0;
-					break;
-				case 5:
-					gotSupply = board.getTile(currentTile - dimension).getSupply() ? 1 : 0;
-					break;
-				case 7:
-					gotSupply = board.getTile(currentTile -1).getSupply() ? 1 : 0;
-					break;
+		// 		case 3:
+		// 			gotSupply = board.getTile(currentTile + 1).getSupply() ? 1 : 0;
+		// 			break;
+		// 		case 5:
+		// 			gotSupply = board.getTile(currentTile - dimension).getSupply() ? 1 : 0;
+		// 			break;
+		// 		case 7:
+		// 			gotSupply = board.getTile(currentTile -1).getSupply() ? 1 : 0;
+		// 			break;
 				
-			}
-		}
+		// 	}
+		// }
 
-		path.get(1).add(gotSupply); 
+		// path.get(1).add(gotSupply); 
 		
 		// If he has found a supply then isTheClosestSupply becomes false at the first code lines of the method.
 		// If he hasn't found a supply isTheClosestSupply is true so -1 is added in third ArrayList of path.
-		if(isTheClosestSupply)
-			path.get(2).add(-1);
+		// if(isTheClosestSupply)
+		// 	path.get(2).add(-1);
 		
-		// The third and fourth ArrayLists of path must have the same size (same as the round count up)
-		// If they haven't it means no element has been added in the fourth array list so no opponent has been found near to the player.
-		// So, in this case, add -1.
-		if(path.get(2).size() != path.get(3).size())
-			path.get(3).add(-1);
+		// // The third and fourth ArrayLists of path must have the same size (same as the round count up)
+		// // If they haven't it means no element has been added in the fourth array list so no opponent has been found near to the player.
+		// // So, in this case, add -1.
+		// if(path.get(2).size() != path.get(3).size())
+		// 	path.get(3).add(-1);
 
-		// Adds dice in the suitable ArrayList for each move to add them up in statistics() in order to overlook how many times the player moved in each direction. 
-		switch(bestDice)
-		{
-			case 1:
-				path.get(4).add(1);
-				break;
-			case 3:
-				path.get(5).add(3);
-				break;
-			case 5:
-				path.get(6).add(5);
-				break;
-			case 7:
-				path.get(7).add(7);
-				break;
-		}
+		// // Adds dice in the suitable ArrayList for each move to add them up in statistics() in order to overlook how many times the player moved in each direction. 
+		// switch(bestDice)
+		// {
+		// 	case 1:
+		// 		path.get(4).add(1);
+		// 		break;
+		// 	case 3:
+		// 		path.get(5).add(3);
+		// 		break;
+		// 	case 5:
+		// 		path.get(6).add(5);
+		// 		break;
+		// 	case 7:
+		// 		path.get(7).add(7);
+		// 		break;
+		// }
 		
 		
 		return bestDice;
