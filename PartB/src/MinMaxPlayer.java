@@ -180,7 +180,7 @@ public class MinMaxPlayer extends Player{
 		
 		double cumulativeEvaluation = 0;	
 		
-		for(int j=0; j<4; j++) {	 		
+		for(int j=1; j<4; j++) {	 		
 				
 			tileDistSupply = -1;
 			tileDistOpponent = -1;
@@ -253,13 +253,13 @@ public class MinMaxPlayer extends Player{
 					{
 						tileDistSupply = iterationTimes;	
 						
-						if(isTheClosestSupply) {
-							path.get(2).add(tileDistSupply);
-							isTheClosestSupply = false;
-						}
-
-						if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile+1)-1])
-							tileDistSupply = -1;
+//						if(isTheClosestSupply) {
+//							path.get(2).add(tileDistSupply);
+//							isTheClosestSupply = false;
+//						}
+//
+//						if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile+1)-1])
+//							tileDistSupply = -1;
 					}
 					if(playerId == 2 && board.getTile(currentTile + 1).hasMinotaur()) {
 						tileDistOpponent = iterationTimes;	
@@ -304,13 +304,13 @@ public class MinMaxPlayer extends Player{
 					{
 						tileDistSupply = iterationTimes;	
 						
-						if(isTheClosestSupply) {
-							path.get(2).add(tileDistSupply);
-							isTheClosestSupply = false;
-						}
-
-						if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile - dimension)-1])
-							tileDistSupply = -1;
+//						if(isTheClosestSupply) {
+//							path.get(2).add(tileDistSupply);
+//							isTheClosestSupply = false;
+//						}
+//
+//						if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile - dimension)-1])
+//							tileDistSupply = -1;
 					}
 
 					if(playerId == 2 && board.getTile(currentTile - dimension).hasMinotaur()) {
@@ -356,13 +356,13 @@ public class MinMaxPlayer extends Player{
 					{
 						tileDistSupply = iterationTimes;	
 						
-						if(isTheClosestSupply) {
-							path.get(2).add(tileDistSupply);
-							isTheClosestSupply = false;
-						}
-
-						if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile-1) - 1])
-							tileDistSupply = -1;
+//						if(isTheClosestSupply) {
+//							path.get(2).add(tileDistSupply);
+//							isTheClosestSupply = false;
+//						}
+//
+//						if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile-1) - 1])
+//							tileDistSupply = -1;
 					}
 					if(playerId == 2 && board.getTile(currentTile - 1).hasMinotaur()) { 
 						tileDistOpponent = iterationTimes;	
@@ -420,7 +420,9 @@ public class MinMaxPlayer extends Player{
 			double bestEval = -(1)*inf;
 			for(int i=0; i<node.getChildren().size(); i++) 
 			{
-				bestEval = Math.max(bestEval,chooseMinMaxMove(node.getChildren().get(i), depth-1, false));
+				if(bestEval<chooseMinMaxMove(node.getChildren().get(i), depth-1, false))
+					bestEval = chooseMinMaxMove(node.getChildren().get(i), depth-1, false);
+				//bestEval = Math.max(bestEval,chooseMinMaxMove(node.getChildren().get(i), depth-1, false));
 				node.getChildren().get(i).setNodeEvaluation(bestEval);			
 				node.setNodeMove(node.getChildren().get(i).getNodeMove());
 			}			
@@ -433,7 +435,9 @@ public class MinMaxPlayer extends Player{
 			double bestEval = inf;
 			for(int i=0; i<node.getChildren().size(); i++) 
 			{
-				bestEval = Math.min(bestEval,chooseMinMaxMove(node.getChildren().get(i), depth-1, true));
+				if(bestEval>chooseMinMaxMove(node.getChildren().get(i), depth-1, true))
+					bestEval = chooseMinMaxMove(node.getChildren().get(i), depth-1, true);
+				//bestEval = Math.min(bestEval,chooseMinMaxMove(node.getChildren().get(i), depth-1, true));
 				node.getChildren().get(i).setNodeEvaluation(bestEval);		
 				node.setNodeMove(node.getChildren().get(i).getNodeMove());	
 			}
@@ -542,7 +546,7 @@ public class MinMaxPlayer extends Player{
 	public int getNextMove()
 	{	
 		int dimension = board.getN();
-		createMySubtree(2);
+		createMySubtree(0);
 		int bestDice = chooseMinMaxMove(root, 2, true);
 		
 				
