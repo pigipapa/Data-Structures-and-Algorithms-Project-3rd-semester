@@ -148,6 +148,24 @@ public class Board {
      */   
 	public Supply getSupply(int index) { return supplies[index]; }
 	
+	public int getMinotaurTile()
+	{
+		for(int i = 0; i < N*N; i++)
+			if(tiles[i].hasMinotaur())
+				return i;
+
+		return -1;
+	}
+
+	public int getTheseusTile()
+	{
+		for(int i = 0; i < N*N; i++)
+			if(tiles[i].hasTheseus())
+				return i;
+
+		return -1;
+	}
+	
 	/**
 	 * Initializes the tiles in a random way.
 	 * The x, y and tileId variables of the tile objects in the array tile[] are set
