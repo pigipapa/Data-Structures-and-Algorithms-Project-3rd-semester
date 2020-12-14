@@ -448,7 +448,11 @@ public class MinMaxPlayer extends Player{
 		
 	}
 	
+<<<<<<< Updated upstream
 	boolean canMove(int direction, Board cloneboard) {
+=======
+	boolean canMove(int direction, Board board) {
+>>>>>>> Stashed changes
 		
 		switch(direction) 
 		{
@@ -637,6 +641,7 @@ public class MinMaxPlayer extends Player{
 
 			int direction = 2*i+1;
 			Board childrenBoard = new Board(root.getNodeBoard());
+<<<<<<< Updated upstream
 
 			if(canMove(direction, childrenBoard)) {
 				
@@ -651,6 +656,25 @@ public class MinMaxPlayer extends Player{
 				childrenArray[2] = direction;
 
 				root.setChildren(new Node(root, new ArrayList<Node>(), depth+1, childrenArray, childrenBoard, evaluation, root.getNodePlayer()));
+=======
+			Board initialRootBoard = new Board(root.getNodeBoard());
+			
+			if(canMove(direction, childrenBoard)) {
+				
+				int[] childrenArray = new int[3];
+				int tempX = this.x;
+				int tempY = this.y;
+				int tempCurrentTile = this.currentTile;
+				double evaluation = evaluate(direction, childrenBoard);
+				childrenArray = move(2*i+1, childrenBoard);
+				this.x = tempX;
+				this.y = tempY;
+				this.currentTile =  tempCurrentTile ;
+				int[] newChildren = {childrenArray[1], childrenArray[2], direction};
+				
+				root.setChildren(new Node(root, new ArrayList<Node>(), depth+1, newChildren, childrenBoard, evaluation, root.getNodePlayer()));
+				root.setNodeBoard(initialRootBoard);
+>>>>>>> Stashed changes
 				createOpponentSubtree(root.getChildren().get(root.getChildren().size()-1), depth+2, evaluation);
 			}
 		}
@@ -667,6 +691,7 @@ public class MinMaxPlayer extends Player{
 			if(canMove(direction, childrenBoard)) {
 				
 				int[] childrenArray = new int[3];
+<<<<<<< Updated upstream
 				int[] tempArray = new int[2];
 				double evaluation = parent.getNodePlayer().evaluate(direction, childrenBoard);
 				tempArray = parent.getNodePlayer().fakemove(parent.getNodePlayer().getX(), parent.getNodePlayer().getY(), 2*i+1, childrenBoard);
@@ -676,6 +701,20 @@ public class MinMaxPlayer extends Player{
 				childrenArray[2] = direction;
 
 				parent.setChildren(new Node(parent, new ArrayList<Node>(), depth+1, childrenArray, childrenBoard, evaluation - parentEval, parent.getNodePlayer()));
+=======
+				
+				int tempX = parent.getNodePlayer().getX();
+				int tempY = parent.getNodePlayer().getY();
+				int tempCurrentTile = parent.getNodePlayer().getCurrentTile();
+				double evaluation = parent.getNodePlayer().evaluate(direction, childrenBoard);
+				childrenArray = parent.getNodePlayer().move(2*i+1, childrenBoard);
+				parent.getNodePlayer().setX(tempX);
+				parent.getNodePlayer().setY(tempY);
+				parent.getNodePlayer().setCurrentTile(tempCurrentTile);
+				int[] newChildren = {childrenArray[1], childrenArray[2], direction};
+				
+				parent.setChildren(new Node(parent, new ArrayList<Node>(), depth+1, newChildren, childrenBoard, evaluation - parentEval, parent.getNodePlayer()));
+>>>>>>> Stashed changes
 			}
 		}
 	}
