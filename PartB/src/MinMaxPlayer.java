@@ -524,8 +524,8 @@ public class MinMaxPlayer extends Player{
 	int chooseMinMaxMove(Node node, int depth, boolean isMaximizing) {
 		
 		if(depth == 0) {
-			// System.out.println(name + " final dice: " + node.getNodeMove()[2]);
-			return node.getNodeMove()[2]; //dice
+			System.out.println(name + " minmax: " + node.getNodeEvaluation());
+			return (int)node.getNodeEvaluation(); 
 		}
 		
 		double inf = Double.POSITIVE_INFINITY;
@@ -540,7 +540,7 @@ public class MinMaxPlayer extends Player{
 				node.setNodeMove(node.getChildren().get(i).getNodeMove());
 			}			
 
-			// System.out.println(name + " bestEval " + bestEval);
+			System.out.println(name + " bestEval " + bestEval);
 			return (int)bestEval;
 		}
 		
@@ -554,7 +554,7 @@ public class MinMaxPlayer extends Player{
 				node.getChildren().get(i).setNodeEvaluation(bestEval);		
 				node.setNodeMove(node.getChildren().get(i).getNodeMove());	
 			}
-			// System.out.println(name + " bestEval " + bestEval);
+			System.out.println(name + " bestEval " + bestEval);
 			return (int)bestEval;
 		}
 	
@@ -768,7 +768,6 @@ public class MinMaxPlayer extends Player{
 
 			int direction = 2*i+1;
 			Board childrenBoard = new Board(root.getNodeBoard());
-<<<<<<< Updated upstream
 
 			// System.out.println(name+" childrenBoard out of if"+" direction "+ direction);
 			// printBoard(childrenBoard.getStringRepresentation(childrenBoard.getTheseusTile(), childrenBoard.getMinotaurTile()), childrenBoard.getN());
@@ -822,7 +821,6 @@ public class MinMaxPlayer extends Player{
 			if(canMove(parent.getNodePlayer().getX(), parent.getNodePlayer().getY(), direction, childrenBoard)) {
 				
 				int[] childrenArray = new int[3];
-<<<<<<< Updated upstream
 				int[] tempArray = new int[2];
 				double evaluation = parent.getNodePlayer().evaluate(direction, childrenBoard);
 				tempArray = parent.getNodePlayer().fakemove(parent.getNodePlayer().getX(), parent.getNodePlayer().getY(), 2*i+1, childrenBoard);
@@ -840,20 +838,6 @@ public class MinMaxPlayer extends Player{
 				// printBoard(parent.getNodeBoard().getStringRepresentation(parent.getNodeBoard().getTheseusTile(), parent.getNodeBoard().getMinotaurTile()), parent.getNodeBoard().getN());	
 
 				parent.setChildren(new Node(parent, new ArrayList<Node>(), depth+1, childrenArray, childrenBoard, evaluation - parentEval, parent.getNodePlayer()));
-=======
-				
-				int tempX = parent.getNodePlayer().getX();
-				int tempY = parent.getNodePlayer().getY();
-				int tempCurrentTile = parent.getNodePlayer().getCurrentTile();
-				double evaluation = parent.getNodePlayer().evaluate(direction, childrenBoard);
-				childrenArray = parent.getNodePlayer().move(2*i+1, childrenBoard);
-				parent.getNodePlayer().setX(tempX);
-				parent.getNodePlayer().setY(tempY);
-				parent.getNodePlayer().setCurrentTile(tempCurrentTile);
-				int[] newChildren = {childrenArray[1], childrenArray[2], direction};
-				
-				parent.setChildren(new Node(parent, new ArrayList<Node>(), depth+1, newChildren, childrenBoard, evaluation - parentEval, parent.getNodePlayer()));
->>>>>>> Stashed changes
 			}
 		}
 	}
@@ -867,16 +851,22 @@ public class MinMaxPlayer extends Player{
 	{	
 		// int dimension = board.getN();
 		createMySubtree(root, 0);
+
+		System.out.println();
 		for(int i = 0; i < root.getChildren().size(); i++)
 		{
-			System.out.println("Depth 1, evaluation of node "+i+": " + root.getChildren().get(i).getNodeEvaluation());
-			for(int j = 0; j < root.getChildren().get(i).getChildren().size(); j++)
-				System.out.println("Depth 2, evaluation of node " + j+": " + root.getChildren().get(i).getChildren().get(j).getNodeEvaluation());
+			System.out.println("Depth 1, node "+i+" evaluation " + root.getChildren().get(i).getNodeEvaluation()+" dice "+ root.getChildren().get(i).getNodeMove()[2]);
 
+			for(int j = 0; j < root.getChildren().get(i).getChildren().size(); j++)
+			{
+				System.out.println("Depth 2 parent "+i+" node " + j+" evaluation " + root.getChildren().get(i).getChildren().get(j).getNodeEvaluation()+" dice "+ root.getChildren().get(i).getChildren().get(j).getNodeMove()[2]);
+			}
 			System.out.println();
 		}
-		int bestDice = chooseMinMaxMove(root, 2, true);
-		
+
+	
+		chooseMinMaxMove(root, 2, true);
+		int bestDice = root.getNodeMove()[2];
 				
 		// // path (info about the dice (0), got supply or not (1), is near to a supply (2), is near to enemy (3), times moved up (4), times moved right (5), times moved down (6), times moved left (7))
 		
