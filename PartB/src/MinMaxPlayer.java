@@ -138,17 +138,17 @@ public class MinMaxPlayer extends Player{
 	 * @param tileDistOpponent
 	 * @return the evaluation of the player's single movement in the direction the dice implements. 
 	 */
-	// private double evaluate(int dice, Board board)	{
-	// 	int dimension = board.getN();
+	private double evaluate(int dice, Board board)	{
+		int dimension = board.getN();
 		
-	// 	int initialX = x;
-	// 	int initialY = y;
-	// 	int initialCurrentTile = currentTile;
+		int initialX = x;
+		int initialY = y;
+		int initialCurrentTile = currentTile;
 		
-	// 	// int deactivatedSupplyId = -1;
+		// int deactivatedSupplyId = -1;
 		
-	// 	int tileDistSupply = -1;
-	// 	int tileDistOpponent = -1;
+		int tileDistSupply = -1;
+		int tileDistOpponent = -1;
 
 		// if((playerId == 1) && board.getTile(currentTile).getSupply())
 		// {
@@ -178,348 +178,348 @@ public class MinMaxPlayer extends Player{
 		// 	}
 		// }
 		
-// 		double cumulativeEvaluation = 0;	
+		double cumulativeEvaluation = 0;	
 		
-// 		for(int j=1; j<4; j++) {	 		
+		for(int j=1; j<4; j++) {	 		
 				
-// 			tileDistSupply = -1;
-// 			tileDistOpponent = -1;
+			tileDistSupply = -1;
+			tileDistOpponent = -1;
 			
-// 			switch(dice) {
+			switch(dice) {
 			
-// 			case 1:	//up
+			case 1:	//up
 
-// 				if(board.getTile(currentTile).getUp())					
-// 					break;
-// 				else {
-// 					int iterationTimes = (x + 1) - initialX;				 
+				if(board.getTile(currentTile).getUp())					
+					break;
+				else {
+					int iterationTimes = (x + 1) - initialX;				 
 					
-// 					if(board.getTile(currentTile + dimension).getSupply())	
-// 					{	
-// 						tileDistSupply = iterationTimes;	
+					if(board.getTile(currentTile + dimension).getSupply())	
+					{	
+						tileDistSupply = iterationTimes;	
 						
-// 						// if(isTheClosestSupply) {	
-// 						// 	path.get(2).add(tileDistSupply);										
-// 						// 	isTheClosestSupply = false;											
-// 						// }
+						// if(isTheClosestSupply) {	
+						// 	path.get(2).add(tileDistSupply);										
+						// 	isTheClosestSupply = false;											
+						// }
 					
-// 						// if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile + dimension) - 1])	
-// 							// tileDistSupply = -1;												
-// 					}
+						// if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile + dimension) - 1])	
+							// tileDistSupply = -1;												
+					}
 					
 					
-// 					if(playerId == 2 && board.getTile(currentTile + dimension).hasMinotaur()) {		
-// 						tileDistOpponent = iterationTimes;	
-// 						// path.get(3).add(tileDistOpponent);											
-// 					}
-// 					else if(playerId == 1 && board.getTile(currentTile + dimension).hasTheseus()) {	
-// 						tileDistOpponent = iterationTimes;
-// 						path.get(3).add(tileDistOpponent);										
-// 					}
+					if(playerId == 2 && board.getTile(currentTile + dimension).hasMinotaur()) {		
+						tileDistOpponent = iterationTimes;	
+						// path.get(3).add(tileDistOpponent);											
+					}
+					else if(playerId == 1 && board.getTile(currentTile + dimension).hasTheseus()) {	
+						tileDistOpponent = iterationTimes;
+						path.get(3).add(tileDistOpponent);										
+					}
 
-// 					double NearSupplies = 0;
-// 					double OpponentDist = 0;
-// 					int sign = (playerId == 2) ? -1 : 1;
+					double NearSupplies = 0;
+					double OpponentDist = 0;
+					int sign = (playerId == 2) ? -1 : 1;
 					
-// 					if(tileDistSupply != -1)	
-// 						NearSupplies = 1.0/tileDistSupply;	
+					if(tileDistSupply != -1)	
+						NearSupplies = 1.0/tileDistSupply;	
 				
-// 					if(tileDistOpponent != -1)	
-// 						OpponentDist = sign*(1.0/tileDistOpponent);								
+					if(tileDistOpponent != -1)	
+						OpponentDist = sign*(1.0/tileDistOpponent);								
 					
-// 					if(playerId == 2)
-// 						cumulativeEvaluation += (NearSupplies * 0.4 + OpponentDist * 0.6)*10;		
-// 					else 
-// 						cumulativeEvaluation += (NearSupplies * 0.2 + OpponentDist * 0.8)*10;
+					if(playerId == 2)
+						cumulativeEvaluation += (NearSupplies * 0.4 + OpponentDist * 0.6)*10;		
+					else 
+						cumulativeEvaluation += (NearSupplies * 0.2 + OpponentDist * 0.8)*10;
 												
 
-// 					if(j != 3)
-// 					{
-// 						x = x + 1;															
-// 						y = y;
-// 						currentTile = y + x * dimension;
-// 					}
-// 				}
-// 				break;
+					if(j != 3)
+					{
+						x = x + 1;															
+						y = y;
+						currentTile = y + x * dimension;
+					}
+				}
+				break;
 				
-// 			case 3:	//right
+			case 3:	//right
 				
-// 				if(board.getTile(currentTile).getRight()) 
-// 					break;
-// 				else {
-// 					int iterationTimes = (y + 1) - initialY;
+				if(board.getTile(currentTile).getRight()) 
+					break;
+				else {
+					int iterationTimes = (y + 1) - initialY;
 
-// 					if(board.getTile(currentTile + 1).getSupply()) 
-// 					{
-// 						tileDistSupply = iterationTimes;	
+					if(board.getTile(currentTile + 1).getSupply()) 
+					{
+						tileDistSupply = iterationTimes;	
 						
-// //						if(isTheClosestSupply) {
-// //							path.get(2).add(tileDistSupply);
-// //							isTheClosestSupply = false;
-// //						}
-// //
-// //						if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile+1)-1])
-// //							tileDistSupply = -1;
-// 					}
-// 					if(playerId == 2 && board.getTile(currentTile + 1).hasMinotaur()) {
-// 						tileDistOpponent = iterationTimes;	
-// 						path.get(3).add(tileDistOpponent);
-// 					}
-// 					else if(playerId == 1 && board.getTile(currentTile + 1).hasTheseus()) {
-// 						tileDistOpponent = iterationTimes;
-// 						path.get(3).add(tileDistOpponent);
-// 					}
+//						if(isTheClosestSupply) {
+//							path.get(2).add(tileDistSupply);
+//							isTheClosestSupply = false;
+//						}
+//
+//						if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile+1)-1])
+//							tileDistSupply = -1;
+					}
+					if(playerId == 2 && board.getTile(currentTile + 1).hasMinotaur()) {
+						tileDistOpponent = iterationTimes;	
+						path.get(3).add(tileDistOpponent);
+					}
+					else if(playerId == 1 && board.getTile(currentTile + 1).hasTheseus()) {
+						tileDistOpponent = iterationTimes;
+						path.get(3).add(tileDistOpponent);
+					}
 
-// 					double NearSupplies = 0;
-// 					double OpponentDist = 0;
-// 					int sign = (playerId == 2) ? -1 : 1;
+					double NearSupplies = 0;
+					double OpponentDist = 0;
+					int sign = (playerId == 2) ? -1 : 1;
 					
-// 					if(tileDistSupply != -1)	
-// 						NearSupplies = 1.0/tileDistSupply;	
+					if(tileDistSupply != -1)	
+						NearSupplies = 1.0/tileDistSupply;	
 				
-// 					if(tileDistOpponent != -1)	
-// 						OpponentDist = sign*(1.0/tileDistOpponent);								
+					if(tileDistOpponent != -1)	
+						OpponentDist = sign*(1.0/tileDistOpponent);								
 					
-// 					if(playerId == 2)
-// 						cumulativeEvaluation += (NearSupplies * 0.4 + OpponentDist * 0.6)*10;		
-// 					else 
-// 						cumulativeEvaluation += (NearSupplies * 0.2 + OpponentDist * 0.8)*10;
-// 					if(j != 3)
-// 					{
-// 						x = x;
-// 						y = y + 1;
-// 						currentTile = y + x * dimension;
-// 					}						
-// 				}
-// 				break;
+					if(playerId == 2)
+						cumulativeEvaluation += (NearSupplies * 0.4 + OpponentDist * 0.6)*10;		
+					else 
+						cumulativeEvaluation += (NearSupplies * 0.2 + OpponentDist * 0.8)*10;
+					if(j != 3)
+					{
+						x = x;
+						y = y + 1;
+						currentTile = y + x * dimension;
+					}						
+				}
+				break;
 			 
-// 			case 5:	//down
+			case 5:	//down
 				
-// 				if(board.getTile(currentTile).getDown() || currentTile == 0) 
-// 					break;
-// 				else {
-// 					int iterationTimes = initialX - (x - 1);
+				if(board.getTile(currentTile).getDown() || currentTile == 0) 
+					break;
+				else {
+					int iterationTimes = initialX - (x - 1);
 
-// 					if(board.getTile(currentTile - dimension).getSupply()) 
-// 					{
-// 						tileDistSupply = iterationTimes;	
+					if(board.getTile(currentTile - dimension).getSupply()) 
+					{
+						tileDistSupply = iterationTimes;	
 						
-// //						if(isTheClosestSupply) {
-// //							path.get(2).add(tileDistSupply);
-// //							isTheClosestSupply = false;
-// //						}
-// //
-// //						if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile - dimension)-1])
-// //							tileDistSupply = -1;
-// 					}
+//						if(isTheClosestSupply) {
+//							path.get(2).add(tileDistSupply);
+//							isTheClosestSupply = false;
+//						}
+//
+//						if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile - dimension)-1])
+//							tileDistSupply = -1;
+					}
 
-// 					if(playerId == 2 && board.getTile(currentTile - dimension).hasMinotaur()) {
-// 						tileDistOpponent = iterationTimes;	
-// 						path.get(3).add(tileDistOpponent);
-// 					}
-// 					else if(playerId == 1 && board.getTile(currentTile - dimension).hasTheseus()) {
-// 						tileDistOpponent = iterationTimes;
-// 						path.get(3).add(tileDistOpponent);
-// 					}
+					if(playerId == 2 && board.getTile(currentTile - dimension).hasMinotaur()) {
+						tileDistOpponent = iterationTimes;	
+						path.get(3).add(tileDistOpponent);
+					}
+					else if(playerId == 1 && board.getTile(currentTile - dimension).hasTheseus()) {
+						tileDistOpponent = iterationTimes;
+						path.get(3).add(tileDistOpponent);
+					}
 
-// 					double NearSupplies = 0;
-// 					double OpponentDist = 0;
-// 					int sign = (playerId == 2) ? -1 : 1;
+					double NearSupplies = 0;
+					double OpponentDist = 0;
+					int sign = (playerId == 2) ? -1 : 1;
 					
-// 					if(tileDistSupply != -1)	
-// 						NearSupplies = 1.0/tileDistSupply;	
+					if(tileDistSupply != -1)	
+						NearSupplies = 1.0/tileDistSupply;	
 				
-// 					if(tileDistOpponent != -1)	
-// 						OpponentDist = sign*(1.0/tileDistOpponent);								
+					if(tileDistOpponent != -1)	
+						OpponentDist = sign*(1.0/tileDistOpponent);								
 					
-// 					if(playerId == 2)
-// 						cumulativeEvaluation += (NearSupplies * 0.4 + OpponentDist * 0.6)*10;		
-// 					else 
-// 						cumulativeEvaluation += (NearSupplies * 0.2 + OpponentDist * 0.8)*10;				
-// 					if(j != 3)
-// 					{
-// 						x = x - 1;
-// 						y = y;
-// 						currentTile = y + x * dimension;
-// 					}						
-// 				}
-// 				break;
+					if(playerId == 2)
+						cumulativeEvaluation += (NearSupplies * 0.4 + OpponentDist * 0.6)*10;		
+					else 
+						cumulativeEvaluation += (NearSupplies * 0.2 + OpponentDist * 0.8)*10;				
+					if(j != 3)
+					{
+						x = x - 1;
+						y = y;
+						currentTile = y + x * dimension;
+					}						
+				}
+				break;
 			 
-// 			case 7:	//left
+			case 7:	//left
 				
-// 				if(board.getTile(currentTile).getLeft()) 
-// 					break;
-// 				else {
-// 					int iterationTimes = initialY - (y - 1);
+				if(board.getTile(currentTile).getLeft()) 
+					break;
+				else {
+					int iterationTimes = initialY - (y - 1);
 
-// 					if(board.getTile(currentTile - 1).getSupply()) 
-// 					{
-// 						tileDistSupply = iterationTimes;	
+					if(board.getTile(currentTile - 1).getSupply()) 
+					{
+						tileDistSupply = iterationTimes;	
 						
-// //						if(isTheClosestSupply) {
-// //							path.get(2).add(tileDistSupply);
-// //							isTheClosestSupply = false;
-// //						}
-// //
-// //						if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile-1) - 1])
-// //							tileDistSupply = -1;
-// 					}
-// 					if(playerId == 2 && board.getTile(currentTile - 1).hasMinotaur()) { 
-// 						tileDistOpponent = iterationTimes;	
-// 						path.get(3).add(tileDistOpponent);
-// 					}
-// 					else if(playerId == 1 && board.getTile(currentTile - 1).hasTheseus()) {
-// 						tileDistOpponent = iterationTimes;
-// 						path.get(3).add(tileDistOpponent);
-// 					}
+//						if(isTheClosestSupply) {
+//							path.get(2).add(tileDistSupply);
+//							isTheClosestSupply = false;
+//						}
+//
+//						if((playerId == 1)  && enoughTimesBeenOnTheSupply[board.TileIdToSupplyId(currentTile-1) - 1])
+//							tileDistSupply = -1;
+					}
+					if(playerId == 2 && board.getTile(currentTile - 1).hasMinotaur()) { 
+						tileDistOpponent = iterationTimes;	
+						path.get(3).add(tileDistOpponent);
+					}
+					else if(playerId == 1 && board.getTile(currentTile - 1).hasTheseus()) {
+						tileDistOpponent = iterationTimes;
+						path.get(3).add(tileDistOpponent);
+					}
 					
-// 					double NearSupplies = 0;
-// 					double OpponentDist = 0;
-// 					int sign = (playerId == 2) ? -1 : 1;
+					double NearSupplies = 0;
+					double OpponentDist = 0;
+					int sign = (playerId == 2) ? -1 : 1;
 					
-// 					if(tileDistSupply != -1)	
-// 						NearSupplies = 1.0/tileDistSupply;	
+					if(tileDistSupply != -1)	
+						NearSupplies = 1.0/tileDistSupply;	
 				
-// 					if(tileDistOpponent != -1)	
-// 						OpponentDist = sign*(1.0/tileDistOpponent);								
+					if(tileDistOpponent != -1)	
+						OpponentDist = sign*(1.0/tileDistOpponent);								
 					
-// 					if(playerId == 2)
-// 						cumulativeEvaluation += (NearSupplies * 0.4 + OpponentDist * 0.6)*10;		
-// 					else 
-// 						cumulativeEvaluation += (NearSupplies * 0.2 + OpponentDist * 0.8)*10;					
-// 					if(j != 3)
-// 					{
-// 						x = x;
-// 						y = y - 1;
-// 						currentTile = y + x * dimension;
-// 					}
+					if(playerId == 2)
+						cumulativeEvaluation += (NearSupplies * 0.4 + OpponentDist * 0.6)*10;		
+					else 
+						cumulativeEvaluation += (NearSupplies * 0.2 + OpponentDist * 0.8)*10;					
+					if(j != 3)
+					{
+						x = x;
+						y = y - 1;
+						currentTile = y + x * dimension;
+					}
 
-// 				}
-// 				break;
-// 			}
+				}
+				break;
+			}
 			
-// 		}
-
-// 		x = initialX;								
-// 		y = initialY;
-// 		currentTile = initialCurrentTile;
-
-// 		System.out.println(name + " cumulativeEvaluation: " + cumulativeEvaluation + " dice: "+ dice);
-// 		return cumulativeEvaluation;	
-// 	}	
-
-	double evaluate(int dice, Board cloneboard)
-	{
-		double NearSupplies = 0;
-		double OpponentDist = 0;
-		int dimension = cloneboard.getN();
-		int tileDistSupply = -1;
-		int tileDistOpponent = -1; 
-		int sign = (playerId == 2) ? -1 : 1;
-		
-		int GetMinotaurTile = cloneboard.getMinotaurTile();
-		int GetTheseusTile = cloneboard.getTheseusTile();
-		int opp = 0;
-		opp = (playerId == 1) ? GetTheseusTile : GetMinotaurTile;
-		
-		switch(dice)
-		{
-			case 1: // Up
-				
-				for(int i = 1; i < 4; i++) {
-					if(cloneboard.getTile(getCurrentTile() + (i-1)*dimension).getUp()) break;
-					else if((currentTile + i*dimension) < dimension * dimension)
-					{
-						if(cloneboard.getTile(currentTile + i*dimension).getSupply() && (NearSupplies == 0)) {
-							NearSupplies = 1.0/i;
-							tileDistSupply = i;
-						}
-	
-						if(opp == (currentTile + i*dimension)) {			
-							OpponentDist = sign*(1.0/i);
-							tileDistOpponent = i;
-						}
-					}					
-				}
-					
-			break;
-				
-			case 3: // Right
-				
-				for(int i = 1; i < 4; i++) {
-					if(cloneboard.getTile(getCurrentTile() + (i-1)).getRight()) break;
-					else if((currentTile + i) < (getX()+1)*dimension-1)
-						{
-							if(cloneboard.getTile(currentTile + i*1).getSupply() && (NearSupplies == 0)) {
-								NearSupplies = 1.0/i;
-								tileDistSupply = i;
-							}
-								
-							if(opp == (currentTile + i)) { 
-								OpponentDist = sign*(1.0/i);
-								tileDistOpponent = i;
-							}
-						}
-					
-				}
-			
-			break;
-		
-			case 5: // Down
-				
-				for(int i = 1; i < 4; i++) {
-					if(cloneboard.getTile(getCurrentTile() - (i-1)*dimension).getTileId() == 0 || cloneboard.getTile(getCurrentTile() - (i-1)*dimension).getDown()) {
-						break; 
-					}
-					else if((currentTile - i*dimension) > 0)
-					{
-							if(cloneboard.getTile(currentTile - i*dimension).getSupply() && (NearSupplies == 0)) {
-								NearSupplies = 1.0/i;
-								tileDistSupply = i;
-									
-							}
-									
-							if(opp == (currentTile - i*dimension)) { 
-								OpponentDist = sign*(1.0/i);
-								tileDistOpponent = i;
-							}
-					}
-									
-				}
-			break;
-		
-			case 7: // Left
-				
-				for(int i = 1; i < 4; i++) {
-					if(cloneboard.getTile(getCurrentTile() - (i-1)).getLeft()) break;
-					else if(((currentTile - i*1) > getX()*dimension))
-					{
-						if(cloneboard.getTile(currentTile - i*1).getSupply() && (NearSupplies == 0)) {
-							NearSupplies = 1.0/i;
-							tileDistSupply = i;
-						}
-	
-						if(opp == (currentTile - i*1)) {
-							OpponentDist = sign*(1.0/i);
-							tileDistOpponent = i;
-						}
-					}
-				}
-			break;
 		}
+
+		x = initialX;								
+		y = initialY;
+		currentTile = initialCurrentTile;
+
+		// System.out.println(name + " cumulativeEvaluation: " + cumulativeEvaluation + " dice: "+ dice);
+		return cumulativeEvaluation;	
+	}	
+
+	// double evaluate(int dice, Board cloneboard)
+	// {
+	// 	double NearSupplies = 0;
+	// 	double OpponentDist = 0;
+	// 	int dimension = cloneboard.getN();
+	// 	int tileDistSupply = -1;
+	// 	int tileDistOpponent = -1; 
+	// 	int sign = (playerId == 2) ? -1 : 1;
+		
+	// 	int GetMinotaurTile = cloneboard.getMinotaurTile();
+	// 	int GetTheseusTile = cloneboard.getTheseusTile();
+	// 	int opp = 0;
+	// 	opp = (playerId == 1) ? GetTheseusTile : GetMinotaurTile;
+		
+	// 	switch(dice)
+	// 	{
+	// 		case 1: // Up
+				
+	// 			for(int i = 1; i < 4; i++) {
+	// 				if(cloneboard.getTile(getCurrentTile() + (i-1)*dimension).getUp()) break;
+	// 				else if((currentTile + i*dimension) < dimension * dimension)
+	// 				{
+	// 					if(cloneboard.getTile(currentTile + i*dimension).getSupply() && (NearSupplies == 0)) {
+	// 						NearSupplies = 1.0/i;
+	// 						tileDistSupply = i;
+	// 					}
+	
+	// 					if(opp == (currentTile + i*dimension)) {			
+	// 						OpponentDist = sign*(1.0/i);
+	// 						tileDistOpponent = i;
+	// 					}
+	// 				}					
+	// 			}
+					
+	// 		break;
+				
+	// 		case 3: // Right
+				
+	// 			for(int i = 1; i < 4; i++) {
+	// 				if(cloneboard.getTile(getCurrentTile() + (i-1)).getRight()) break;
+	// 				else if((currentTile + i) < (getX()+1)*dimension-1)
+	// 					{
+	// 						if(cloneboard.getTile(currentTile + i*1).getSupply() && (NearSupplies == 0)) {
+	// 							NearSupplies = 1.0/i;
+	// 							tileDistSupply = i;
+	// 						}
+								
+	// 						if(opp == (currentTile + i)) { 
+	// 							OpponentDist = sign*(1.0/i);
+	// 							tileDistOpponent = i;
+	// 						}
+	// 					}
+					
+	// 			}
+			
+	// 		break;
+		
+	// 		case 5: // Down
+				
+	// 			for(int i = 1; i < 4; i++) {
+	// 				if(cloneboard.getTile(getCurrentTile() - (i-1)*dimension).getTileId() == 0 || cloneboard.getTile(getCurrentTile() - (i-1)*dimension).getDown()) {
+	// 					break; 
+	// 				}
+	// 				else if((currentTile - i*dimension) > 0)
+	// 				{
+	// 						if(cloneboard.getTile(currentTile - i*dimension).getSupply() && (NearSupplies == 0)) {
+	// 							NearSupplies = 1.0/i;
+	// 							tileDistSupply = i;
+									
+	// 						}
+									
+	// 						if(opp == (currentTile - i*dimension)) { 
+	// 							OpponentDist = sign*(1.0/i);
+	// 							tileDistOpponent = i;
+	// 						}
+	// 				}
+									
+	// 			}
+	// 		break;
+		
+	// 		case 7: // Left
+				
+	// 			for(int i = 1; i < 4; i++) {
+	// 				if(cloneboard.getTile(getCurrentTile() - (i-1)).getLeft()) break;
+	// 				else if(((currentTile - i*1) > getX()*dimension))
+	// 				{
+	// 					if(cloneboard.getTile(currentTile - i*1).getSupply() && (NearSupplies == 0)) {
+	// 						NearSupplies = 1.0/i;
+	// 						tileDistSupply = i;
+	// 					}
+	
+	// 					if(opp == (currentTile - i*1)) {
+	// 						OpponentDist = sign*(1.0/i);
+	// 						tileDistOpponent = i;
+	// 					}
+	// 				}
+	// 			}
+	// 		break;
+	// 	}
 		
 		
-		// if(playerId == 2)
-		// 	System.out.println(name + " evaluation: " + (NearSupplies * 0.4 + OpponentDist * 0.6));
-		// else
-		// 	System.out.println(name + " evaluation: " + (NearSupplies * 0.2 + OpponentDist * 0.8));
+	// 	// if(playerId == 2)
+	// 	// 	System.out.println(name + " evaluation: " + (NearSupplies * 0.4 + OpponentDist * 0.6));
+	// 	// else
+	// 	// 	System.out.println(name + " evaluation: " + (NearSupplies * 0.2 + OpponentDist * 0.8));
 		
 			
-		if(playerId == 2)
-			return 10*(NearSupplies * 0.4 + OpponentDist * 0.6);		
-		else 
-			return 10*(NearSupplies * 0.2 + OpponentDist * 0.8);
-	}	
+	// 	if(playerId == 2)
+	// 		return 10*(NearSupplies * 0.4 + OpponentDist * 0.6);		
+	// 	else 
+	// 		return 10*(NearSupplies * 0.2 + OpponentDist * 0.8);
+	// }	
 
 	int chooseMinMaxMove(Node node, int depth, boolean isMaximizing) {
 		
@@ -561,13 +561,15 @@ public class MinMaxPlayer extends Player{
 		
 	}
 	
-	boolean canMove(int direction, Board cloneboard) {
-		
+	boolean canMove(int fakeX, int fakeY, int direction, Board cloneboard) {
+
+		int fakeCurrentTile = fakeY + fakeX * cloneboard.getN();
+
 		switch(direction) 
 		{
 			case 1:	//up
 				
-				if(cloneboard.getTile(currentTile).getUp() == true)
+				if(cloneboard.getTile(fakeCurrentTile).getUp() == true)
 					return false;				
 				else 
 					return true;
@@ -575,21 +577,21 @@ public class MinMaxPlayer extends Player{
 				
 			case 3:	//right
 				
-				if(cloneboard.getTile(currentTile).getRight() == true)
+				if(cloneboard.getTile(fakeCurrentTile).getRight() == true)
 					return false;				
 				else
 					return true;
 				
 			case 5:	//down
 				
-				if(cloneboard.getTile(currentTile).getDown() == true || currentTile==0)
+				if(cloneboard.getTile(fakeCurrentTile).getDown() == true || fakeCurrentTile==0)
 					return false;					
 				else
 					return true;
 				
 			case 7:	//left
 				
-				if(cloneboard.getTile(currentTile).getLeft() == true)
+				if(cloneboard.getTile(fakeCurrentTile).getLeft() == true)
 					return false;				
 				else 
 					return true;
@@ -609,7 +611,7 @@ public class MinMaxPlayer extends Player{
 		{
 			case 1:	//up
 				
-				if(cloneboard.getTile(currentTile).getUp() == true)
+				if(cloneboard.getTile(fakeCurrentTile).getUp() == true)
 				{
 					// System.out.println(getName() + " didn't move. Wall ahead!" + "\n");
 					break;					
@@ -620,9 +622,9 @@ public class MinMaxPlayer extends Player{
 					
 					// Player left from it's previous tile.
 					if(playerId ==2)
-						cloneboard.getTile(currentTile).setTheseus(false); 
+						cloneboard.getTile(fakeCurrentTile).setTheseus(false); 
 					else if(playerId == 1)
-						cloneboard.getTile(currentTile).setMinotaur(false);
+						cloneboard.getTile(fakeCurrentTile).setMinotaur(false);
 						
 					fakeX = fakeX + 1; 
 					fakeCurrentTile = fakeY + fakeX * cloneboard.getN();
@@ -638,7 +640,7 @@ public class MinMaxPlayer extends Player{
 				
 			case 3:	//right
 				
-				if(cloneboard.getTile(currentTile).getRight() == true)
+				if(cloneboard.getTile(fakeCurrentTile).getRight() == true)
 				{
 					// System.out.println(getName() + " didn't move. Wall at the right side!" + "\n");
 					break;					
@@ -648,9 +650,9 @@ public class MinMaxPlayer extends Player{
 					// System.out.println(getName() + " moved right.");
 					
 					if(playerId ==2)
-						cloneboard.getTile(currentTile).setTheseus(false);
+						cloneboard.getTile(fakeCurrentTile).setTheseus(false);
 					else if(playerId == 1)
-						cloneboard.getTile(currentTile).setMinotaur(false);
+						cloneboard.getTile(fakeCurrentTile).setMinotaur(false);
 					
 					fakeY = fakeY + 1;
 					fakeCurrentTile = fakeY + fakeX * cloneboard.getN();
@@ -665,7 +667,7 @@ public class MinMaxPlayer extends Player{
 				
 			case 5:	//down
 				
-				if(cloneboard.getTile(currentTile).getDown() == true || currentTile==0)
+				if(cloneboard.getTile(fakeCurrentTile).getDown() == true || currentTile==0)
 				{
 					// System.out.println(getName() + " didn't move. Wall down!" + "\n");
 					break;					
@@ -675,9 +677,9 @@ public class MinMaxPlayer extends Player{
 					// System.out.println(getName() + " moved down.");
 					
 					if(playerId ==2)
-						cloneboard.getTile(currentTile).setTheseus(false);
+						cloneboard.getTile(fakeCurrentTile).setTheseus(false);
 					else if(playerId == 1)
-						cloneboard.getTile(currentTile).setMinotaur(false);
+						cloneboard.getTile(fakeCurrentTile).setMinotaur(false);
 					
 					fakeX = fakeX - 1;
 					fakeCurrentTile = fakeY + fakeX * cloneboard.getN();
@@ -692,7 +694,7 @@ public class MinMaxPlayer extends Player{
 				
 			case 7:	//left
 				
-				if(cloneboard.getTile(currentTile).getLeft() == true)
+				if(cloneboard.getTile(fakeCurrentTile).getLeft() == true)
 				{
 					// System.out.println(getName() + " didn't move. Wall at the left side!" + "\n");
 					break;					
@@ -702,9 +704,9 @@ public class MinMaxPlayer extends Player{
 					// System.out.println(getName() + " moved left.");
 					
 					if(playerId ==2)
-						cloneboard.getTile(currentTile).setTheseus(false);
+						cloneboard.getTile(fakeCurrentTile).setTheseus(false);
 					else if(playerId == 1)
-						cloneboard.getTile(currentTile).setMinotaur(false);
+						cloneboard.getTile(fakeCurrentTile).setMinotaur(false);
 
 					fakeY = fakeY - 1;
 					fakeCurrentTile = fakeY + fakeX * cloneboard.getN();
@@ -744,28 +746,56 @@ public class MinMaxPlayer extends Player{
 		
 		return array;
 	}
+
+	public void printBoard(String[][] res, int Dimensions) {
+	
+		for (int i = 2*Dimensions; i >= 0; i--) {
+			
+			for (int j = 0; j < Dimensions; j++) {
+	
+				System.out.print(res[i][j]);
+			}
+			
+			System.out.println();
+		}
+	}
 		
 	void createMySubtree(Node root, int depth) {
-		
+		// System.out.println(name+" rootBoard out of for");
+		// printBoard(root.getNodeBoard().getStringRepresentation(root.getNodeBoard().getTheseusTile(), root.getNodeBoard().getMinotaurTile()), root.getNodeBoard().getN());
+
 		for(int i=0; i<4; i++) {
 
 			int direction = 2*i+1;
 			Board childrenBoard = new Board(root.getNodeBoard());
 
-			if(canMove(direction, childrenBoard)) {
+			// System.out.println(name+" childrenBoard out of if"+" direction "+ direction);
+			// printBoard(childrenBoard.getStringRepresentation(childrenBoard.getTheseusTile(), childrenBoard.getMinotaurTile()), childrenBoard.getN());
+
+			// System.out.println(name+" rootBoard out of if direction "+direction); 
+			// printBoard(root.getNodeBoard().getStringRepresentation(root.getNodeBoard().getTheseusTile(), root.getNodeBoard().getMinotaurTile()), root.getNodeBoard().getN());
+
+			if(canMove(this.x, this.y, direction, childrenBoard)) {
 				
 				int[] childrenArray = new int[3];
 				int[] tempArray = new int[2];
 
 				double evaluation = evaluate(direction, childrenBoard);
+					
 				tempArray = fakemove(this.x, this.y, 2*i+1, childrenBoard);
 
 				childrenArray[0] = tempArray[0];
 				childrenArray[1] = tempArray[1];
 				childrenArray[2] = direction;
 
+				System.out.println(name + " evaluation: " + evaluation + " direction "+direction);
+
 				root.setChildren(new Node(root, new ArrayList<Node>(), depth+1, childrenArray, childrenBoard, evaluation, root.getNodePlayer()));
-				System.out.println(root.getNodeBoard().getTile(0).hasTheseus());
+				// System.out.println(name+" childrenBoard in if direction " +direction);
+				// printBoard(childrenBoard.getStringRepresentation(childrenBoard.getTheseusTile(), childrenBoard.getMinotaurTile()), childrenBoard.getN());
+	
+				// System.out.println(name + " rootBoard in if direction "+direction);
+				// printBoard(root.getNodeBoard().getStringRepresentation(root.getNodeBoard().getTheseusTile(), root.getNodeBoard().getMinotaurTile()), root.getNodeBoard().getN());
 				createOpponentSubtree(root.getChildren().get(root.getChildren().size()-1), depth+2, evaluation);
 			}
 		}
@@ -774,12 +804,21 @@ public class MinMaxPlayer extends Player{
 	
 	void createOpponentSubtree(Node parent, int depth, double parentEval) {
 		
+		// System.out.println(parent.getNodePlayer().getName() + " rootBoard in of for direction ");
+		// printBoard(parent.getNodeBoard().getStringRepresentation(parent.getNodeBoard().getTheseusTile(), parent.getNodeBoard().getMinotaurTile()), parent.getNodeBoard().getN());
+
 		for(int i=0; i<4; i++) {
 
 			int direction = 2*i+1;
 			Board childrenBoard = new Board(parent.getNodeBoard());
+
+			// System.out.println(parent.getNodePlayer().getName() + " childrenBoard in of if direction" + direction);
+			// printBoard(childrenBoard.getStringRepresentation(childrenBoard.getTheseusTile(), childrenBoard.getMinotaurTile()), childrenBoard.getN());
+
+			// System.out.println(parent.getNodePlayer().getName() + " rootBoard in of if direction "+direction);
+			// printBoard(parent.getNodeBoard().getStringRepresentation(parent.getNodeBoard().getTheseusTile(), parent.getNodeBoard().getMinotaurTile()), parent.getNodeBoard().getN());
 			
-			if(canMove(direction, childrenBoard)) {
+			if(canMove(parent.getNodePlayer().getX(), parent.getNodePlayer().getY(), direction, childrenBoard)) {
 				
 				int[] childrenArray = new int[3];
 				int[] tempArray = new int[2];
@@ -789,6 +828,14 @@ public class MinMaxPlayer extends Player{
 				childrenArray[0] = tempArray[0];
 				childrenArray[1] = tempArray[1];
 				childrenArray[2] = direction;
+
+				System.out.println(parent.getNodePlayer().getName() + " evaluation: " + evaluation + " direction "+direction);
+
+				// System.out.println(parent.getNodePlayer().getName() + " childrenBoard in if direction " +direction);
+				// printBoard(childrenBoard.getStringRepresentation(childrenBoard.getTheseusTile(), childrenBoard.getMinotaurTile()), childrenBoard.getN());
+	
+				// System.out.println(parent.getNodePlayer().getName() + " rootBoard in if direction"+ direction);
+				// printBoard(parent.getNodeBoard().getStringRepresentation(parent.getNodeBoard().getTheseusTile(), parent.getNodeBoard().getMinotaurTile()), parent.getNodeBoard().getN());	
 
 				parent.setChildren(new Node(parent, new ArrayList<Node>(), depth+1, childrenArray, childrenBoard, evaluation - parentEval, parent.getNodePlayer()));
 			}

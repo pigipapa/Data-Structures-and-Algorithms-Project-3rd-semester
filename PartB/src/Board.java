@@ -20,8 +20,8 @@ public class Board {
 		N=0;
 		S=0;
 		W=0;
-		tiles = new Tile[N*N];
-		supplies = new Supply[S];
+		tiles = new Tile[0];
+		supplies = new Supply[0];
 	}
 	
 	/**
@@ -39,13 +39,13 @@ public class Board {
 		tiles = new Tile[this.N*this.N];
 		
 		for(int i=0; i<N*N; i++) {
-        tiles[i] = new Tile();
+        	this.tiles[i] = new Tile();
 		}
 		
 		supplies = new Supply[S];
 		
 		for(int i=0; i<S; i++) {
-			supplies[i] = new Supply();
+			this.supplies[i] = new Supply();
 		}
 		
 	}
@@ -58,8 +58,13 @@ public class Board {
 		N = ob.N;
 		S = ob.S;
 		W = ob.W;
-		tiles = ob.tiles.clone();
-		supplies = ob.supplies.clone();		
+		this.tiles = new Tile[ob.getN()*ob.getN()];
+		for(int i = 0; i<N*N; i++)
+			this.tiles[i] = new Tile(ob.getTile(i));
+
+		this.supplies = new Supply[ob.getS()];
+		for(int i = 0; i< S; i++)
+			this.supplies[i] = new Supply(ob.getSupply(i));		
 	}
 
 	/**
