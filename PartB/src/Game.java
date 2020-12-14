@@ -85,16 +85,16 @@ public class Game {
 		int Dimensions = 5;  
 		int Supplies = 4;
 		int Walls = (Dimensions*Dimensions*3+1)/2;
-		int maxRounds = 10;	// If max dices to tie up the game are 200, max rounds are 100.
+		int maxRounds = 3;	// If max dices to tie up the game are 200, max rounds are 100.
 		
 		Game game = new Game();
 		Board board = new Board(Dimensions, Supplies, Walls);
 		board.createBoard();
 		double inf = Double.POSITIVE_INFINITY;
-		Node MinotaurNode = new Node(new Node(), new ArrayList<Node>(), 0, new int[3], board, (-1)*inf, new MinMaxPlayer(2, "Theseus", board, 0, 0, 0, -1, new Node()));
-		Node TheseusNode = new Node(new Node(), new ArrayList<Node>(), 0, new int[3], board, (-1)*inf, new MinMaxPlayer(1, "Minotaur", board, 0, (Dimensions-1)/2, (Dimensions-1)/2, -1, new Node()));
-		MinMaxPlayer Minotaur = new MinMaxPlayer(1, "Minotaur", board, 0, (Dimensions-1)/2, (Dimensions-1)/2, -1, MinotaurNode); 
-		MinMaxPlayer Theseus = new MinMaxPlayer(2, "Theseus", board, 0, 0, 0, -1, TheseusNode); 
+		// Node MinotaurNode = new Node(new Node(), new ArrayList<Node>(), 0, new int[3], board, (-1)*inf, new MinMaxPlayer(2, "Theseus", board, 0, 0, 0, -1/*, new Node()*/));
+		// Node TheseusNode = new Node(new Node(), new ArrayList<Node>(), 0, new int[3], board, (-1)*inf, new MinMaxPlayer(1, "Minotaur", board, 0, (Dimensions-1)/2, (Dimensions-1)/2, -1/*, new Node()*/));
+		MinMaxPlayer Minotaur = new MinMaxPlayer(1, "Minotaur", board, 0, (Dimensions-1)/2, (Dimensions-1)/2, -1/*, MinotaurNode*/); 
+		MinMaxPlayer Theseus = new MinMaxPlayer(2, "Theseus", board, 0, 0, 0, -1/*, TheseusNode*/); 
 		
 		int times;
 		for(times = 0; times < maxRounds; times++)
@@ -110,7 +110,9 @@ public class Game {
 						
 			// Time for Theseus to move
 			//Theseus.setBoard(board.getPlayerBoard(Theseus));
-			Theseus.move(Theseus.getNextMove(), board);
+			Node TheseusNode = new Node(new Node(), new ArrayList<Node>(), 0, new int[3], board, (-1)*inf, Minotaur);
+	
+			Theseus.move(Theseus.getNextMove(TheseusNode));
 
 		    // Prints the board after Theseus moves.
 			System.out.println("------------------------------------------");
@@ -122,7 +124,8 @@ public class Game {
 						
 			// Time for Minotaur to move
 			//Minotaur.setBoard(board.getPlayerBoard(Minotaur));
-			Minotaur.move(Minotaur.getNextMove(), board);
+			Node MinotaurNode = new Node(new Node(), new ArrayList<Node>(), 0, new int[3], board, (-1)*inf, Theseus);
+			Minotaur.move(Minotaur.getNextMove(MinotaurNode));
 
 			// Prints the board after Theseus moves.
 			System.out.println("------------------------------------------");

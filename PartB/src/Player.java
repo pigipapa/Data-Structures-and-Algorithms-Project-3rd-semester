@@ -41,12 +41,10 @@ public class Player {
 		this.currentTile = y + x * board.getN();
 		
 		if(playerId == 2)
-			this.board.getTile(this.currentTile).setTheseus(true);
+			board.getTile(this.currentTile).setTheseus(true);
 		else if(playerId == 1)
-			this.board.getTile(this.currentTile).setMinotaur(true);
-			
-	}
-	
+			board.getTile(this.currentTile).setMinotaur(true);
+	}			
 	/**
      * Initializes Player with the values of another player.
      */
@@ -177,7 +175,7 @@ public class Player {
      *
      * @param direction, the direction (1 -> Up, 5 -> Down, 7 -> Left, 3 -> Right) chosen for the player to be moved to.
      */
-	public int[] move(int direction, Board board)
+	public int[] move(int direction)
 	{				
 		int supplyId = -1;			// When no supply is got, supplyId's value is -1.
 		

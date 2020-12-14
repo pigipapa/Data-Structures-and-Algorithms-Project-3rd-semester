@@ -26,7 +26,9 @@ public class Tile {
     	up = false;
     	left = false;
     	right = false;
-    	supply = false;
+        supply = false;
+        Theseus = false;
+        Minotaur = false;
     }
     
     /**
@@ -43,7 +45,8 @@ public class Tile {
         left = tile.left;
         right = tile.right;
         supply = tile.supply; 
-        
+        Theseus = tile.Theseus;
+        Minotaur = tile.Minotaur;
     }
 
     /**
