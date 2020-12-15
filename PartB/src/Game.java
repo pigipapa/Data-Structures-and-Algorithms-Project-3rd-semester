@@ -55,10 +55,10 @@ public class Game {
 			System.out.println("\nTheseus gathered all supplies. Theseus is the winner.");
 			System.out.println("\n------------------------------------------");
 			System.out.println("\nEach round's statistics for Theseus:");
-			// Theseus.statistics();
+			Theseus.statistics();
 			System.out.println("------------------------------------------");
 			System.out.println("\nEach round's statistics for Minotaur:");
-			// Minotaur.statistics();
+			Minotaur.statistics();
 			return true;
 		}
 		
@@ -69,10 +69,10 @@ public class Game {
 																				
 			System.out.println("\n------------------------------------------");
 			System.out.println("\nEach round's statistics for Theseus:");
-			// Theseus.statistics();
+			Theseus.statistics();
 			System.out.println("------------------------------------------");
 			System.out.println("\nEach round's statistics for Minotaur:");
-			// Minotaur.statistics();
+			Minotaur.statistics();
 			return true;
 		}		
 		
@@ -85,16 +85,13 @@ public class Game {
 		int Dimensions = 5;  
 		int Supplies = 4;
 		int Walls = (Dimensions*Dimensions*3+1)/2;
-		int maxRounds = 10;	// If max dices to tie up the game are 200, max rounds are 100.
+		int maxRounds = 20;	// If max dices to tie up the game are 200, max rounds are 100.
 		
 		Game game = new Game();
 		Board board = new Board(Dimensions, Supplies, Walls);
-		board.createBoard();
 		double inf = Double.POSITIVE_INFINITY;
-		// Node MinotaurNode = new Node(new Node(), new ArrayList<Node>(), 0, new int[3], board, (-1)*inf, new MinMaxPlayer(2, "Theseus", board, 0, 0, 0, -1/*, new Node()*/));
-		// Node TheseusNode = new Node(new Node(), new ArrayList<Node>(), 0, new int[3], board, (-1)*inf, new MinMaxPlayer(1, "Minotaur", board, 0, (Dimensions-1)/2, (Dimensions-1)/2, -1/*, new Node()*/));
-		MinMaxPlayer Minotaur = new MinMaxPlayer(1, "Minotaur", board, 0, (Dimensions-1)/2, (Dimensions-1)/2, -1/*, MinotaurNode*/); 
-		MinMaxPlayer Theseus = new MinMaxPlayer(2, "Theseus", board, 0, 0, 0, -1/*, TheseusNode*/); 
+		MinMaxPlayer Minotaur = new MinMaxPlayer(1, "Minotaur", board, 0, (Dimensions-1)/2, (Dimensions-1)/2, -1); 
+		MinMaxPlayer Theseus = new MinMaxPlayer(2, "Theseus", board, 0, 0, 0, -1); 
 		
 		int times;
 		for(times = 0; times < maxRounds; times++)
@@ -109,10 +106,9 @@ public class Game {
 			System.out.println();
 						
 			// Time for Theseus to move
-			//Theseus.setBoard(board.getPlayerBoard(Theseus));
 			Node TheseusNode = new Node(new Node(), new ArrayList<Node>(), 0, new int[3], board, (-1)*inf, Minotaur);
-	
-			Theseus.move(Theseus.getNextMove(TheseusNode));
+			Theseus.move(Theseus.getNextMove(TheseusNode), board);
+			Theseus.setBoard(board);
 
 		    // Prints the board after Theseus moves.
 			System.out.println("------------------------------------------");
@@ -123,9 +119,9 @@ public class Game {
 			if(checkWin(Minotaur, Theseus, Supplies)) break;
 						
 			// Time for Minotaur to move
-			//Minotaur.setBoard(board.getPlayerBoard(Minotaur));
 			Node MinotaurNode = new Node(new Node(), new ArrayList<Node>(), 0, new int[3], board, (-1)*inf, Theseus);
-			Minotaur.move(Minotaur.getNextMove(MinotaurNode));
+			Minotaur.move(Minotaur.getNextMove(MinotaurNode), board);
+			Minotaur.setBoard(board);
 
 			// Prints the board after Theseus moves.
 			System.out.println("------------------------------------------");
@@ -144,10 +140,10 @@ public class Game {
 			System.out.println("\nTie...");	// Nobody won...
 			System.out.println("\n------------------------------------------");
 			System.out.println("\nEach round's statistics for Theseus:");
-			// Theseus.statistics();
+			Theseus.statistics();
 			System.out.println("------------------------------------------");
 			System.out.println("\nEach round's statistics for Minotaur:");
-			// Minotaur.statistics();
+			Minotaur.statistics();
 		}
 
 	}

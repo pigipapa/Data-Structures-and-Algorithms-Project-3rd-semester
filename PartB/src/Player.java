@@ -175,7 +175,7 @@ public class Player {
      *
      * @param direction, the direction (1 -> Up, 5 -> Down, 7 -> Left, 3 -> Right) chosen for the player to be moved to.
      */
-	public int[] move(int direction)
+	public int[] move(int direction, Board board)
 	{				
 		int supplyId = -1;			// When no supply is got, supplyId's value is -1.
 		
