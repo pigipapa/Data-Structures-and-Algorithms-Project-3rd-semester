@@ -15,13 +15,7 @@ public class MinMaxPlayer extends Player{
 	// path.get(6)->times player moved down
 	// path.get(7)->times player moved left
 	private ArrayList <ArrayList<Integer>> path;							
-	// !Used only by Minotaur! 
-	// Array that consists of counters for each supply, that show how many times Minotaur has been on a tile that has a specific supply on it. 
-	private int[] timesBeenOnTheSupply;			
-	// !Used only by Minotaur!
-	// Array that implements if Minotaur has crossed a tile that contains supply enough time by now.
-	private boolean[] enoughTimesBeenOnTheSupply;	
-		
+
 	/**
 	 * Initializes a clever/heuristic player. Variables are initialized to -1, arrays and structures are initialized without content.  
 	 */
@@ -29,8 +23,6 @@ public class MinMaxPlayer extends Player{
 	{
 		super();
 		path = new ArrayList<ArrayList<Integer>>();
-		timesBeenOnTheSupply = new int[board.getS()];
-		enoughTimesBeenOnTheSupply = new boolean[board.getS()];
 	}
 	
 	/**
@@ -51,17 +43,6 @@ public class MinMaxPlayer extends Player{
 		
 		for(int i = 0; i < 8; i++)
 			path.add(new ArrayList<Integer>()); 
-
-		timesBeenOnTheSupply = new int[board.getS()];
-
-		for(int i = 0; i < board.getS(); i++)
-			timesBeenOnTheSupply[i] = 0;
-
-		enoughTimesBeenOnTheSupply = new boolean[board.getS()];
-
-		for(int i = 0; i < board.getS(); i++)
-			enoughTimesBeenOnTheSupply[i] = false;
-		
 	}
 	
 	/**
@@ -78,13 +59,7 @@ public class MinMaxPlayer extends Player{
 
 			this.path.add(i, player.path.get(i));
 		}
-		
-		this.timesBeenOnTheSupply = player.timesBeenOnTheSupply.clone();
-		
-		this.enoughTimesBeenOnTheSupply =player.enoughTimesBeenOnTheSupply.clone();
-
 	}
-	
 	
 	/**
 	 * Sets path.
@@ -97,7 +72,6 @@ public class MinMaxPlayer extends Player{
 	 * @return path
 	 */
 	public ArrayList<ArrayList<Integer>> getPath(){ return this.path; } 
-	
 	
 	/**
 	 * This function evaluates the quality of player's single movements on the board in the directions that is given by dice, considering if he sees supplies or his opponent. 
@@ -142,7 +116,6 @@ public class MinMaxPlayer extends Player{
 						 	isTheClosestSupply = false;											
 						 }											
 					}
-					
 					
 					if(playerId == 2 && board.getTile(currentTile + dimension).hasMinotaur()) {		
 						tileDistOpponent = iterationTimes;	
@@ -324,7 +297,6 @@ public class MinMaxPlayer extends Player{
 				}
 				break;
 			}
-			
 		}
 
 		x = initialX;								
@@ -348,7 +320,6 @@ public class MinMaxPlayer extends Player{
 					return false;				
 				else 
 					return true;
-					
 				
 			case 3:	//right
 				
@@ -491,10 +462,8 @@ public class MinMaxPlayer extends Player{
 				cloneboard.getSupply(supplyId-1).setSupplyId(-1);
 				cloneboard.getSupply(supplyId-1).setSupplyTileId(-1);
 				cloneboard.getTile(fakeCurrentTile).setSupply(false);
-				
 			}
 		} 
-		
 		array[0] = fakeX; 
 		array[1] = fakeY; 
 		
@@ -564,7 +533,6 @@ public class MinMaxPlayer extends Player{
 				createOpponentSubtree(root.getChildren().get(root.getChildren().size()-1), depth+2, evaluation);
 			}
 		}
-		
 	}
 	
 	void createOpponentSubtree(Node parent, int depth, double parentEval) {
@@ -590,7 +558,6 @@ public class MinMaxPlayer extends Player{
 		}
 	}
 	
-	
 	/**
 	 * The function that returns the best dice player can decide after evaluating his moves in each directions. 
 	 * @return bestDice
@@ -614,11 +581,9 @@ public class MinMaxPlayer extends Player{
 		 if(name == "Theseus") {  // If player is Theseus.
 		 	// If he gets supply in his next move then add 1 in path's second ArrayList else add 0 (added through variable gotSupply)
 		 	switch(bestDice) {
-			
 		 		case 1:
 		 			gotSupply = board.getTile(currentTile + dimension).getSupply() ? 1 : 0;
 		 			break;
-				
 		 		case 3:
 		 			gotSupply = board.getTile(currentTile + 1).getSupply() ? 1 : 0;
 		 			break;
@@ -628,7 +593,6 @@ public class MinMaxPlayer extends Player{
 				case 7:
 					gotSupply = board.getTile(currentTile -1).getSupply() ? 1 : 0;
 		 			break;
-				
 		 	}
 		 }
 
@@ -661,8 +625,6 @@ public class MinMaxPlayer extends Player{
 		 		path.get(7).add(7);
 		 		break;
 		 }
-		
-		
 		return bestDice;
 	}
 	
@@ -689,8 +651,7 @@ public class MinMaxPlayer extends Player{
 				if(path.get(2).get(i) != -1)
 					System.out.println(getName() + " had " + path.get(2).get(i) + " tiles distance from the closest supply.");
 				else
-					System.out.println(getName() + " didn't see any supply.");
-				
+					System.out.println(getName() + " didn't see any supply.");				
 			}
 			
 			System.out.print("Before moving ");
@@ -702,12 +663,10 @@ public class MinMaxPlayer extends Player{
 		}
 
 		// Moves
-	
 		System.out.println("\nTotal statistics for " + getName() + ":\n");
 		System.out.println(getName() + " moved up " + path.get(4).size() + " times.");
 		System.out.println(getName() + " moved right " + path.get(5).size() + " times.");
 		System.out.println(getName() + " moved down " + path.get(6).size() + " times.");
 		System.out.println(getName() + " moved left " + path.get(7).size() + " times.\n");
-
 	}
 }
