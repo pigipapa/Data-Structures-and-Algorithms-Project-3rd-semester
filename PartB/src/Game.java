@@ -85,7 +85,7 @@ public class Game {
 		int Dimensions = 5;  
 		int Supplies = 4;
 		int Walls = (Dimensions*Dimensions*3+1)/2;
-		int maxRounds = 3;	// If max dices to tie up the game are 200, max rounds are 100.
+		int maxRounds = 10;	// If max dices to tie up the game are 200, max rounds are 100.
 		
 		Game game = new Game();
 		Board board = new Board(Dimensions, Supplies, Walls);
