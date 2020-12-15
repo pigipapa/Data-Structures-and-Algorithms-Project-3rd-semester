@@ -33,9 +33,8 @@ public class MinMaxPlayer extends Player{
 	 * @param score
 	 * @param x
 	 * @param y
-	 * @param LastMove
 	 */
-	public MinMaxPlayer(int playerId, String name, Board board, int score, int x, int y, int LastMove) 
+	public MinMaxPlayer(int playerId, String name, Board board, int score, int x, int y) 
 	{
 		super(playerId, name, board, score, x, y);
 		
@@ -93,7 +92,6 @@ public class MinMaxPlayer extends Player{
 		int tileDistSupply = -1;
 		int tileDistOpponent = -1;
 		
-		boolean isTheClosestSupply = true;
 		double cumulativeEvaluation = 0;	
 		
 		for(int j=1; j<4; j++) {	// Loop for every movement	
@@ -111,24 +109,13 @@ public class MinMaxPlayer extends Player{
 					int iterationTimes = (x + 1) - initialX;		// Computing the distance between players initial position and his posotion after his testing move.		 
 					
 					if(board.getTile(currentTile + dimension).getSupply())	
-					{	
 						tileDistSupply = iterationTimes;	
-						
-						 if(isTheClosestSupply) {	
-						 	path.get(2).add(tileDistSupply);		// Store to path the distance between the closest supply and Theseus, 								
-						 	isTheClosestSupply = false;				// in case there are more than one supplies near to him.						
-						 }											
-					}
-					
-					if(playerId == 2 && board.getTile(currentTile + dimension).hasMinotaur()) {		//Checks if Minotaur is on Theseus' upper tile.
+											
+					if(playerId == 2 && board.getTile(currentTile + dimension).hasMinotaur()) 		//Checks if Minotaur is on Theseus' upper tile.
 						tileDistOpponent = iterationTimes;	
-						path.get(3).add(tileDistOpponent);											// Adds in Theseus' path his distance from Minotaur.
-					}
-					else if(playerId == 1 && board.getTile(currentTile + dimension).hasTheseus()) {	//Checks if Theseus is on Minotaur's upper tile.
-						tileDistOpponent = iterationTimes;
-						path.get(3).add(tileDistOpponent);											// Adds in Minotaur's path his distance from Theseus.
-					}
 
+					else if(playerId == 1 && board.getTile(currentTile + dimension).hasTheseus()) 	//Checks if Theseus is on Minotaur's upper tile.
+						tileDistOpponent = iterationTimes;
 					
 					// This variable's values can be 0.3, 0.5, 1 depending on the distance between the player and a supply, which he can see.
 					// If two tiles keep them apart then NearSupplies = 0.3, else if tile distance is 1 then NearSupplies = 0.5, else if they are neighboring NearSupplies = 1. 
@@ -185,22 +172,13 @@ public class MinMaxPlayer extends Player{
 					int iterationTimes = (y + 1) - initialY;
 
 					if(board.getTile(currentTile + 1).getSupply()) 
-					{
-						tileDistSupply = iterationTimes;	
-						
-						if(isTheClosestSupply) {
-							path.get(2).add(tileDistSupply);
-							isTheClosestSupply = false;
-						}
-					}
-					if(playerId == 2 && board.getTile(currentTile + 1).hasMinotaur()) {
+						tileDistSupply = iterationTimes;
+
+					if(playerId == 2 && board.getTile(currentTile + 1).hasMinotaur()) 
 						tileDistOpponent = iterationTimes;	
-						path.get(3).add(tileDistOpponent);
-					}
-					else if(playerId == 1 && board.getTile(currentTile + 1).hasTheseus()) {
+
+					else if(playerId == 1 && board.getTile(currentTile + 1).hasTheseus()) 
 						tileDistOpponent = iterationTimes;
-						path.get(3).add(tileDistOpponent);
-					}
 
 					double NearSupplies = 0;
 					double OpponentDist = 0;
@@ -233,23 +211,13 @@ public class MinMaxPlayer extends Player{
 					int iterationTimes = initialX - (x - 1);
 
 					if(board.getTile(currentTile - dimension).getSupply()) 
-					{
 						tileDistSupply = iterationTimes;	
 						
-						if(isTheClosestSupply) {
-							path.get(2).add(tileDistSupply);
-							isTheClosestSupply = false;
-						}
-					}
 
-					if(playerId == 2 && board.getTile(currentTile - dimension).hasMinotaur()) {
+					if(playerId == 2 && board.getTile(currentTile - dimension).hasMinotaur()) 
 						tileDistOpponent = iterationTimes;	
-						path.get(3).add(tileDistOpponent);
-					}
-					else if(playerId == 1 && board.getTile(currentTile - dimension).hasTheseus()) {
+					else if(playerId == 1 && board.getTile(currentTile - dimension).hasTheseus()) 
 						tileDistOpponent = iterationTimes;
-						path.get(3).add(tileDistOpponent);
-					}
 
 					double NearSupplies = 0;
 					double OpponentDist = 0;
@@ -282,22 +250,12 @@ public class MinMaxPlayer extends Player{
 					int iterationTimes = initialY - (y - 1);
 
 					if(board.getTile(currentTile - 1).getSupply()) 
-					{
 						tileDistSupply = iterationTimes;	
 						
-						if(isTheClosestSupply) {
-							path.get(2).add(tileDistSupply);
-							isTheClosestSupply = false;
-						}
-					}
-					if(playerId == 2 && board.getTile(currentTile - 1).hasMinotaur()) { 
+					if(playerId == 2 && board.getTile(currentTile - 1).hasMinotaur()) 
 						tileDistOpponent = iterationTimes;	
-						path.get(3).add(tileDistOpponent);
-					}
-					else if(playerId == 1 && board.getTile(currentTile - 1).hasTheseus()) {
+					else if(playerId == 1 && board.getTile(currentTile - 1).hasTheseus()) 
 						tileDistOpponent = iterationTimes;
-						path.get(3).add(tileDistOpponent);
-					}
 					
 					double NearSupplies = 0;
 					double OpponentDist = 0;
@@ -328,8 +286,7 @@ public class MinMaxPlayer extends Player{
 		x = initialX;								
 		y = initialY;
 		currentTile = initialCurrentTile;
-
-		return cumulativeEvaluation;	
+		return cumulativeEvaluation;
 	}	
 
 	/**
@@ -524,20 +481,20 @@ public class MinMaxPlayer extends Player{
 
 			if(canMove(this.x, this.y, direction, childrenBoard)) {			//Checks if he can move in this direction.
 				
-				int[] childrenArray = new int[3];							// [0]->false_x, [1]->false_y, [2]->dice 
 				int[] tempArray = new int[2];
-
+				
 				double evaluation = evaluate(direction, childrenBoard);		// Evaluation of the false movement.
 					
 				tempArray = fakemove(this.x, this.y, 2*i+1, childrenBoard);	// It contains false x and y.
 
 				// Assignments
-				childrenArray[0] = tempArray[0];
-				childrenArray[1] = tempArray[1];
-				childrenArray[2] = direction;
-				
+				int[] childrenMove = new int[3];  // [0]->false_x, [1]->false_y, [2]->dice 
+				childrenMove[0] = tempArray[0];
+				childrenMove[1] = tempArray[1];
+				childrenMove[2] = direction;
+
 				// Sets the new data of root's children.
-				root.setChildren(new Node(root, new ArrayList<Node>(), depth+1, childrenArray, childrenBoard, evaluation, root.getNodePlayer()));
+				root.setChildren(new Node(root, new ArrayList<Node>(), depth+1, childrenMove, childrenBoard, evaluation, root.getNodePlayer()));
 				// Call the function that creates opponent subtree. 
 				createOpponentSubtree(root.getChildren().get(root.getChildren().size()-1), depth+2, evaluation);
 			}
@@ -557,20 +514,21 @@ public class MinMaxPlayer extends Player{
 			int direction = 2*i+1;									// Dice.
 			Board childrenBoard = new Board(parent.getNodeBoard());	// False board.
 
-			if(canMove(parent.getNodePlayer().getX(), parent.getNodePlayer().getY(), direction, childrenBoard)) {	//Checks if he can move in this direction.
+			if(canMove(parent.getNodePlayer().getX(), parent.getNodePlayer().getY(), direction, childrenBoard)) {	// Checks if he can move in this direction.
 				
-				int[] childrenArray = new int[3];									  			// [0]->false_x, [1]->false_y, [2]->dice 
-				int[] tempArray = new int[2];
 				double evaluation = parent.getNodePlayer().evaluate(direction, childrenBoard);	// Evaluation of the false movement.
+
 				// It contains false x and y.
+				int[] tempArray = new int[2];
 				tempArray = parent.getNodePlayer().fakemove(parent.getNodePlayer().getX(), parent.getNodePlayer().getY(), 2*i+1, childrenBoard);	
 				
-				childrenArray[0] = tempArray[0];
-				childrenArray[1] = tempArray[1];
-				childrenArray[2] = parent.getNodeMove()[2];
+				int[] childrenMove = new int[3];	 
+				childrenMove[0] = tempArray[0]; 		    // [0]->false_x,
+				childrenMove[1] = tempArray[1]; 			// [1]->false_y
+				childrenMove[2] = parent.getNodeMove()[2];  // [2]->dice 
 				
 				// Sets the new data of parent's children.
-				parent.setChildren(new Node(parent, new ArrayList<Node>(), depth+1, childrenArray, childrenBoard, parentEval - evaluation, parent.getNodePlayer()));
+				parent.setChildren(new Node(parent, new ArrayList<Node>(), depth+1, childrenMove, childrenBoard, parentEval - evaluation, parent.getNodePlayer()));
 			}
 		}
 	}
@@ -636,11 +594,11 @@ public class MinMaxPlayer extends Player{
 				
 		// path (info about the dice (0), got supply or not (1), is near to a supply (2), is near to enemy (3), times moved up (4), times moved right (5), times moved down (6), times moved left (7))
 		
-		 path.get(0).add(bestDice);	// Add bestDice in path's first ArrayList
+		path.get(0).add(bestDice);	// Add bestDice in path's first ArrayList
 		
-		 int gotSupply = 0;
+		int gotSupply = 0;
 		
-		 if(name == "Theseus") {  // If player is Theseus.
+		if(name == "Theseus") {  // If player is Theseus.
 		 	// If he gets supply in his next move then add 1 in path's second ArrayList else add 0 (added through variable gotSupply)
 		 	switch(bestDice) {
 		 		case 1:
@@ -656,24 +614,158 @@ public class MinMaxPlayer extends Player{
 					gotSupply = board.getTile(currentTile -1).getSupply() ? 1 : 0;
 		 			break;
 		 	}
-		 }
+		}
 
-		 path.get(1).add(gotSupply); 
+		path.get(1).add(gotSupply); 
 		
+		// Distance from nearest supply	and opponent
+
+		int minDistance = 10;
+		for(int i=0; i<4; i++) {	// Loop for every movement	
+		
+			int direction = 2*i + 1; 
+			int tileDistSupply = -1;
+			int tileDistOpponent = -1;
+
+			switch(direction) {
+			
+			case 1:	//up
+				for(int j = 0; j < 3; j++)
+				{
+					if(currentTile + j*dimension < dimension * dimension)
+						break;
+					else if(board.getTile(currentTile + dimension*j).getUp())				// Checks if there is a wall ahead.			
+						break;
+					else {
+						if(board.getTile(currentTile + dimension*j).getSupply())	
+						{	
+							tileDistSupply = j+1;	
+
+							if(minDistance > tileDistSupply){
+								minDistance = tileDistSupply;	
+								path.get(2).add(tileDistSupply);		// Store to path the distance between the closest supply and Theseus, 								
+							}
+						}
+						
+						if(playerId == 2 && board.getTile(currentTile + dimension*j).hasMinotaur()) {		//Checks if Minotaur is on Theseus' upper tile.
+							tileDistOpponent = j+1;	
+							path.get(3).add(tileDistOpponent);											// Adds in Theseus' path his distance from Minotaur.
+						}
+						else if(playerId == 1 && board.getTile(currentTile + dimension*j).hasTheseus()) {	//Checks if Theseus is on Minotaur's upper tile.
+							tileDistOpponent = j+1;
+							path.get(3).add(tileDistOpponent);											// Adds in Minotaur's path his distance from Theseus.
+						}
+					}
+				}
+				break;
+				
+			case 3:	//right
+				for(int j = 0; j < 3; j++)
+				{
+					if(currentTile + j*dimension > 0)
+						break;
+					else if(board.getTile(currentTile + j).getRight()) 
+						break;
+					else {
+
+						if(board.getTile(currentTile + j).getSupply()) 
+						{
+							tileDistSupply = j+1;	
+
+							if(minDistance > tileDistSupply){
+								minDistance = tileDistSupply;	
+								path.get(2).add(tileDistSupply);		// Store to path the distance between the closest supply and Theseus, 								
+							}
+						}
+						if(playerId == 2 && board.getTile(currentTile + j).hasMinotaur()) {
+							tileDistOpponent = j+1;	
+							path.get(3).add(tileDistOpponent);
+						}
+						else if(playerId == 1 && board.getTile(currentTile + j).hasTheseus()) {
+							tileDistOpponent = j+1;
+							path.get(3).add(tileDistOpponent);
+						}
+					}
+				}
+				break;
+			 
+			case 5:	//down
+				for(int j = 0; j < 3; j++)
+				{
+					if(currentTile == 0 || (currentTile - j*dimension < 0))
+						break;
+					else if(board.getTile(currentTile - j*dimension).getDown()) 
+						break;
+					else {
+
+						if(board.getTile(currentTile - j*dimension).getSupply()) 
+						{
+							tileDistSupply = j+1;	
+
+							if(minDistance > tileDistSupply){
+								minDistance = tileDistSupply;	
+								path.get(2).add(tileDistSupply);		// Store to path the distance between the closest supply and Theseus, 								
+							}
+						}
+
+						if(playerId == 2 && board.getTile(currentTile - j*dimension).hasMinotaur()) {
+							tileDistOpponent = j;	
+							path.get(3).add(tileDistOpponent);
+						}
+						else if(playerId == 1 && board.getTile(currentTile - j*dimension).hasTheseus()) {
+							tileDistOpponent = j;
+							path.get(3).add(tileDistOpponent);
+						}
+
+					}
+				}
+				break;
+			 
+			case 7:	//left
+				for(int j = 0; j < 3; j++)
+				{
+					if(currentTile - j*dimension > 0)
+						break;
+					if(board.getTile(currentTile - j).getLeft()) 
+						break;
+					else {
+						if(board.getTile(currentTile - j).getSupply()) 
+						{
+							tileDistSupply = j+1;	
+
+							if(minDistance > tileDistSupply){
+								minDistance = tileDistSupply;	
+								path.get(2).add(tileDistSupply);		// Store to path the distance between the closest supply and Theseus, 								
+							}
+						}
+						if(playerId == 2 && board.getTile(currentTile - j).hasMinotaur()) { 
+							tileDistOpponent = j;	
+							path.get(3).add(tileDistOpponent);
+						}
+						else if(playerId == 1 && board.getTile(currentTile - j).hasTheseus()) {
+							tileDistOpponent = j;
+							path.get(3).add(tileDistOpponent);
+						}
+					}
+				}
+				break;
+			}
+		}
+
 		// If he has found a supply then isTheClosestSupply becomes false at the first code lines of the method.
 		// If he hasn't found a supply isTheClosestSupply is true so -1 is added in third ArrayList of path.
-		 if(path.get(2).size() != path.get(0).size())
-		 	path.get(2).add(-1);
-		
+		if(path.get(2).size() != path.get(0).size())
+		path.get(2).add(-1);
+
 		// // The third and fourth ArrayLists of path must have the same size (same as the round count up)
 		// // If they haven't it means no element has been added in the fourth array list so no opponent has been found near to the player.
 		// // So, in this case, add -1.
-		 if(path.get(3).size() != path.get(0).size())
-		 	path.get(3).add(-1);
+		if(path.get(3).size() != path.get(0).size())
+		path.get(3).add(-1);
 
-		 // Adds dice in the suitable ArrayList for each move to add them up in statistics() in order to overlook how many times the player moved in each direction. 
-		 switch(bestDice)
-		 {
+		// Adds dice in the suitable ArrayList for each move to add them up in statistics() in order to overlook how many times the player moved in each direction. 
+		switch(bestDice)
+		{
 		 	case 1:
 		 		path.get(4).add(1);
 		 		break;
@@ -686,7 +778,7 @@ public class MinMaxPlayer extends Player{
 		 	case 7:
 		 		path.get(7).add(7);
 		 		break;
-		 }
+		}
 		return bestDice;
 	}
 	
@@ -706,7 +798,7 @@ public class MinMaxPlayer extends Player{
 			// Supplies
 			if(playerId == 2) // If player is Theseus. 
 			{
-				System.out.println(getName() + " had collected " + getScore() + " supplies.");
+				System.out.println(getName() + " has collected " + getScore() + " supplies totally.");
 
 				// Supply Distance
 				System.out.print("Before moving ");

@@ -2,13 +2,13 @@ import java.util.*;
 
 public class Node
 {
-    private Node parent;	// The parent of the node.
+    private Node parent;	            // The parent of the node.
     private ArrayList<Node> children;	// Every position of the ArrayList is a child of the node.
-    private int nodeDepth;	// The depth at witch the node is found.
-    private int[] nodeMove;	// An array that contains x [0], y[1] coordinate after the move that led to the node and the dice [2] which led to the node.
-    private Board nodeBoard;	// The node has it's own board, different from the game's one.
-    private double nodeEvaluation;	// The evaluation of the movement that led to the node.
-    private MinMaxPlayer nodePlayer;	// A player that uses the node. It's usually the opponent of the player that has it's turn on the game.
+    private int nodeDepth;	            // The depth at witch the node is found.
+    private int[] nodeMove;	            // An array that contains x [0], y[1] coordinate after the move that led to the node and the dice [2] which led to the node.
+    private Board nodeBoard;	        // The node has it's own board, different from the game's one.
+    private double nodeEvaluation;  	// The evaluation of the movement that led to the node.
+    private MinMaxPlayer nodePlayer;	// A player that's usually the opponent of the player that has it's turn on the game.
 
     /**
      * Initializes the values of the Node to zero (0) and it calls void constructors of other objects Node class has as variables.

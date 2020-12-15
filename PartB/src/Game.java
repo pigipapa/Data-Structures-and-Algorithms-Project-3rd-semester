@@ -85,13 +85,13 @@ public class Game {
 		int Dimensions = 5;  
 		int Supplies = 4;
 		int Walls = (Dimensions*Dimensions*3+1)/2;
-		int maxRounds = 20;	// If max dices to tie up the game are 200, max rounds are 100.
+		int maxRounds = 5;	// If max dices to tie up the game are 200, max rounds are 100.
 		
 		Game game = new Game();
 		Board board = new Board(Dimensions, Supplies, Walls);
 		double inf = Double.POSITIVE_INFINITY;
-		MinMaxPlayer Minotaur = new MinMaxPlayer(1, "Minotaur", board, 0, (Dimensions-1)/2, (Dimensions-1)/2, -1); 
-		MinMaxPlayer Theseus = new MinMaxPlayer(2, "Theseus", board, 0, 0, 0, -1); 
+		MinMaxPlayer Minotaur = new MinMaxPlayer(1, "Minotaur", board, 0, (Dimensions-1)/2, (Dimensions-1)/2); 
+		MinMaxPlayer Theseus = new MinMaxPlayer(2, "Theseus", board, 0, 0, 0); 
 		
 		int times;
 		for(times = 0; times < maxRounds; times++)
