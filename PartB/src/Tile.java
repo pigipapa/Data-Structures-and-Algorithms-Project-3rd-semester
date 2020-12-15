@@ -32,7 +32,7 @@ public class Tile {
     }
     
     /**
-     * Initializes tiles with the given values.
+     * Initializes tiles with the values of another tile.
      * @param tile, a tile object.
      */
     public Tile(Tile tile)
@@ -50,7 +50,7 @@ public class Tile {
     }
 
     /**
-     * Initializes tiles with the values of another tile.
+     * Initializes tiles with the given values.
      * @param tileId
      * @param x
      * @param y

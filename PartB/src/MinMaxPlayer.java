@@ -35,7 +35,7 @@ public class MinMaxPlayer extends Player{
 	 * @param y
 	 * @param LastMove
 	 */
-	public MinMaxPlayer(int playerId, String name, Board board, int score, int x, int y, int LastMove/*, Node root*/) 
+	public MinMaxPlayer(int playerId, String name, Board board, int score, int x, int y, int LastMove) 
 	{
 		super(playerId, name, board, score, x, y);
 		
@@ -81,19 +81,22 @@ public class MinMaxPlayer extends Player{
 	 * @return the evaluation of the player's single movement in the direction the dice implements. 
 	 */
 	private double evaluate(int dice, Board board)	{
+		
 		int dimension = board.getN();
 		
+		// Save the initial values of the player variables that show his position on the board.
 		int initialX = x;
 		int initialY = y;
 		int initialCurrentTile = currentTile;
 		
+		// Initialized to -1.
 		int tileDistSupply = -1;
 		int tileDistOpponent = -1;
 		
 		boolean isTheClosestSupply = true;
 		double cumulativeEvaluation = 0;	
 		
-		for(int j=1; j<4; j++) {	 		
+		for(int j=1; j<4; j++) {	// Loop for every movement	
 				
 			tileDistSupply = -1;
 			tileDistOpponent = -1;
@@ -102,43 +105,64 @@ public class MinMaxPlayer extends Player{
 			
 			case 1:	//up
 
-				if(board.getTile(currentTile).getUp())					
+				if(board.getTile(currentTile).getUp())				// Checks if there is a wall ahead.			
 					break;
 				else {
-					int iterationTimes = (x + 1) - initialX;				 
+					int iterationTimes = (x + 1) - initialX;		// Computing the distance between players initial position and his posotion after his testing move.		 
 					
 					if(board.getTile(currentTile + dimension).getSupply())	
 					{	
 						tileDistSupply = iterationTimes;	
 						
 						 if(isTheClosestSupply) {	
-						 	path.get(2).add(tileDistSupply);										
-						 	isTheClosestSupply = false;											
+						 	path.get(2).add(tileDistSupply);		// Store to path the distance between the closest supply and Theseus, 								
+						 	isTheClosestSupply = false;				// in case there are more than one supplies near to him.						
 						 }											
 					}
 					
-					if(playerId == 2 && board.getTile(currentTile + dimension).hasMinotaur()) {		
+					if(playerId == 2 && board.getTile(currentTile + dimension).hasMinotaur()) {		//Checks if Minotaur is on Theseus' upper tile.
 						tileDistOpponent = iterationTimes;	
-						path.get(3).add(tileDistOpponent);											
+						path.get(3).add(tileDistOpponent);											// Adds in Theseus' path his distance from Minotaur.
 					}
-					else if(playerId == 1 && board.getTile(currentTile + dimension).hasTheseus()) {	
+					else if(playerId == 1 && board.getTile(currentTile + dimension).hasTheseus()) {	//Checks if Theseus is on Minotaur's upper tile.
 						tileDistOpponent = iterationTimes;
-						path.get(3).add(tileDistOpponent);										
+						path.get(3).add(tileDistOpponent);											// Adds in Minotaur's path his distance from Theseus.
 					}
 
+					
+					// This variable's values can be 0.3, 0.5, 1 depending on the distance between the player and a supply, which he can see.
+					// If two tiles keep them apart then NearSupplies = 0.3, else if tile distance is 1 then NearSupplies = 0.5, else if they are neighboring NearSupplies = 1. 
 					double NearSupplies = 0;
+					// This variable's values can be 0.3, 0.5, 1 if player is Minotaur and is close to Theseus at distance 2,1 and 0 tiles.
+					// If player is Theseus, OppponentDist values can be -0.3 when his distance from Minotaur is 2 tiles, -0.5 if it's 1 tile and -1 if Minotaur is next to him.  
 					double OpponentDist = 0;
+					// A sign roulette. If player is Minotaur then sign = -1. If palyer is Theseus sign = 1. 
 					int sign = (playerId == 2) ? -1 : 1;
 					
+					
+					// If player sees supply
+					// tileDistSupply can be 1, 2 and 3 depending on the distance between the player and the supply.
+					//1-> supply on the next tile in the direction player is heading 
+					//2-> one tile between the player and the supply
+					//3-> two tiles between the player and the supply
+					// The function we use is 1/x because 1/1=1, 1/2=0.5 and 1/3=0.33, which are the values NearSupplies is expected to have.
 					if(tileDistSupply != -1)	
 						NearSupplies = 1.0/tileDistSupply;	
 				
+					
+					// If player sees his opponent
+					// The same comments as above, but this time player is looking for his opponent on the near tiles.
+					// If player is Theseus sign=-1 so OpponentDist<0.
+					// If palyer is Minotaur sign=1 so OpponentDist>0.
 					if(tileDistOpponent != -1)	
 						OpponentDist = sign*(1.0/tileDistOpponent);								
 					
+					
 					if(playerId == 2)
+						// Theseus' evaluation function 
 						cumulativeEvaluation += (NearSupplies * 0.4 + OpponentDist * 0.6)*10;		
 					else 
+						// Minotaur's evaluation function
 						cumulativeEvaluation += (NearSupplies * 0.2 + OpponentDist * 0.8)*10;
 												
 
@@ -150,6 +174,8 @@ public class MinMaxPlayer extends Player{
 					}
 				}
 				break;
+				
+			// The same logic as described above is used in the rest cases.
 				
 			case 3:	//right
 				
@@ -306,8 +332,14 @@ public class MinMaxPlayer extends Player{
 		return cumulativeEvaluation;	
 	}	
 
-	
-	
+	/**
+	 * This method checks if there is a wall at the given direction. If there is an obstacle the player can't move otherwise he can.
+	 * @param fakeX
+	 * @param fakeY
+	 * @param direction
+	 * @param cloneboard
+	 * @return true if player can move or false if he cant't.
+	 */
 	boolean canMove(int fakeX, int fakeY, int direction, Board cloneboard) {
 
 		int fakeCurrentTile = fakeY + fakeX * cloneboard.getN();
@@ -346,6 +378,14 @@ public class MinMaxPlayer extends Player{
 		}
 	}
 
+	/**
+	 * This function simulates a false movement.
+	 * @param fakeX
+	 * @param fakeY
+	 * @param direction
+	 * @param cloneboard
+	 * @return an integer array ([0]->fakeX, [1]->fakeY).
+	 */
 	public int[] fakemove(int fakeX, int fakeY, int direction, Board cloneboard)
 	{				
 		int supplyId = -1;			// When no supply is got, supplyId's value is -1.
@@ -470,93 +510,115 @@ public class MinMaxPlayer extends Player{
 		return array;
 	}
 
-
-	int chooseMinMaxMove(Node node, int depth, boolean isMaximizing) {
-		
-		if(depth == 0) {
-			return (int)node.getNodeEvaluation(); 
-		}
-		
-		double inf = Double.POSITIVE_INFINITY;
-		if(isMaximizing) {
-			double bestEval = -(1)*inf;
-			for(int i=0; i<node.getChildren().size(); i++) 
-			{
-				int minmax = chooseMinMaxMove(node.getChildren().get(i), depth-1, false);
-				if(minmax > bestEval)
-				{
-					bestEval = minmax;
-					node.getChildren().get(i).setNodeEvaluation(bestEval);			
-					node.setNodeMove(node.getChildren().get(i).getNodeMove());
-				}
-			}			
-			return (int)bestEval;
-		}
-		
-		else {
-			double bestEval = inf;
-			for(int i=0; i<node.getChildren().size(); i++) 
-			{
-				int minmax = chooseMinMaxMove(node.getChildren().get(i), depth-1, true);
-				if(minmax < bestEval)  
-				{
-					bestEval = minmax;
-					node.getChildren().get(i).setNodeEvaluation(bestEval);		
-					node.setNodeMove(node.getChildren().get(i).getNodeMove());
-				}	
-			}
-			return (int)bestEval;
-		}
-	}
-		
+	/**
+	 * This function creates the tree of the player that get's it's turn.
+	 * @param root
+	 * @param depth
+	 */
 	void createMySubtree(Node root, int depth) {
 	
 		for(int i=0; i<4; i++) {
 
-			int direction = 2*i+1;
-			Board childrenBoard = new Board(root.getNodeBoard());
+			int direction = 2*i+1;											// Dice.
+			Board childrenBoard = new Board(root.getNodeBoard());			// False board.
 
-			if(canMove(this.x, this.y, direction, childrenBoard)) {
+			if(canMove(this.x, this.y, direction, childrenBoard)) {			//Checks if he can move in this direction.
 				
-				int[] childrenArray = new int[3];
+				int[] childrenArray = new int[3];							// [0]->false_x, [1]->false_y, [2]->dice 
 				int[] tempArray = new int[2];
 
-				double evaluation = evaluate(direction, childrenBoard);
+				double evaluation = evaluate(direction, childrenBoard);		// Evaluation of the false movement.
 					
-				tempArray = fakemove(this.x, this.y, 2*i+1, childrenBoard);
+				tempArray = fakemove(this.x, this.y, 2*i+1, childrenBoard);	// It contains false x and y.
 
+				// Assignments
 				childrenArray[0] = tempArray[0];
 				childrenArray[1] = tempArray[1];
 				childrenArray[2] = direction;
-
+				
+				// Sets the new data of root's children.
 				root.setChildren(new Node(root, new ArrayList<Node>(), depth+1, childrenArray, childrenBoard, evaluation, root.getNodePlayer()));
+				// Call the function that creates opponent subtree. 
 				createOpponentSubtree(root.getChildren().get(root.getChildren().size()-1), depth+2, evaluation);
 			}
 		}
 	}
 	
+	/**
+	 * Function that creates opponents subtree. !Called by createMySubtree(...) function!
+	 * @param parent
+	 * @param depth
+	 * @param parentEval
+	 */
 	void createOpponentSubtree(Node parent, int depth, double parentEval) {
 
 		for(int i=0; i<4; i++) {
 
-			int direction = 2*i+1;
-			Board childrenBoard = new Board(parent.getNodeBoard());
+			int direction = 2*i+1;									// Dice.
+			Board childrenBoard = new Board(parent.getNodeBoard());	// False board.
 
-			if(canMove(parent.getNodePlayer().getX(), parent.getNodePlayer().getY(), direction, childrenBoard)) {
+			if(canMove(parent.getNodePlayer().getX(), parent.getNodePlayer().getY(), direction, childrenBoard)) {	//Checks if he can move in this direction.
 				
-				int[] childrenArray = new int[3];
+				int[] childrenArray = new int[3];									  			// [0]->false_x, [1]->false_y, [2]->dice 
 				int[] tempArray = new int[2];
-				double evaluation = parent.getNodePlayer().evaluate(direction, childrenBoard);
-				tempArray = parent.getNodePlayer().fakemove(parent.getNodePlayer().getX(), parent.getNodePlayer().getY(), 2*i+1, childrenBoard);
+				double evaluation = parent.getNodePlayer().evaluate(direction, childrenBoard);	// Evaluation of the false movement.
+				// It contains false x and y.
+				tempArray = parent.getNodePlayer().fakemove(parent.getNodePlayer().getX(), parent.getNodePlayer().getY(), 2*i+1, childrenBoard);	
 				
 				childrenArray[0] = tempArray[0];
 				childrenArray[1] = tempArray[1];
 				childrenArray[2] = parent.getNodeMove()[2];
-
+				
+				// Sets the new data of parent's children.
 				parent.setChildren(new Node(parent, new ArrayList<Node>(), depth+1, childrenArray, childrenBoard, parentEval - evaluation, parent.getNodePlayer()));
 			}
 		}
 	}
+	
+	/**
+	 * This function implements the Min-Max algorithm.
+	 * @param node
+	 * @param depth
+	 * @param isMaximizing
+	 * @return evaluation of palyer's movement.
+	 */
+	int chooseMinMaxMove(Node node, int depth, boolean isMaximizing) {
+			
+			if(depth == 0) {
+				return (int)node.getNodeEvaluation(); 
+			}
+			
+			double inf = Double.POSITIVE_INFINITY;
+			if(isMaximizing) {
+				double bestEval = -(1)*inf;
+				for(int i=0; i<node.getChildren().size(); i++) 
+				{
+					int minmax = chooseMinMaxMove(node.getChildren().get(i), depth-1, false);
+					if(minmax > bestEval)
+					{
+						bestEval = minmax;
+						node.getChildren().get(i).setNodeEvaluation(bestEval);			
+						node.setNodeMove(node.getChildren().get(i).getNodeMove());
+					}
+				}			
+				return (int)bestEval;
+			}
+			
+			else {
+				double worstEval = inf;
+				for(int i=0; i<node.getChildren().size(); i++) 
+				{
+					int minmax = chooseMinMaxMove(node.getChildren().get(i), depth-1, true);
+					if(minmax < worstEval)  
+					{
+						worstEval = minmax;
+						node.getChildren().get(i).setNodeEvaluation(worstEval);		
+						node.setNodeMove(node.getChildren().get(i).getNodeMove());
+					}	
+				}
+				return (int)worstEval;
+			}
+		}
 	
 	/**
 	 * The function that returns the best dice player can decide after evaluating his moves in each directions. 
