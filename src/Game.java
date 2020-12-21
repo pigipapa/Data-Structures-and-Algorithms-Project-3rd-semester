@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.*;
 
 /**
@@ -93,6 +94,13 @@ public class Game {
 		MinMaxPlayer Minotaur = new MinMaxPlayer(1, "Minotaur", board, 0, (Dimensions-1)/2, (Dimensions-1)/2); 
 		MinMaxPlayer Theseus = new MinMaxPlayer(2, "Theseus", board, 0, 0, 0); 
 		
+		JFrame frame = new JFrame("A Night in the Museum");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(600,600);
+		PanelBoard panelboard = new PanelBoard(board);
+		frame.add(panelboard.getBoard()); 
+		frame.setVisible(true);
+
 		int times;
 		for(times = 0; times < maxRounds; times++)
 		{	
