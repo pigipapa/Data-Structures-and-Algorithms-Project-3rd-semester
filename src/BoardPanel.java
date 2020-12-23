@@ -47,6 +47,7 @@ public class BoardPanel {
         urls.add("https://raw.githubusercontent.com/valiapp/Data-Structures-and-Algorithms-Project-3rd-semester/GUI/graphics/tiles/2walls/DungeonTileRightDown.png");
         urls.add("https://raw.githubusercontent.com/valiapp/Data-Structures-and-Algorithms-Project-3rd-semester/GUI/graphics/tiles/2walls/DungeonTileRightUp.png");
         urls.add("https://raw.githubusercontent.com/valiapp/Data-Structures-and-Algorithms-Project-3rd-semester/GUI/graphics/tiles/2walls/DungeonTileUpDown.png");
+        urls.add("https://raw.githubusercontent.com/valiapp/Data-Structures-and-Algorithms-Project-3rd-semester/GUI/graphics/supply.png");
 
         for(int i = 0; i < urls.size(); i++)
         {
@@ -127,6 +128,19 @@ public class BoardPanel {
                     subpanel.setLayout(overlay);
 
                     subpanel.add(new JLabel(graphics.get(0)));
+                    subpanel.add(chooseTile(board, tileId));
+                    
+                    gbc.gridx = x;
+                    gbc.gridy = y;
+                    boardPanel.add(subpanel, gbc);
+                }
+                else if(board.getTile(tileId).getSupply())
+                {
+                    JPanel subpanel = new JPanel();
+                    LayoutManager overlay = new OverlayLayout(subpanel);
+                    subpanel.setLayout(overlay);
+
+                    subpanel.add(new JLabel(graphics.get(13)));
                     subpanel.add(chooseTile(board, tileId));
                     
                     gbc.gridx = x;
