@@ -6,30 +6,30 @@ import java.net.*;
 import javax.swing.*;
 import java.awt.*;
 
-public class PanelBoard {
+public class BoardPanel {
 
-    private JPanel panelboard;
+    private JPanel boardPanel;
     private GridBagConstraints gbc;
     private ArrayList<ImageIcon> graphics;
 
-    public PanelBoard()
+    public BoardPanel()
     {
         graphics = new ArrayList<ImageIcon>();
         gbc = new GridBagConstraints();
-        panelboard = new JPanel(new GridLayout(0, 0));
+        boardPanel = new JPanel(new GridLayout(0, 0));
     }
 
-    public PanelBoard(Board board)
+    public BoardPanel(Board board)
     {
         graphics = new ArrayList<ImageIcon>();
         gbc = new GridBagConstraints();
-        panelboard = new JPanel(new GridBagLayout());
+        boardPanel = new JPanel(new GridBagLayout());
 
         loadGraphics();
-        createVisualizedBoard(board);
+        getVisualizedBoard(board);
     }
 
-    public JPanel getBoard() { return panelboard; }
+    public JPanel getBoard() { return boardPanel; }
 
     public void loadGraphics()
     {
@@ -97,7 +97,7 @@ public class PanelBoard {
         return label;
     }
 
-    void createVisualizedBoard(Board board)
+    JPanel getVisualizedBoard(Board board)
     {
         int dimensions = board.getN();
 
@@ -118,7 +118,7 @@ public class PanelBoard {
                     
                     gbc.gridx = x;
                     gbc.gridy = y;
-                    panelboard.add(subpanel, gbc);
+                    boardPanel.add(subpanel, gbc);
                 }
                 else if(board.getTile(tileId).hasMinotaur())
                 {
@@ -131,16 +131,16 @@ public class PanelBoard {
                     
                     gbc.gridx = x;
                     gbc.gridy = y;
-                    panelboard.add(subpanel, gbc);
+                    boardPanel.add(subpanel, gbc);
                 }
                 else
                 {
                     gbc.gridx = x;
                     gbc.gridy = y;
-                    panelboard.add(chooseTile(board, tileId), gbc);
+                    boardPanel.add(chooseTile(board, tileId), gbc);
                 }
-                
             }
         }
+        return boardPanel;
     }
 }
