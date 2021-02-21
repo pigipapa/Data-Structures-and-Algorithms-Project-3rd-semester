@@ -36,7 +36,7 @@ public class IntroFrame {
         };
         MinotaurComboBox.addActionListener(MinotaurActionListener);
 
-        JTextField text1 = new JTextField("Select Minotaur Type");
+        JLabel text1 = new JLabel("Select Minotaur Type");
         IntroFrame.add(text1);
         IntroFrame.add(MinotaurComboBox);
 
@@ -54,19 +54,19 @@ public class IntroFrame {
         };
 
         TheseusComboBox.addActionListener(TheseusActionListener);
-        JTextField text2 = new JTextField("Select Theseus Type");
+        JLabel text2 = new JLabel("Select Theseus Type");
         IntroFrame.add(text2);
 
         IntroFrame.add(TheseusComboBox);
         IntroFrame.setVisible(true);
 
-        JTextField text3 = new JTextField("After selecting, please press Proceed");
+        JLabel text3 = new JLabel("After selecting, please press Proceed");
         IntroFrame.add(text3);
 
         JButton quitButton = new JButton("Proceed");
         IntroFrame.add(quitButton);
 
-        JTextField text4 = new JTextField("Choose again");
+        JLabel text4 = new JLabel("Choose again");
         IntroFrame.add(text4);
 
         JButton refreshButton = new JButton("Refresh");

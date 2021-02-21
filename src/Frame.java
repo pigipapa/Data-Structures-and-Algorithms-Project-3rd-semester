@@ -17,17 +17,14 @@ public class Frame {
 		TypesOfPlayer Minotaur = new TypesOfPlayer(1, "Minotaur", game.getBoard(), 0, (Dimensions-1)/2, (Dimensions-1)/2);
 		TypesOfPlayer Theseus = new TypesOfPlayer(2, "Theseus", game.getBoard(), 0, 0, 0);
 
-		// this.board = new Board(board);
         frame = new JFrame("A Night in the Museum");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(1000,1000);
-		// frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		frame.setVisible(true);
-		
-		// int frameWidth = (int)frame.getWidth();
-		// int frameHeight = (int)frame.getHeight();
 
 		panel = new JPanel(new BorderLayout());
+		JPanel statusPanel = makeStatusPanel(game.getBoard().getS(), game.getRound(), game.getMaxRounds(), TheseusTypeOfPlayer, MinotaurTypeOfPlayer, Minotaur, Theseus);
+		panel.add(statusPanel, BorderLayout.PAGE_START);
 
 		boardPanel = new BoardPanel(game.getBoard()).getBoard();
 		panel.add(boardPanel, BorderLayout.CENTER);
@@ -66,10 +63,20 @@ public class Frame {
 
 				if(TheseusTypeOfPlayer == "MinMaxPlayer" && MinotaurTypeOfPlayer == "MinMaxPlayer")
 					game.movePlayers(Theseus.getMinMaxPlayer(), Minotaur.getMinMaxPlayer());
-					
+
+				game.setRound(game.getRound()+1);
+
 				frame.invalidate();
+
 				panel.remove(boardPanel);
-				panel.add(new BoardPanel(game.getBoard()).getBoard());
+				panel.add(new BoardPanel(game.getBoard()).getBoard(), BorderLayout.CENTER);
+
+				panel.remove(statusPanel);
+				panel.add(makeStatusPanel(game.getBoard().getS(), game.getRound(), game.getMaxRounds(), TheseusTypeOfPlayer, MinotaurTypeOfPlayer, Minotaur, Theseus), BorderLayout.PAGE_START);
+
+				boolean[] checkWin = checkWin(TheseusTypeOfPlayer, MinotaurTypeOfPlayer, Minotaur, Theseus, game.getBoard().getS());
+				if(game.getMaxRounds() == game.getRound() || checkWin[0] || checkWin[1])
+					playButton.setEnabled(false);
 
 				frame.validate();
 			} 
@@ -87,6 +94,103 @@ public class Frame {
 		frame.setVisible(true);
 	}
 	
+	JPanel makeStatusPanel( int Supplies, int gameRound, int gameMaxRounds, String TheseusTypeOfPlayer, String MinotaurTypeOfPlayer, TypesOfPlayer Minotaur, TypesOfPlayer Theseus)
+	{
+		int MinotaurScoreNumber=0;
+		int TheseusScoreNumber=0;
+
+		if(MinotaurTypeOfPlayer == "Player")
+			MinotaurScoreNumber = Minotaur.getPlayer().getScore();
+		else if(MinotaurTypeOfPlayer == "HeuristicPlayer")
+			MinotaurScoreNumber = Minotaur.getHeuristicPlayer().getScore();
+		else if(MinotaurTypeOfPlayer == "MinMaxPlayer")
+			MinotaurScoreNumber = Minotaur.getMinMaxPlayer().getScore();
+
+		if(TheseusTypeOfPlayer == "Player")
+			TheseusScoreNumber = Theseus.getPlayer().getScore();
+		else if(TheseusTypeOfPlayer == "HeuristicPlayer")
+			TheseusScoreNumber = Theseus.getHeuristicPlayer().getScore();
+		else if(TheseusTypeOfPlayer == "MinMaxPlayer")
+			TheseusScoreNumber = Theseus.getMinMaxPlayer().getScore();
+
+		JLabel MinotaurScore = new JLabel("<html>Minotaur Score: " + String.valueOf(MinotaurScoreNumber) + "<br/>Type of player: " + MinotaurTypeOfPlayer+"</html>");
+		JLabel TheseusScore = new JLabel("<html>Theseus Score: " + String.valueOf(TheseusScoreNumber) + "<br/>Type of player: " + TheseusTypeOfPlayer+"</html>");
+
+		JPanel statusPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints statusGbc = new GridBagConstraints();
+		statusGbc.insets = new Insets(8, 25, 25, 8);
+
+		statusPanel.add(MinotaurScore, statusGbc);
+		statusPanel.add(TheseusScore, statusGbc);
+
+		boolean[] checkWin = checkWin(TheseusTypeOfPlayer, MinotaurTypeOfPlayer, Minotaur, Theseus, Supplies);
+
+		if(gameRound == gameMaxRounds)
+			statusPanel.add(new JLabel("Maximum rounds have been reached"), statusGbc);
+		else if(checkWin[0])
+			statusPanel.add(new JLabel("Theseus won!"), statusGbc);
+		else if(checkWin[1])
+			statusPanel.add(new JLabel("Minotaur won!"), statusGbc);
+		else if(gameRound != gameMaxRounds)
+			statusPanel.add(new JLabel("Round: " + String.valueOf(gameRound)), statusGbc);
+
+		return statusPanel;
+	}
+
+	public boolean[] checkWin(String TheseusTypeOfPlayer, String MinotaurTypeOfPlayer, TypesOfPlayer Minotaur, TypesOfPlayer Theseus, int Supplies) {
+		
+		boolean[] checkWin = new boolean[2];
+		for(int i = 0; i < 2; i++)
+			checkWin[i] = false;
+
+		int MinotaurScoreNumber=0;
+		int TheseusScoreNumber=0;
+
+		int MinotaurCurrentTile=0;
+		int TheseusCurrentTile=0;
+
+		if(MinotaurTypeOfPlayer == "Player")
+		{
+			MinotaurScoreNumber = Minotaur.getPlayer().getScore();
+			MinotaurCurrentTile =  Minotaur.getPlayer().getCurrentTile();
+		}
+		else if(MinotaurTypeOfPlayer == "HeuristicPlayer")
+		{
+			MinotaurScoreNumber = Minotaur.getHeuristicPlayer().getScore();
+			MinotaurCurrentTile =  Minotaur.getHeuristicPlayer().getCurrentTile();
+		}
+		else if(MinotaurTypeOfPlayer == "MinMaxPlayer")
+		{
+			MinotaurScoreNumber = Minotaur.getMinMaxPlayer().getScore();
+			MinotaurCurrentTile =  Minotaur.getMinMaxPlayer().getCurrentTile();
+		}
+
+		if(TheseusTypeOfPlayer == "Player")
+		{
+			TheseusScoreNumber = Theseus.getPlayer().getScore();
+			TheseusCurrentTile = Theseus.getPlayer().getCurrentTile();
+		}
+		else if(TheseusTypeOfPlayer == "HeuristicPlayer")
+		{
+			TheseusScoreNumber = Theseus.getHeuristicPlayer().getScore();
+			TheseusCurrentTile = Theseus.getHeuristicPlayer().getCurrentTile();
+		}
+		else if(TheseusTypeOfPlayer == "MinMaxPlayer")
+		{
+			TheseusScoreNumber = Theseus.getMinMaxPlayer().getScore();
+			TheseusCurrentTile = Theseus.getMinMaxPlayer().getCurrentTile();
+		}
+
+		if(TheseusScoreNumber == Supplies) 											
+			checkWin[0] = true;
+		
+		if(TheseusCurrentTile == MinotaurCurrentTile)					
+			checkWin[1] = true;
+
+		return checkWin;
+		
+	}
+
 	JFrame getFrame() { return frame;}
 
 	JPanel getPanel() { return panel;}

@@ -32,6 +32,8 @@ public class Game {
      */
 	public void setRound(int round) { this.round = round; }
 
+	public int getMaxRounds() { return maxRounds; }
+
 	void movePlayers(MinMaxPlayer Theseus, MinMaxPlayer Minotaur)
 	{
 		double inf = Double.POSITIVE_INFINITY;
