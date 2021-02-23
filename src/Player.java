@@ -40,12 +40,10 @@ public class Player {
 		this.currentTile = y + x * board.getN();
 		
 		if(playerId == 2)
-			this.board.getTile(this.currentTile).setTheseus(true);
+			board.getTile(this.currentTile).setTheseus(true);
 		else if(playerId == 1)
-			this.board.getTile(this.currentTile).setMinotaur(true);
-			
-	}
-	
+			board.getTile(this.currentTile).setMinotaur(true);
+	}			
 	/**
      * Initializes Player with the values of another player.
      */
@@ -176,7 +174,7 @@ public class Player {
      *
      * @param direction, the direction (1 -> Up, 5 -> Down, 7 -> Left, 3 -> Right) chosen for the player to be moved to.
      */
-	public int[] move(int direction)
+	public int[] move(int direction, Board board)
 	{				
 		int supplyId = -1;			// When no supply is got, supplyId's value is -1.
 		
@@ -193,7 +191,7 @@ public class Player {
 				}
 				else
 				{ 
-					System.out.println(getName() + " moved up.");
+					// System.out.println(getName() + " moved up.");
 					
 					// Player left from it's previous tile.
 					if(playerId ==2)
@@ -222,7 +220,7 @@ public class Player {
 				}
 				else
 				{ 
-					System.out.println(getName() + " moved right.");
+					// System.out.println(getName() + " moved right.");
 					
 					if(playerId ==2)
 						board.getTile(currentTile).setTheseus(false);
@@ -242,14 +240,14 @@ public class Player {
 				
 			case 5:	//down
 				
-				if(board.getTile(currentTile).getDown() == true && currentTile==0)
+				if(board.getTile(currentTile).getDown() == true || currentTile==0)
 				{
 					System.out.println(getName() + " didn't move. Wall down!" + "\n");
 					break;					
 				}
 				else
 				{ 
-					System.out.println(getName() + " moved down.");
+					// System.out.println(getName() + " moved down.");
 					
 					if(playerId ==2)
 						board.getTile(currentTile).setTheseus(false);
@@ -276,7 +274,7 @@ public class Player {
 				}
 				else 
 				{ 
-					System.out.println(getName() + " moved left.");
+					// System.out.println(getName() + " moved left.");
 					
 					if(playerId ==2)
 						board.getTile(currentTile).setTheseus(false);

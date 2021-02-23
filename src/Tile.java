@@ -25,11 +25,13 @@ public class Tile {
     	up = false;
     	left = false;
     	right = false;
-    	supply = false;
+        supply = false;
+        Theseus = false;
+        Minotaur = false;
     }
     
     /**
-     * Initializes tiles with the given values.
+     * Initializes tiles with the values of another tile.
      * @param tile, a tile object.
      */
     public Tile(Tile tile)
@@ -42,11 +44,12 @@ public class Tile {
         left = tile.left;
         right = tile.right;
         supply = tile.supply; 
-        
+        Theseus = tile.Theseus;
+        Minotaur = tile.Minotaur;
     }
 
     /**
-     * Initializes tiles with the values of another tile.
+     * Initializes tiles with the given values.
      * @param tileId
      * @param x
      * @param y

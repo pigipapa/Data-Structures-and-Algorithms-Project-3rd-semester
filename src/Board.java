@@ -18,8 +18,8 @@ public class Board {
 		N=0;
 		S=0;
 		W=0;
-		tiles = new Tile[N*N];
-		supplies = new Supply[S];
+		tiles = new Tile[0];
+		supplies = new Supply[0];
 	}
 	
 	/**
@@ -37,14 +37,16 @@ public class Board {
 		tiles = new Tile[this.N*this.N];
 		
 		for(int i=0; i<N*N; i++) {
-        tiles[i] = new Tile();
+        	this.tiles[i] = new Tile();
 		}
 		
 		supplies = new Supply[S];
 		
 		for(int i=0; i<S; i++) {
-			supplies[i] = new Supply();
+			this.supplies[i] = new Supply();
 		}
+		
+		createBoard();
 		
 	}
 	
@@ -56,8 +58,13 @@ public class Board {
 		N = ob.N;
 		S = ob.S;
 		W = ob.W;
-		tiles = ob.tiles.clone();
-		supplies = ob.supplies.clone();		
+		this.tiles = new Tile[ob.getN()*ob.getN()];
+		for(int i = 0; i<N*N; i++)
+			this.tiles[i] = new Tile(ob.getTile(i));
+
+		this.supplies = new Supply[ob.getS()];
+		for(int i = 0; i< S; i++)
+			this.supplies[i] = new Supply(ob.getSupply(i));		
 	}
 
 	/**
@@ -146,13 +153,31 @@ public class Board {
      */   
 	public Supply getSupply(int index) { return supplies[index]; }
 	
+	public int getMinotaurTile()
+	{
+		for(int i = 0; i < N*N; i++)
+			if(tiles[i].hasMinotaur())
+				return i;
+
+		return -1;
+	}
+
+	public int getTheseusTile()
+	{
+		for(int i = 0; i < N*N; i++)
+			if(tiles[i].hasTheseus())
+				return i;
+
+		return -1;
+	}
+	
 	/**
 	 * Initializes the tiles in a random way.
 	 * The x, y and tileId variables of the tile objects in the array tile[] are set
 	 * and it is randomly decided if a wall will be built in any direction of the tile
 	 * if it's possible.
 	 */
-	public void createTile() {
+	private void createTile() {
 		
 		Random rand = new Random(System.currentTimeMillis());
 		
@@ -294,7 +319,7 @@ public class Board {
 	/**
 	 * Creates the board using createTile() and createSupply() functions which are initializing the board in a random way. 
 	 */
-	public void createBoard() {
+	private void createBoard() {
 		
 		createTile();
 		createSupply();
@@ -403,53 +428,5 @@ public class Board {
 	    return -1;	    
 	}
 
-	 /**
-	  * This functions returns a board that contains only the elements the player can see in each direction in a distance of three tiles away.
-	  * This is preferred because a fairer playing is achieved. 
-	  * The player does'n have as input the whole board showing him exactly where supplies and his opponent are, so he decides to move based only on the data he can fetch. 
-	  * @param player
-	  * @return
-	  */
-	Board getPlayerBoard(Player player)
-	{
-		int Dimensions = N;
-		int Supplies = S;
-
-		Board playerBoard = new Board(Dimensions, Supplies, 0);
-
-		playerBoard.createTile();
-		
-		// Set up the tile player is currently on.
-		playerBoard.setTile(player.getCurrentTile(), getTile(player.getCurrentTile()));
-		if(getTile(player.getCurrentTile()).getSupply())
-			playerBoard.setSupply((TileIdToSupplyId(player.getCurrentTile())-1), getSupply(TileIdToSupplyId(player.getCurrentTile())-1));
-		
-		// Set up player board (the rest tiles). 
-		// Every tile the player can see in each direction is copied from Game's board to Player's Board. 
-		for(int i=1; i<4; i++) { 
-			if(player.getCurrentTile() + i*Dimensions < Dimensions * Dimensions) {
-				playerBoard.setTile(player.getCurrentTile() + i*Dimensions, getTile(player.getCurrentTile() + i*Dimensions));
-				if(playerBoard.getTile(player.getCurrentTile() + i*Dimensions).getSupply())
-					playerBoard.setSupply(TileIdToSupplyId(player.getCurrentTile() + i*Dimensions)-1, getSupply(TileIdToSupplyId(player.getCurrentTile() + i*Dimensions)-1));
-			}
-			if(player.getCurrentTile() - i*Dimensions > 0) {
-				playerBoard.setTile(player.getCurrentTile() - i*Dimensions, getTile(player.getCurrentTile() - i*Dimensions));
-				if(playerBoard.getTile(player.getCurrentTile() - i*Dimensions).getSupply())
-					playerBoard.setSupply(TileIdToSupplyId(player.getCurrentTile() - i*Dimensions)-1, getSupply(TileIdToSupplyId(player.getCurrentTile() - i*Dimensions)-1));
-			}
-			if(player.getCurrentTile() + i <= (player.getX()+1)*Dimensions - 1) {
-				playerBoard.setTile(player.getCurrentTile() + i, getTile(player.getCurrentTile() + i));
-				if(playerBoard.getTile(player.getCurrentTile() + i).getSupply())
-					playerBoard.setSupply(TileIdToSupplyId(player.getCurrentTile() + i)-1, getSupply(TileIdToSupplyId(player.getCurrentTile() + i)-1));
-			}
-			if(player.getCurrentTile() - i >= player.getX()*Dimensions) {
-				playerBoard.setTile(player.getCurrentTile() - i, getTile(player.getCurrentTile() - i));
-				if(playerBoard.getTile(player.getCurrentTile() - i).getSupply())
-					playerBoard.setSupply(TileIdToSupplyId(player.getCurrentTile() - i)-1, getSupply(TileIdToSupplyId(player.getCurrentTile() - i)-1));
-			}
-		}
-
-		return playerBoard;
-	}
 }
     
