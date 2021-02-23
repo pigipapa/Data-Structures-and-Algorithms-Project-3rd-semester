@@ -1,4 +1,5 @@
 
+
 /**
  *	Class that implements the supplies Theseus is seeking.
  */
@@ -109,5 +110,4 @@ public class Supply {
 	public int getSupplyTileId() {
 		return supplyTileId;
 	}
-
 }

@@ -4,13 +4,13 @@
  */
 public class Player {
 
-	private int playerId;		// 1 for Minotaur, 2 for Theseus
-	private String name;		// Player's name
-	private Board board;		// The board on which the game is played
-	private int score;			// Player's score, depending on the number of supplies that the player has got. Always equal to 0 for Minotaur.
-	private int x;				// Player's x coordinate on the board
-	private int y;				// Player's y coordinate on the board
-	private int currentTile;	// Id of the tile, player is located on. 
+	protected int playerId;		// 1 for Minotaur, 2 for Theseus
+	protected String name;		// Player's name
+	protected Board board;		// The board on which the game is played
+	protected int score;			// Player's score, depending on the number of supplies that the player has got. Always equal to 0 for Minotaur.
+	protected int x;				// Player's x coordinate on the board
+	protected int y;				// Player's y coordinate on the board
+	protected int currentTile;	// Id of the tile, player is located on. 
 	
 	/**
 	 * Initializes the objects and variables of the player as zero (0), minus 1 (-1) and null.
@@ -38,10 +38,16 @@ public class Player {
 		this.x = x;
 		this.y = y;
 		this.currentTile = y + x * board.getN();
+		
+		if(playerId == 2)
+			this.board.getTile(this.currentTile).setTheseus(true);
+		else if(playerId == 1)
+			this.board.getTile(this.currentTile).setMinotaur(true);
+			
 	}
 	
 	/**
-     * Initializes Player with the values of another board.
+     * Initializes Player with the values of another player.
      */
 	public Player(Player player)
 	{
@@ -145,7 +151,7 @@ public class Player {
 			this.board.setTile(i, board.getTile(i));
 		}
 		
-		for(int i=0; i<board.getW(); i++) {
+		for(int i=0; i<board.getS(); i++) {
 			this.board.setSupply(i, board.getSupply(i));
 		}
 		
@@ -176,25 +182,34 @@ public class Player {
 		
 		int[] array = {currentTile, x, y, supplyId};
 		
-		String printplayer = null;
-		
-		if(getPlayerId() == 1)			printplayer = "Minotaur";
-		else if (getPlayerId() == 2)	printplayer = "Theseus";
-		
 		switch(direction) 
 		{
 			case 1:	//up
 				
 				if(board.getTile(currentTile).getUp() == true)
 				{
-					System.out.println(printplayer + " didn't move. Wall ahead!");
+					System.out.println(getName() + " didn't move. Wall ahead!" + "\n");
 					break;					
 				}
 				else
 				{ 
-					System.out.println(printplayer + " moved up.");
+					System.out.println(getName() + " moved up.");
+					
+					// Player left from it's previous tile.
+					if(playerId ==2)
+						board.getTile(currentTile).setTheseus(false); 
+					else if(playerId == 1)
+						board.getTile(currentTile).setMinotaur(false);
+						
 					this.x = this.x + 1; 
 					this.currentTile = this.y + this.x * board.getN();
+					
+					// Player set on it's new current tile.
+					if(playerId ==2)
+						board.getTile(currentTile).setTheseus(true);
+					else if(playerId == 1)
+						board.getTile(currentTile).setMinotaur(true);
+					
 					break;
 				}
 				
@@ -202,29 +217,53 @@ public class Player {
 				
 				if(board.getTile(currentTile).getRight() == true)
 				{
-					System.out.println(printplayer + " didn't move. Wall at the right side!");
+					System.out.println(getName() + " didn't move. Wall at the right side!" + "\n");
 					break;					
 				}
 				else
 				{ 
-					System.out.println(printplayer + " moved right.");
+					System.out.println(getName() + " moved right.");
+					
+					if(playerId ==2)
+						board.getTile(currentTile).setTheseus(false);
+					else if(playerId == 1)
+						board.getTile(currentTile).setMinotaur(false);
+					
 					this.y = this.y + 1; 
 					this.currentTile = this.y + this.x * board.getN();
+					
+					if(playerId ==2)
+						board.getTile(currentTile).setTheseus(true);
+					else if(playerId == 1)
+						board.getTile(currentTile).setMinotaur(true);
+					
 					break;
 				}
 				
 			case 5:	//down
 				
-				if(board.getTile(currentTile).getDown() == true)
+				if(board.getTile(currentTile).getDown() == true && currentTile==0)
 				{
-					System.out.println(printplayer + " didn't move. Wall down!");
+					System.out.println(getName() + " didn't move. Wall down!" + "\n");
 					break;					
 				}
 				else
 				{ 
-					System.out.println(printplayer + " moved down.");
+					System.out.println(getName() + " moved down.");
+					
+					if(playerId ==2)
+						board.getTile(currentTile).setTheseus(false);
+					else if(playerId == 1)
+						board.getTile(currentTile).setMinotaur(false);
+					
 					this.x = this.x - 1; 
 					this.currentTile = this.y + this.x * board.getN();
+					
+					if(playerId ==2)
+						board.getTile(currentTile).setTheseus(true);
+					else if(playerId == 1)
+						board.getTile(currentTile).setMinotaur(true);
+					
 					break;
 				}
 				
@@ -232,14 +271,26 @@ public class Player {
 				
 				if(board.getTile(currentTile).getLeft() == true)
 				{
-					System.out.println(printplayer + " didn't move. Wall at the left side!");
+					System.out.println(getName() + " didn't move. Wall at the left side!" + "\n");
 					break;					
 				}
 				else 
 				{ 
-					System.out.println(printplayer + " moved left.");
+					System.out.println(getName() + " moved left.");
+					
+					if(playerId ==2)
+						board.getTile(currentTile).setTheseus(false);
+					else if(playerId == 1)
+						board.getTile(currentTile).setMinotaur(false);
+					
 					this.y = this.y - 1; 
 					this.currentTile = this.y + this.x * board.getN();
+					
+					if(playerId ==2)
+						board.getTile(currentTile).setTheseus(true);
+					else if(playerId == 1)
+						board.getTile(currentTile).setMinotaur(true);
+					
 					break;
 				}
 		}
@@ -255,8 +306,6 @@ public class Player {
 				// Theseus got the supply, so it should be deleted. Deletion is made by setting supply's
 				// coordinates equal to -1 (outside board), and its id equal to -1 as well. 
 				// Also, tile's variable supply is set false.
-				
-				System.out.println("Theseus just got supply S" + supplyId + ".");
 				
 				board.getSupply(supplyId-1).setX(-1);
 				board.getSupply(supplyId-1).setY(-1);
