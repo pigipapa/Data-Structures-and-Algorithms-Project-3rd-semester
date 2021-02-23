@@ -41,7 +41,7 @@ public class Game {
 		int n = 0;
 		int times;
 		for(times = 0; times < 200; times++)
-		{
+		{	
 			game.setRound(game.getRound()+1);
 			
 			System.out.println("Current round: " + game.getRound());
@@ -57,7 +57,7 @@ public class Game {
 			}
 			
 			System.out.print(newLine);
-				
+			
 			// Time for Theseus to move
 			if(Theseus.getCurrentTile() == 0 ) {	// If Theseus is on the first tile he can't escape from the maze.
 				n = rand.nextInt(2);
@@ -85,7 +85,7 @@ public class Game {
 			{
 				System.out.println("Minotaur got Theseus. Minotaur is the winner.");	// There is a possibility because the moves are random, Theseus walks onto Minotaur,
 				break;																	// so we check it here.
-			}
+			}		
 			
 			// Time for Minotaur to move
 			if(Minotaur.getCurrentTile() == 0) {	// If Minotaur is on the first tile he can't escape from the maze.
@@ -125,9 +125,9 @@ public class Game {
 				break;
 			}
 			
-			if(times<199) {
+			if(times<199)
 			System.out.println("==========================================");
-			}
+		
 		}
 		
 		if(times == 200) System.out.println("Tie...");	// Nobody won...
