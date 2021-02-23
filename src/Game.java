@@ -40,12 +40,10 @@ public class Game {
 		Node TheseusNode = new Node(new Node(), new ArrayList<Node>(), 0, new int[3], board, (-1)*inf, Minotaur);
 		Theseus.move(Theseus.getNextMove(TheseusNode), board);
 		Theseus.setBoard(board);
-		System.out.println(Theseus.getX()+" "+Theseus.getY());
 
 		Node MinotaurNode = new Node(new Node(), new ArrayList<Node>(), 0, new int[3], board, (-1)*inf, Theseus);
 		Minotaur.move(Minotaur.getNextMove(MinotaurNode), board);
 		Minotaur.setBoard(board);
-		System.out.println(Minotaur.getX()+" "+Minotaur.getY());
 	}
 
 	void movePlayer(HeuristicPlayer player)

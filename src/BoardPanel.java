@@ -108,7 +108,20 @@ public class BoardPanel {
             {
                 int tileId = dimensions*dimensions - dimensions - dimensions*y + x;
 
-                if(board.getTile(tileId).hasTheseus())
+                if(board.getTile(tileId).hasTheseus() && board.getTile(tileId).hasMinotaur())
+                {
+                    JPanel subpanel = new JPanel();
+                    LayoutManager overlay = new OverlayLayout(subpanel);
+                    subpanel.setLayout(overlay);
+
+                    subpanel.add(new JLabel(graphics.get(0)));
+                    subpanel.add(chooseTile(board, tileId));
+                    
+                    gbc.gridx = x;
+                    gbc.gridy = y;
+                    boardPanel.add(subpanel, gbc);
+                }
+                else if(board.getTile(tileId).hasTheseus())
                 {
                     JPanel subpanel = new JPanel();
                     LayoutManager overlay = new OverlayLayout(subpanel);
