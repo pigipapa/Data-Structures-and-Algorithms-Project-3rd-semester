@@ -51,14 +51,18 @@ public class MinMaxPlayer extends Player{
 	 */
 	public MinMaxPlayer(MinMaxPlayer player) 
 	{
-		super(player);
+		super(player);		
 		
-		for(int i = 0; i < player.path.size(); i++) {
+		path = new ArrayList<ArrayList<Integer>>();
+		
+		for(int i = 0; i < 9; i++)
+			path.add(new ArrayList<Integer>()); 
+		// for(int i = 0; i < player.path.size(); i++) {
 
-			this.path.set(i, new ArrayList<Integer>(player.path.get(i)));
+		// 	this.path.set(i, new ArrayList<Integer>(player.path.get(i)));
 
-			this.path.add(i, player.path.get(i));
-		}
+		// 	this.path.add(i, player.path.get(i));
+		// }
 	}
 	
 	/**
@@ -468,37 +472,53 @@ public class MinMaxPlayer extends Player{
 		return array;
 	}
 
-	/**
+/**
 	 * This function creates the tree of the player that get's it's turn.
 	 * @param root
 	 * @param depth
 	 */
 	void createMySubtree(Node root, int depth) {
-	
-		for(int i=0; i<4; i++) {
-
-			int direction = 2*i+1;											// Dice.
-			Board childrenBoard = new Board(root.getNodeBoard());			// False board.
-
-			if(canMove(this.x, this.y, direction, childrenBoard)) {			//Checks if he can move in this direction.
-				
-				int[] tempArray = new int[2];
-				
-				double evaluation = evaluate(direction, childrenBoard);		// Evaluation of the false movement.
-					
-				tempArray = fakemove(this.x, this.y, 2*i+1, childrenBoard);	// It contains false x and y.
-
-				// Assignments
-				int[] childrenMove = new int[3];  // [0]->false_x, [1]->false_y, [2]->dice 
-				childrenMove[0] = tempArray[0];
-				childrenMove[1] = tempArray[1];
-				childrenMove[2] = direction;
-
-				// Sets the new data of root's children.
-				root.setChildren(new Node(root, new ArrayList<Node>(), depth+1, childrenMove, childrenBoard, evaluation, root.getNodePlayer()));
-				// Call the function that creates opponent subtree. 
-				createOpponentSubtree(root.getChildren().get(root.getChildren().size()-1), depth+2, evaluation);
+		
+		Random rand = new Random(System.currentTimeMillis());
+		int k=0;
+		
+		while(k<4) {
+			boolean flag = true;
+			int direction = 2*rand.nextInt(4)+1;	// Random dice in order to avoid repeating movements.
+			int[] dices = new int[4];				// Array of dices.
+			
+			for(int i=0; i<k; i++) {
+				if(dices[i] == direction)			// Checks if this dice exists already in the array. 
+					flag = false;					// If so flag becomes false.
 			}
+			
+			if(flag == false)
+				break;								// When flag is false repeat the loop without increasing k.
+			
+			dices[k] = direction;					// If flag is true, so the dice has not previously been added, then store the dice in the array.
+			k++;
+														
+				Board childrenBoard = new Board(root.getNodeBoard());			// False board.
+	
+				if(canMove(this.x, this.y, direction, childrenBoard)) {			//Checks if he can move in this direction.
+					
+					int[] tempArray = new int[2];
+					
+					double evaluation = evaluate(direction, childrenBoard);		// Evaluation of the false movement.
+						
+					tempArray = fakemove(this.x, this.y, direction, childrenBoard);	// It contains false x and y.
+	
+					// Assignments
+					int[] childrenMove = new int[3];  // [0]->false_x, [1]->false_y, [2]->dice 
+					childrenMove[0] = tempArray[0];
+					childrenMove[1] = tempArray[1];
+					childrenMove[2] = direction;
+	
+					// Sets the new data of root's children.
+					root.setChildren(new Node(root, new ArrayList<Node>(), depth+1, childrenMove, childrenBoard, evaluation, root.getNodePlayer()));
+					// Call the function that creates opponent subtree. 
+					createOpponentSubtree(root.getChildren().get(root.getChildren().size()-1), depth+2, evaluation);
+				}
 		}
 	}
 	
@@ -510,9 +530,26 @@ public class MinMaxPlayer extends Player{
 	 */
 	void createOpponentSubtree(Node parent, int depth, double parentEval) {
 
-		for(int i=0; i<4; i++) {
+		Random rand = new Random(System.currentTimeMillis());
+		int k=0;
+		
+		while(k<4) {
 
-			int direction = 2*i+1;									// Dice.
+			boolean flag = true;
+			int direction = 2*rand.nextInt(4)+1;	
+			int[] dices = new int[4];
+			
+			for(int i=0; i<k; i++) {
+				if(dices[i] == direction)
+					flag = false;
+			}
+			
+			if(flag == false)
+				break;
+			
+			dices[k] = direction;
+			k++;								
+			
 			Board childrenBoard = new Board(parent.getNodeBoard());	// False board.
 
 			if(canMove(parent.getNodePlayer().getX(), parent.getNodePlayer().getY(), direction, childrenBoard)) {	// Checks if he can move in this direction.
@@ -521,7 +558,7 @@ public class MinMaxPlayer extends Player{
 
 				// It contains false x and y.
 				int[] tempArray = new int[2];
-				tempArray = parent.getNodePlayer().fakemove(parent.getNodePlayer().getX(), parent.getNodePlayer().getY(), 2*i+1, childrenBoard);	
+				tempArray = parent.getNodePlayer().fakemove(parent.getNodePlayer().getX(), parent.getNodePlayer().getY(), direction, childrenBoard);	
 				
 				int[] childrenMove = new int[3];	 
 				childrenMove[0] = tempArray[0]; 		    // [0]->false_x,

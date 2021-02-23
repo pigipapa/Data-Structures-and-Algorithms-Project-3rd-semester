@@ -1,5 +1,7 @@
 import java.util.Random; 
 
+
+
 /**
  *	Class that implements the board of the game.
  */
@@ -429,4 +431,3 @@ public class Board {
 	}
 
 }
-    

@@ -50,11 +50,11 @@ public class HeuristicPlayer extends Player{
 	 * @param y
 	 * @param LastMove
 	 */
-	public HeuristicPlayer(int playerId, String name, Board board, int score, int x, int y, int LastMove) 
+	public HeuristicPlayer(int playerId, String name, Board board, int score, int x, int y) 
 	{
 		super(playerId, name, board, score, x, y);
 		
-		this.LastMove = LastMove; //Initialized <1. Better as -1.
+		this.LastMove = -1; 
 		
 		path = new ArrayList<ArrayList<Integer>>();
 		
@@ -80,12 +80,18 @@ public class HeuristicPlayer extends Player{
 	{
 		super(player);
 		
-		for(int i = 0; i < player.path.size(); i++) {
+		// if(player.path.isEmpty())
+		// {
+			this.path = new ArrayList<ArrayList<Integer>>();
+		// }
+		// else{
+		// 	for(int i = 0; i < player.path.size(); i++) {
 
-			this.path.set(i, new ArrayList<Integer>(player.path.get(i)));
+		// 		this.path.set(i, new ArrayList<Integer>(player.path.get(i)));
 
-			this.path.add(i, player.path.get(i));
-		}
+		// 		this.path.add(i, player.path.get(i));
+		// 	}
+		// }
 		
 		this.LastMove = player.LastMove;
 		

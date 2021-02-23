@@ -1,12 +1,22 @@
 import java.util.*;
-
 /**
  * Class that contains the main and implements the game. 
  */
 public class Game {
 	private int round;	// Game's number of total rounds.
-	
-	public Game(){ this.round = 0; }
+	private Board board;
+	private int maxRounds;
+
+	public Game(Board gameBoard, /*MinMaxPlayer Minotaur, MinMaxPlayer Theseus,*/ int maxRounds)
+	{ 
+		this.maxRounds = maxRounds;
+		this.round = 0; 
+		this.board = new Board(gameBoard);
+		// this.Minotaur = new MinMaxPlayer(Minotaur); 
+		// this.Theseus = new MinMaxPlayer(Theseus); 
+	}
+
+	Board getBoard() { return board; }
 	
 	/**
      * Returns game's current round.
@@ -21,156 +31,40 @@ public class Game {
      * @param round, game's current round.
      */
 	public void setRound(int round) { this.round = round; }
-	
-	/**
-	 * Function that prints board.
-	 * @param res, a 2-Dimensional board  
-	 * @param Dimensions, dimensions of board
-	 */
-	static public void printBoard(String[][] res, int Dimensions) {
-	
-		for (int i = 2*Dimensions; i >= 0; i--) {
-			
-			for (int j = 0; j < Dimensions; j++) {
-	
-				System.out.print(res[i][j]);
-			}
-			
-			System.out.println();
-		}
-	}
-	
-	/**
-	 * This function checks if Theseus or Minotaur won.
-	 * @param Minotaur
-	 * @param Theseus
-	 * @param Supplies, number of supplies 
-	 * @return true if some player is the winner, otherwise it returns false 
-	 */
-	static public boolean checkWin(MinMaxPlayer Minotaur, MinMaxPlayer Theseus, int Supplies) {
-		
-		if(Theseus.getScore() == Supplies) 											// Theseus got all supplies.
-		{
-			System.out.println("==========================================");
-			System.out.println("\nTheseus gathered all supplies. Theseus is the winner.");
-			System.out.println("\n------------------------------------------");
-			System.out.println("\nEach round's statistics for Theseus:");
-			Theseus.statistics();
-			System.out.println("------------------------------------------");
-			System.out.println("\nEach round's statistics for Minotaur:");
-			Minotaur.statistics();
-			return true;
-		}
-		
-		if(Theseus.getCurrentTile() == Minotaur.getCurrentTile())					// Theseus went in the tile where Minotaur was.
-		{
-			System.out.println("==========================================");
-			System.out.println("\nMinotaur got Theseus. Minotaur is the winner.");	
-																				
-			System.out.println("\n------------------------------------------");
-			System.out.println("\nEach round's statistics for Theseus:");
-			Theseus.statistics();
-			System.out.println("------------------------------------------");
-			System.out.println("\nEach round's statistics for Minotaur:");
-			Minotaur.statistics();
-			return true;
-		}		
-		
-		return false;
-	}
-	
-	public static void main(String[] args)
-	{		
-		// Board variables
-		int Dimensions = 5;  
-		int Supplies = 4;
-		int Walls = (Dimensions*Dimensions*3+1)/2;
-		int maxRounds = 5;	// If max dices to tie up the game are 200, max rounds are 100.
-		
-		Game game = new Game();
-		Board board = new Board(Dimensions, Supplies, Walls);
+
+	public int getMaxRounds() { return maxRounds; }
+
+	void movePlayers(MinMaxPlayer Theseus, MinMaxPlayer Minotaur)
+	{
 		double inf = Double.POSITIVE_INFINITY;
-		MinMaxPlayer Minotaur = new MinMaxPlayer(1, "Minotaur", board, 0, (Dimensions-1)/2, (Dimensions-1)/2); 
-		MinMaxPlayer Theseus = new MinMaxPlayer(2, "Theseus", board, 0, 0, 0); 
-		
-		int times;
-		for(times = 0; times < 200; times++)
-		{	
-			game.setRound(game.getRound()+1);
-			
-			System.out.println("==========================================");
-			System.out.println("Current round: " + game.getRound());
-			
-			// Prints board before players take their turn to play.
-			printBoard(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
-			System.out.println();
-						
-			// Time for Theseus to move
-			Node TheseusNode = new Node(new Node(), new ArrayList<Node>(), 0, new int[3], board, (-1)*inf, Minotaur);
-			Theseus.move(Theseus.getNextMove(TheseusNode), board);
-			Theseus.setBoard(board);
+		Node TheseusNode = new Node(new Node(), new ArrayList<Node>(), 0, new int[3], board, (-1)*inf, Minotaur);
+		Theseus.move(Theseus.getNextMove(TheseusNode), board);
+		Theseus.setBoard(board);
+		System.out.println(Theseus.getX()+" "+Theseus.getY());
 
-					System.out.print(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile())[i][j]);
-				}
-				System.out.print(newLine);
-			}
-			
-			System.out.print(newLine);
-			
-			// Time for Theseus to move
-			if(Theseus.getCurrentTile() == 0 ) {	// If Theseus is on the first tile he can't escape from the maze.
-				n = rand.nextInt(2);
-				direction = 2*n + 1;
-				Theseus.move(direction);
-			}
-			else {
-				n = rand.nextInt(4);
-				direction = 2*n + 1;
-				Theseus.move(direction);
-			}
-					    
-		    // Prints the board after Theseus moves.
-			System.out.println("------------------------------------------");
-			System.out.println("Theseus' turn to move\n");
-			printBoard(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
-			System.out.println();
-			
-			System.out.print(newLine);
-			
-			if(Theseus.getCurrentTile() == Minotaur.getCurrentTile())	// Theseus went in the tile where Minotaur was.
-			{
-				System.out.println("Minotaur got Theseus. Minotaur is the winner.");	// There is a possibility because the moves are random, Theseus walks onto Minotaur,
-				break;																	// so we check it here.
-			}		
-			
-			// Time for Minotaur to move
-			Node MinotaurNode = new Node(new Node(), new ArrayList<Node>(), 0, new int[3], board, (-1)*inf, Theseus);
-			Minotaur.move(Minotaur.getNextMove(MinotaurNode), board);
-			Minotaur.setBoard(board);
+		Node MinotaurNode = new Node(new Node(), new ArrayList<Node>(), 0, new int[3], board, (-1)*inf, Theseus);
+		Minotaur.move(Minotaur.getNextMove(MinotaurNode), board);
+		Minotaur.setBoard(board);
+		System.out.println(Minotaur.getX()+" "+Minotaur.getY());
+	}
 
-			// Prints the board after Theseus moves.
-			System.out.println("------------------------------------------");
-			System.out.println("Minotaur's turn to move\n"); 	
-			printBoard(board.getStringRepresentation(Theseus.getCurrentTile(), Minotaur.getCurrentTile()), Dimensions);
-			System.out.println();
+	void movePlayer(HeuristicPlayer player)
+	{
+		player.move(player.getNextMove(), board);
+	}
 
-			// Check if game should be finished.
-			if(Theseus.getScore() == Supplies) 												// Theseus got all supplies.
-			{
-				System.out.println("Theseus gathered all supplies. Theseus is the winner.");
-				break;
-			}
-			
-			if(Theseus.getCurrentTile() == Minotaur.getCurrentTile())	// Theseus went in the tile where Minotaur was.
-			{
-				System.out.println("Minotaur got Theseus. Minotaur is the winner.");
-				break;
-			}
-			
-			if(times<199)
-			System.out.println("==========================================");
-		
+	void movePlayer(Player player)
+	{
+		Random rand = new Random(System.currentTimeMillis());
+		if(player.getCurrentTile() == 0 ) {	// If Theseus is on the first tile he can't escape from the maze.
+			int n = rand.nextInt(2);
+			int direction = 2*n + 1;
+			player.move(direction, board);
 		}
-
+		else {
+			int n = rand.nextInt(4);
+			int direction = 2*n + 1;
+			player.move(direction, board);
+		}
 	}
 }
