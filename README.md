@@ -2,6 +2,8 @@
 
 This repository contains the Data Structures and Algorithms course assignment for the School of Electrical and Computer Engineering, 3rd semester, AUTh, 2020. 
 
+![](https://github.com/valiapp/Data-Structures-and-Algorithms-Project-3rd-semester.preview.png)
+
 The main idea of the project is to simulate the movie "A Νight in the Μuseum", but this time with Theseus and Minotaur as protagonists. In our version, Theseus is aiming to collect all the supplies placed into the labyrinth while avoiding being caught by the Minotaur. 
 
 ## Further info on the project
