@@ -34,6 +34,7 @@ public class IntroFrame {
                 }
             }
         };
+        
         MinotaurComboBox.addActionListener(MinotaurActionListener);
 
         JLabel text1 = new JLabel("Select Minotaur Type");

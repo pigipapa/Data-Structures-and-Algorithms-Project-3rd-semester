@@ -7,6 +7,7 @@ public class Frame {
     private JPanel panel;
 	private JButton playButton;
 	private JButton quitButton;
+	private JButton generateBoardButton;
 	private JPanel buttonPanel;
 	private JPanel boardPanel;
 
@@ -23,22 +24,32 @@ public class Frame {
 		frame.setVisible(true);
 
 		panel = new JPanel(new BorderLayout());
+
 		JPanel statusPanel = makeStatusPanel(game.getBoard().getS(), game.getRound(), game.getMaxRounds(), TheseusTypeOfPlayer, MinotaurTypeOfPlayer, Minotaur, Theseus);
 		panel.add(statusPanel, BorderLayout.PAGE_START);
 
 		boardPanel = new BoardPanel(game.getBoard()).getBoard();
-		panel.add(boardPanel, BorderLayout.CENTER);
 
 		buttonPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
-
 		quitButton = new JButton("Quit");
 		playButton = new JButton("Play");
+		generateBoardButton = new JButton("Generate Board");
 
 		gbc.insets = new Insets(8, 8, 8, 8);
-		
+
+		buttonPanel.add(generateBoardButton, gbc);
 		buttonPanel.add(playButton, gbc);
 		buttonPanel.add(quitButton, gbc);
+
+		generateBoardButton.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent e) {
+				frame.invalidate();
+				panel.add(boardPanel, BorderLayout.CENTER);
+				generateBoardButton.setEnabled(false);
+				frame.validate();
+			} 
+		});
 
 		playButton.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
